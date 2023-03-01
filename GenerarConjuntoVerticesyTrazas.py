@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 def VerticesyTrazasAleatorios(num_vertices = 200, mediatrazas = 70,           \
                               sigmatrazas = 10, mediaz = 0, sigmaz = 5,       \
                               mediat = 0, sigmat = 200, mediar = 0,           \
-                              sigmar = 0.05, error_z = 0.2, error_t =0.1):
+                              sigmar = 0.05, error_z = 0.02, error_t = 10):
     """
     Parameters
     ----------
@@ -39,9 +39,9 @@ def VerticesyTrazasAleatorios(num_vertices = 200, mediatrazas = 70,           \
     sigmar : float, optional
         Desviación estándar de r. The default is 0.1.
     error_z : float, optional
-        Error en la medición en z de la traza en cm. The default is 0.2.
+        Error en la medición en z de la traza en cm. The default is 0.02.
     error_t : float, optional
-        Error en la medición de t en la traza en ps. The default is 0.1.
+        Error en la medición de t en la traza en ps. The default is 10.
 
     Returns
     -------
@@ -118,6 +118,19 @@ def VerticesyTrazasAleatorios(num_vertices = 200, mediatrazas = 70,           \
     # plt.ylabel("$t$/ps")
     # plt.show()
 
+    num_trazas = len(lista_trazas)
+
+    lista_vertices[:,1] = lista_vertices[:,1]/error_z
+    lista_vertices[:,2] = lista_vertices[:,2]/error_t
+    lista_trazas[:,1] = lista_trazas[:,1]/error_z
+    lista_trazas[:,2] = lista_trazas[:,2]/error_t
+    pos_trazas[:,0] = pos_trazas[:,0]/error_z
+    pos_trazas[:,1] = pos_trazas[:,1]/error_t
+
+    X = []
+    for i in range(num_trazas):
+        X.append(np.array([lista_trazas[i,1], lista_trazas[i,2]]))
+
     # Guardar datos en ficheros .dat
     output_file_vertices = open("vertices.dat", "w")
     output_file_vertices.write("Vértice    z/cm    t/ps \n")
@@ -141,4 +154,5 @@ def VerticesyTrazasAleatorios(num_vertices = 200, mediatrazas = 70,           \
         output_file_trazassinvert.write(f"{lista_trazas[i,1]}    "\
                                         f"{lista_trazas[i,2]}\n")
     output_file_trazassinvert.close()
-    return(lista_vertices, lista_trazas, pos_trazas, num_trazas_en_v)
+    return(lista_vertices, lista_trazas, pos_trazas, num_trazas_en_v, X,\
+           num_trazas)

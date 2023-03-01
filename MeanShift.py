@@ -12,8 +12,6 @@ import matplotlib.pyplot as plt
 import GenerarConjuntoVerticesyTrazas as gcvt
 import Evaluar
 
-error_z = 0.02
-error_t = 10
 num_vertices = 200
 
 trazas_totales = []
@@ -32,24 +30,11 @@ num_clusters = []
 for i in range(2):
 
 
-    lista_vertices, lista_trazas, pos_trazas, num_trazas_en_v                 \
-       = gcvt.VerticesyTrazasAleatorios(num_vertices = num_vertices,        \
-               mediatrazas = 70, sigmatrazas = 10, mediaz = 0, sigmaz = 5,   \
-               mediat = 0, sigmat = 200, mediar = 0, sigmar = 0.05,          \
-               error_z = error_z, error_t =error_t)
-
-    num_trazas = len(lista_trazas)
-
-    lista_vertices[:,1] = lista_vertices[:,1]/error_z
-    lista_vertices[:,2] = lista_vertices[:,2]/error_t
-    lista_trazas[:,1] = lista_trazas[:,1]/error_z
-    lista_trazas[:,2] = lista_trazas[:,2]/error_t
-    pos_trazas[:,0] = pos_trazas[:,0]/error_z
-    pos_trazas[:,1] = pos_trazas[:,1]/error_t
-
-    X = []
-    for i in range(num_trazas):
-        X.append(np.array([lista_trazas[i,1], lista_trazas[i,2]]))
+    lista_vertices, lista_trazas, pos_trazas, num_trazas_en_v, X, num_trazas  \
+        = gcvt.VerticesyTrazasAleatorios( num_vertices = num_vertices,        \
+                mediatrazas = 70, sigmatrazas = 10, mediaz = 0, sigmaz = 5,   \
+                mediat = 0, sigmat = 200, mediar = 0, sigmar = 0.05,          \
+                error_z = 0.02, error_t = 10)
 
     bandwidth = skc.estimate_bandwidth(X = X, quantile= 0.01 ,\
                                        n_samples = 299, n_jobs = -1)
@@ -65,16 +50,21 @@ for i in range(2):
     inum_clusters = len(labels_unique)
     num_clusters.append(inum_clusters)
 
-    t1 = time.time_ns()
-
     centroides = meanshift.cluster_centers_
 
+    t1 = time.time_ns()
 
-    ipuntos, idistancia= Evaluar.evaluar(lista_vertices, lista_trazas,        \
-                                        num_vertices, num_trazas, etiquetas,  \
-                                        centroides)
+
+    ctv = Evaluar.cluster_to_vertex(centroides, lista_vertices)
+
+    idistancia = Evaluar.distancia_media(centroides, lista_vertices, ctv)
+
+    ipuntos = Evaluar.evaluar(lista_trazas, etiquetas, ctv, num_trazas)
+
     inotaajustada, inotanorm = Evaluar.evaluacion(lista_trazas, etiquetas)
 
+    itrazas_bien, itrazas_mal, iclusters_bien, iclusters_mal =\
+        Evaluar.tabla_trazas(lista_trazas, etiquetas, num_trazas_en_v, ctv)
 
     puntos.append(ipuntos)
     distancia.append(idistancia)
@@ -82,9 +72,6 @@ for i in range(2):
     notaajustada.append(inotaajustada)
     notanorm.append(inotanorm)
 
-    itrazas_bien, itrazas_mal, iclusters_bien, iclusters_mal =\
-        Evaluar.tabla_trazas(lista_vertices, lista_trazas, num_trazas, \
-                             etiquetas, centroides, num_trazas_en_v)
     trazas_bien.append(itrazas_bien)
     trazas_mal.append(itrazas_mal)
     clusters_bien.append(iclusters_bien)

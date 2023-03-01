@@ -6,8 +6,9 @@ Created on Tue Feb 21 17:55:08 2023
 """
 import numpy as  np
 
+
 def centroides(etiquetas: np.array(1), lista_trazas: np.array(3),      \
-                      num_clusters: int):
+               num_clusters: int):
     """
     Parameters
     ----------
@@ -23,7 +24,6 @@ def centroides(etiquetas: np.array(1), lista_trazas: np.array(3),      \
     np.array(num_clusters, 2)
         Posición de los centroides calculado como la media aritmética
         de las trazas pertenecientes a cada cluster.
-
     """
     icluster = 0
     centroides = []
@@ -37,9 +37,12 @@ def centroides(etiquetas: np.array(1), lista_trazas: np.array(3),      \
         if z != []:
             zmedio = np.mean(z)
             tmedio = np.mean(t)
-            centroidei = [zmedio, tmedio]
-            centroides.append(centroidei)
-        icluster += 1
+
+        else:
+            zmedio = np.inf
+            tmedio = np.inf
+        centroidei = [zmedio, tmedio]
+        centroides.append(centroidei)
     return(np.array(centroides))
 
 def encontrar_num_clusters():
