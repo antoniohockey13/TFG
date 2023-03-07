@@ -4,8 +4,8 @@ Created on Mon Feb 13 19:22:13 2023
 
 @author: Antonio
 """
-from tabulate import tabulate
 import time
+from tabulate import tabulate
 import sklearn.cluster as skc
 import numpy as np
 import matplotlib.pyplot as plt
@@ -15,7 +15,7 @@ import Evaluar
 num_vertices = 200
 
 trazas_totales = []
-puntos = []
+# puntos = []
 distancia = []
 inercia = []
 tiempo = []
@@ -27,8 +27,8 @@ clusters_bien =  []
 clusters_mal = []
 num_clusters = []
 
-for i in range(2):
-
+for i in range(100):
+    print(i)
 
     lista_vertices, lista_trazas, pos_trazas, num_trazas_en_v, X, num_trazas  \
         = gcvt.VerticesyTrazasAleatorios( num_vertices = num_vertices,        \
@@ -55,18 +55,19 @@ for i in range(2):
     t1 = time.time_ns()
 
 
+
     ctv = Evaluar.cluster_to_vertex(centroides, lista_vertices)
 
     idistancia = Evaluar.distancia_media(centroides, lista_vertices, ctv)
 
-    ipuntos = Evaluar.evaluar(lista_trazas, etiquetas, ctv, num_trazas)
+    # ipuntos = Evaluar.evaluar(lista_trazas, etiquetas, ctv, num_trazas)
 
     inotaajustada, inotanorm = Evaluar.evaluacion(lista_trazas, etiquetas)
 
     itrazas_bien, itrazas_mal, iclusters_bien, iclusters_mal =\
         Evaluar.tabla_trazas(lista_trazas, etiquetas, num_trazas_en_v, ctv)
 
-    puntos.append(ipuntos)
+    # puntos.append(ipuntos)
     distancia.append(idistancia)
     tiempo.append((t1-t0)*1e-9)
     notaajustada.append(inotaajustada)
@@ -111,7 +112,7 @@ tabla = [ [' ', '1', '2', 'media', 'error',],
 print(tabulate(tabla, headers =  []))
 print(f'Vertices totales = {num_vertices}')
 
-print(f'Puntos:{np.mean(puntos)} +- {np.std(puntos)}')
+# print(f'Puntos:{np.mean(puntos)} +- {np.std(puntos)}')
 
 print(f'Nota ajustada:{np.mean(notaajustada)} +- {np.std(notaajustada)}')
 print(f'Nota no ajustada:{np.mean(notanorm)} +- {np.std(notanorm)}')

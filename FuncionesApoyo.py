@@ -7,7 +7,7 @@ Created on Tue Feb 21 17:55:08 2023
 import numpy as  np
 
 
-def centroides(etiquetas: np.array(1), lista_trazas: np.array(3),      \
+def encontrar_centroides(etiquetas: np.array(1), lista_trazas: np.array(3),   \
                num_clusters: int):
     """
     Parameters
@@ -43,7 +43,4 @@ def centroides(etiquetas: np.array(1), lista_trazas: np.array(3),      \
             tmedio = np.inf
         centroidei = [zmedio, tmedio]
         centroides.append(centroidei)
-    return(np.array(centroides))
-
-def encontrar_num_clusters():
-    a = 5
+    return np.array(centroides)

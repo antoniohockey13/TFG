@@ -14,7 +14,8 @@ import matplotlib.pyplot as plt
 def VerticesyTrazasAleatorios(num_vertices = 200, mediatrazas = 70,           \
                               sigmatrazas = 10, mediaz = 0, sigmaz = 5,       \
                               mediat = 0, sigmat = 200, mediar = 0,           \
-                              sigmar = 0.05, error_z = 0.02, error_t = 10):
+                              sigmar = 0.05, error_z = 0.02, error_t = 10,    \
+                              guardar_datos: bool = False):
     """
     Parameters
     ----------
@@ -42,6 +43,8 @@ def VerticesyTrazasAleatorios(num_vertices = 200, mediatrazas = 70,           \
         Error en la medición en z de la traza en cm. The default is 0.02.
     error_t : float, optional
         Error en la medición de t en la traza en ps. The default is 10.
+    guardar_datos : bool, optional
+        ¿Se guardan los datos en ficheros .dat? The default is False
 
     Returns
     -------
@@ -132,27 +135,28 @@ def VerticesyTrazasAleatorios(num_vertices = 200, mediatrazas = 70,           \
         X.append(np.array([lista_trazas[i,1], lista_trazas[i,2]]))
 
     # Guardar datos en ficheros .dat
-    output_file_vertices = open("vertices.dat", "w")
-    output_file_vertices.write("Vértice    z/cm    t/ps \n")
-    for i in range(num_vertices):
-        for j in range(3):
-            output_file_vertices.write(f"{lista_vertices[i,j]}    ")
-        output_file_vertices.write("\n")
-    output_file_vertices.close()
+    if guardar_datos:
+        output_file_vertices = open("vertices.dat", "w")
+        output_file_vertices.write("Vértice    z/cm    t/ps \n")
+        for i in range(num_vertices):
+            for j in range(3):
+                output_file_vertices.write(f"{lista_vertices[i,j]}    ")
+                output_file_vertices.write("\n")
+        output_file_vertices.close()
 
-    output_file_trazas = open("trazas.dat", "w")
-    output_file_trazas.write("Vértice    z/cm    t/ps \n")
-    for i in range(len(lista_trazas)):
-        for j in range(3):
-            output_file_trazas.write(f"{lista_trazas[i,j]}    ")
-        output_file_trazas.write("\n")
-    output_file_trazas.close()
+        output_file_trazas = open("trazas.dat", "w")
+        output_file_trazas.write("Vértice    z/cm    t/ps \n")
+        for i in range(len(lista_trazas)):
+            for j in range(3):
+                output_file_trazas.write(f"{lista_trazas[i,j]}    ")
+                output_file_trazas.write("\n")
+        output_file_trazas.close()
 
-    output_file_trazassinvert = open("trazassinvert.dat", "w")
-    output_file_trazassinvert.write("Vértice    z/cm    t/ps \n")
-    for i in range(len(lista_trazas)):
-        output_file_trazassinvert.write(f"{lista_trazas[i,1]}    "\
-                                        f"{lista_trazas[i,2]}\n")
-    output_file_trazassinvert.close()
+        output_file_trazassinvert = open("trazassinvert.dat", "w")
+        output_file_trazassinvert.write("Vértice    z/cm    t/ps \n")
+        for i in range(len(lista_trazas)):
+            output_file_trazassinvert.write(f"{lista_trazas[i,1]}    "\
+                                            f"{lista_trazas[i,2]}\n")
+        output_file_trazassinvert.close()
     return(lista_vertices, lista_trazas, pos_trazas, num_trazas_en_v, X,\
            num_trazas)

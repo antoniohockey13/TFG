@@ -4,8 +4,8 @@ Created on Fri Feb 24 16:05:15 2023
 
 @author: Antonio
 """
-from tabulate import tabulate
 import time
+from tabulate import tabulate
 import sklearn.mixture as skm
 import numpy as np
 import matplotlib.pyplot as plt
@@ -17,7 +17,7 @@ num_vertices = 200
 
 
 trazas_totales = []
-puntos = []
+# puntos = []
 distancia = []
 inercia = []
 tiempo = []
@@ -29,7 +29,8 @@ clusters_bien =  []
 clusters_mal = []
 num_clusters = []
 
-for i in range(2):
+for i in range(100):
+    print(i)
     lista_vertices, lista_trazas, pos_trazas, num_trazas_en_v, X, num_trazas  \
         = gcvt.VerticesyTrazasAleatorios( num_vertices = num_vertices,        \
                 mediatrazas = 70, sigmatrazas = 10, mediaz = 0, sigmaz = 5,   \
@@ -47,21 +48,22 @@ for i in range(2):
 
 
     etiquetas = em_gmm.predict(X)
-    centroides = FA.centroides(etiquetas, lista_trazas, inum_clusters)
+    centroides = FA.encontrar_centroides(etiquetas, lista_trazas,             \
+                                         inum_clusters)
     t1 = time.time_ns()
 
     ctv = Evaluar.cluster_to_vertex(centroides, lista_vertices)
 
     idistancia = Evaluar.distancia_media(centroides, lista_vertices, ctv)
 
-    ipuntos = Evaluar.evaluar(lista_trazas, etiquetas, ctv, num_trazas)
+    # ipuntos = Evaluar.evaluar(lista_trazas, etiquetas, ctv, num_trazas)
 
     inotaajustada, inotanorm = Evaluar.evaluacion(lista_trazas, etiquetas)
 
     itrazas_bien, itrazas_mal, iclusters_bien, iclusters_mal =\
         Evaluar.tabla_trazas(lista_trazas, etiquetas, num_trazas_en_v, ctv)
 
-    puntos.append(ipuntos)
+    # puntos.append(ipuntos)
     distancia.append(idistancia)
     tiempo.append((t1-t0)*1e-9)
     notaajustada.append(inotaajustada)
@@ -90,31 +92,31 @@ print('Ajuste realizado con: EM-GMM')
 
 
 tabla = [ [' ', '1', '2', 'media', 'error',],
-          ['Trazas OK/Tot', trazas_bien[0]/trazas_totales[0], \
-                trazas_bien[1]/trazas_totales[1],                  \
+          ['Trazas OK/Tot', trazas_bien[0]/trazas_totales[0],                 \
+                trazas_bien[1]/trazas_totales[1],                             \
                 np.mean(np.array(trazas_bien)/np.array(trazas_totales)),               \
                 np.std(np.array(trazas_bien)/np.array(trazas_totales))],
-          ['Trazas MAL/Tot', trazas_mal[0]/trazas_totales[0], \
-                trazas_mal[1]/trazas_totales[1],                   \
+          ['Trazas MAL/Tot', trazas_mal[0]/trazas_totales[0],                 \
+                trazas_mal[1]/trazas_totales[1],                              \
                 np.mean(np.array(trazas_mal)/np.array(trazas_totales)),                \
                 np.std(np.array(trazas_mal)/np.array(trazas_totales))],
-          ['Trazas tot', trazas_totales[0], trazas_totales[1],\
+          ['Trazas tot', trazas_totales[0], trazas_totales[1],                \
                 np.mean(trazas_totales), np.std(trazas_totales)],
-          ['Vertices OK', clusters_bien[0], clusters_bien[1],     \
+          ['Vertices OK', clusters_bien[0], clusters_bien[1],                 \
                 np.mean(clusters_bien), np.std(clusters_bien)],
-          ['Vertices MAL', clusters_mal[0], clusters_mal[1],      \
+          ['Vertices MAL', clusters_mal[0], clusters_mal[1],                  \
               np.mean(clusters_mal), np.std(clusters_mal)],
-        ['Clusters totales', num_clusters[0], num_clusters[1],\
+        ['Clusters totales', num_clusters[0], num_clusters[1],                \
             np.mean(num_clusters), np.std(num_clusters)] ]
 print(tabulate(tabla, headers =  []))
 print(f'Vertices totales = {num_vertices}')
 
-print(f'Puntos:{np.mean(puntos)} +- {np.std(puntos)}')
+# print(f'Puntos:{np.mean(puntos)} +- {np.std(puntos)}')
 
 print(f'Nota ajustada:{np.mean(notaajustada)} +- {np.std(notaajustada)}')
 print(f'Nota no ajustada:{np.mean(notanorm)} +- {np.std(notanorm)}')
 
-print('Distancia de los centroides a los vértices (normalizada entre número '\
+print('Distancia de los centroides a los vértices (normalizada entre número ' \
         f'vértices): {np.mean(distancia)} +- {np.std(distancia)}')
 
 print(f'Tiempo en ejecutar = {np.mean(tiempo)}+-{np.std(tiempo)}s')

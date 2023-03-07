@@ -4,10 +4,10 @@ Created on Tue Feb 14 12:37:50 2023
 
 @author: Antonio
 """
+import time
 from tabulate import tabulate
 import sklearn.cluster as skc
 import numpy as np
-import time
 import matplotlib.pyplot as plt
 import GenerarConjuntoVerticesyTrazas as gcvt
 import Evaluar
@@ -19,7 +19,7 @@ num_vertices = 200
 
 
 trazas_totales = []
-puntos = []
+# puntos = []
 distancia = []
 tiempo = []
 notaajustada = []
@@ -31,7 +31,7 @@ clusters_mal = []
 num_clusters = []
 num_noise = []
 
-for i in range(2):
+for i in range(100):
 
     lista_vertices, lista_trazas, pos_trazas, num_trazas_en_v, X, num_trazas  \
         = gcvt.VerticesyTrazasAleatorios( num_vertices = num_vertices,        \
@@ -40,8 +40,9 @@ for i in range(2):
                 error_z = 0.02, error_t = 10)
 
     t0 = time.time_ns()
-    dbscan = skc.DBSCAN(eps = 0.8, min_samples = 3, metric_params = None,
-                        algorithm = 'auto', leaf_size = 30, p = None, n_jobs = -1)
+    dbscan = skc.DBSCAN(eps = 0.8, min_samples = 3, metric_params = None,     \
+                        algorithm = 'auto', leaf_size = 30, p = None,         \
+                        n_jobs = -1)
 
     dbscan.fit(X)
     etiquetas = dbscan.labels_
@@ -52,7 +53,8 @@ for i in range(2):
     num_clusters.append(inum_clusters)
     num_noise.append(inum_noise)
 
-    centroides = FA.centroides(etiquetas, lista_trazas, inum_clusters)
+    centroides = FA.encontrar_centroides(etiquetas, lista_trazas,             \
+                                         inum_clusters)
 
 
 
@@ -62,14 +64,14 @@ for i in range(2):
 
     idistancia = Evaluar.distancia_media(centroides, lista_vertices, ctv)
 
-    ipuntos = Evaluar.evaluar(lista_trazas, etiquetas, ctv, num_trazas)
+    # ipuntos = Evaluar.evaluar(lista_trazas, etiquetas, ctv, num_trazas)
 
     inotaajustada, inotanorm = Evaluar.evaluacion(lista_trazas, etiquetas)
 
     itrazas_bien, itrazas_mal, iclusters_bien, iclusters_mal =\
         Evaluar.tabla_trazas(lista_trazas, etiquetas, num_trazas_en_v, ctv)
 
-    puntos.append(ipuntos)
+    # puntos.append(ipuntos)
     distancia.append(idistancia)
     tiempo.append((t1-t0)*1e-9)
     notaajustada.append(inotaajustada)
@@ -116,7 +118,7 @@ tabla = [ [' ', '1', '2', 'media', 'error',],
 print(tabulate(tabla, headers =  []))
 print(f'Vertices totales = {num_vertices}')
 
-print(f'Puntos:{np.mean(puntos)} +- {np.std(puntos)}')
+# print(f'Puntos:{np.mean(puntos)} +- {np.std(puntos)}')
 
 print(f'Nota ajustada:{np.mean(notaajustada)} +- {np.std(notaajustada)}')
 print(f'Nota no ajustada:{np.mean(notanorm)} +- {np.std(notanorm)}')
