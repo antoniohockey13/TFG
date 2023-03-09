@@ -7,7 +7,7 @@ Created on Tue Feb 14 19:32:54 2023
 import numpy as np
 import sklearn.metrics as skm
 
-def evaluacion(lista_trazas: np.array(np.array(3)), etiquetas:  np.array(int)):
+def evaluacion(lista_trazas: np.array(np.array(3)), etiquetas: np.array(int)):
     """
     Se basa en:
     https://scikit-learn.org/stable/modules/clustering.html#clustering-performance-evaluation
@@ -103,65 +103,14 @@ def distancia_media(centroides: np.array(float),                              \
         centroide = centroides[icentroide]
         numvertice = clustertovertex[icentroide]
         vertice = lista_vertices[int(numvertice)]
-        distancia =np.sqrt((centroide[0]-vertice[1])**2+\
-                           (centroide[1]-vertice[2])**2)
+        if centroide[0] == np.inf or centroide[1] == np.inf:
+            print('Un cluster esta vacío')
+        else:
+            distancia =np.sqrt((centroide[0]-vertice[1])**2+\
+                               (centroide[1]-vertice[2])**2)
         distanciatot += distancia
     return distanciatot/len(lista_vertices)
 
-
-def evaluar(lista_trazas: np.array(np.array(3)), etiquetas: np.array(int),    \
-            clustertovertex: np.array(int), num_trazas: int):
-    """
-    Parameters
-    ----------
-    lista_trazas : np.array(np.array(3))
-        Lista con las trazas de la simulación.
-    etiquetas : np.array(int)
-        Array que indica a que cluster pertenece cada traza.
-    centroides : np.array(float)
-        Posición de los centroides de cada cluster.
-    clustertovertex  :  np.array(int)
-        Lista que relaciona el número de cada cluster con cada vértice
-            # Posición marca cluster, número vertice [2 , 1...]
-            # Cluster 0--> Vertice 2, cluster 1--> Vertice 1
-    num_trazas  :  int
-        Número total de trazas en la simulación.
-
-    Returns
-    -------
-    float
-        Puntos (sobre 10).
-
-    """
-    puntos = 0
-    clustersmal = []
-    # Comprobar si trazas bien asignadas
-    for itraza in range(len(lista_trazas)):
-        # A que cluster se corresponde la traza
-        cluster = etiquetas[itraza]
-        # A que vertice se corresponde la traza
-        vertice = lista_trazas[itraza,0]
-        if vertice == clustertovertex[cluster]:
-            # print('Traza bien asignada')
-            puntos += 1
-        else:
-            # print(f'La traza {itraza} esta mal asignada')
-            puntos -= 1
-            clustersmal.append(cluster)
-
-    # Penalizar si falla mucho en el mismo vértice
-    for i in range(len(clustersmal)):
-        clusteri = clustersmal[i]
-        for j in range(len(clustersmal)):
-            clusterj = clustersmal[j]
-
-            if clusteri == clusterj:
-                puntos -=1/2 # Se divide entre dos por que se encontrara el
-                             # elemento dos veces
-                # print(f'1 traza mal en el cluster {clusteri}')
-
-    puntosnorm =puntos/(num_trazas)*10
-    return puntosnorm
 
 
 def tabla_trazas(lista_trazas: np.array(np.array(3)),                         \
@@ -239,3 +188,41 @@ def tabla_trazas(lista_trazas: np.array(np.array(3)),                         \
         if contador_trazas_mal[itraza] == 1:
             clusters_mal += 1
     return(trazas_bien, trazas_mal, clusters_bien, clusters_mal)
+
+
+def evaluacion_total(lista_trazas: np.array(np.array(3)),                     \
+                     etiquetas: np.array(int), centroides: np.array(float),   \
+                     lista_vertices: np.array(3), num_trazas_en_v: list[int]):
+    """
+    Llama al resto de funciones de evaluación para devolver todos los
+    resultados juntos.
+
+    Parameters
+    ----------
+    lista_trazas : np.array(np.array(3))
+        Lista con las trazas de la simulación.
+    etiquetas : np.array(int)
+        Array que indica a que cluster pertenece cada traza.
+    centroides : np.array(float)
+        Posición de los centroides de cada cluster.
+    lista_vertices : np.array(np.array(3))
+        Lista con los vértices de la simulación.
+    num_trazas_en_v  :  list[int]
+        Lista que indica el número de trazas en cada vértice
+            # Posición marca vértice, número número de trazas [10 , 15...]
+            # Vértice 0--> 10 trazas, Vértice  1--> 15 trazas
+
+    Returns
+    -------
+    (notaajustada, notanorm, distancia, trazas_bien, trazas_mal, clusters_bien,
+     clusters_mal)
+
+    """
+    notaajustada, notanorm = evaluacion(lista_trazas, etiquetas)
+    ctv = cluster_to_vertex(centroides, lista_vertices)
+    distancia = distancia_media(centroides, lista_vertices, ctv)
+    trazas_bien, trazas_mal, clusters_bien, clusters_mal = tabla_trazas(      \
+                                 lista_trazas, etiquetas, num_trazas_en_v, ctv)
+
+    return(notaajustada, notanorm, distancia, trazas_bien, trazas_mal,         \
+           clusters_bien, clusters_mal)

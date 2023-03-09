@@ -6,6 +6,63 @@ Created on Wed Mar  1 18:19:29 2023
 """
 import numpy as np
 
+#%% Da nota sobre 10 a funciones se deshecha por poco precisa
+
+def evaluar(lista_trazas: np.array(np.array(3)), etiquetas: np.array(int),    \
+            clustertovertex: np.array(int), num_trazas: int):
+    """
+    Parameters
+    ----------
+    lista_trazas : np.array(np.array(3))
+        Lista con las trazas de la simulación.
+    etiquetas : np.array(int)
+        Array que indica a que cluster pertenece cada traza.
+    centroides : np.array(float)
+        Posición de los centroides de cada cluster.
+    clustertovertex  :  np.array(int)
+        Lista que relaciona el número de cada cluster con cada vértice
+            # Posición marca cluster, número vertice [2 , 1...]
+            # Cluster 0--> Vertice 2, cluster 1--> Vertice 1
+    num_trazas  :  int
+        Número total de trazas en la simulación.
+
+    Returns
+    -------
+    float
+        Puntos (sobre 10).
+
+    """
+    puntos = 0
+    clustersmal = []
+    # Comprobar si trazas bien asignadas
+    for itraza in range(len(lista_trazas)):
+        # A que cluster se corresponde la traza
+        cluster = etiquetas[itraza]
+        # A que vertice se corresponde la traza
+        vertice = lista_trazas[itraza,0]
+        if vertice == clustertovertex[cluster]:
+            # print('Traza bien asignada')
+            puntos += 1
+        else:
+            # print(f'La traza {itraza} esta mal asignada')
+            puntos -= 1
+            clustersmal.append(cluster)
+
+    # Penalizar si falla mucho en el mismo vértice
+    for i in range(len(clustersmal)):
+        clusteri = clustersmal[i]
+        for j in range(len(clustersmal)):
+            clusterj = clustersmal[j]
+
+            if clusteri == clusterj:
+                puntos -=1/2 # Se divide entre dos por que se encontrara el
+                             # elemento dos veces
+                # print(f'1 traza mal en el cluster {clusteri}')
+
+    puntosnorm =puntos/(num_trazas)*10
+    return puntosnorm
+#%% Sin función cluster to vertex
+
 def tabla_trazas(lista_vertices: np.array(np.array(3)),                       \
                  lista_trazas: np.array(np.array(3)), num_trazas: int,        \
                  etiquetas: np.array(int), centroides: np.array(float),       \

@@ -4,18 +4,17 @@ Created on Mon Feb 13 19:22:13 2023
 
 @author: Antonio
 """
-import time
+
 from tabulate import tabulate
-import sklearn.cluster as skc
 import numpy as np
 import matplotlib.pyplot as plt
 import GenerarConjuntoVerticesyTrazas as gcvt
 import Evaluar
+import Algoritmos
 
 num_vertices = 200
 
 trazas_totales = []
-# puntos = []
 distancia = []
 inercia = []
 tiempo = []
@@ -27,7 +26,7 @@ clusters_bien =  []
 clusters_mal = []
 num_clusters = []
 
-for i in range(100):
+for i in range(2):
     print(i)
 
     lista_vertices, lista_trazas, pos_trazas, num_trazas_en_v, X, num_trazas  \
@@ -36,40 +35,17 @@ for i in range(100):
                 mediat = 0, sigmat = 200, mediar = 0, sigmar = 0.05,          \
                 error_z = 0.02, error_t = 10)
 
-    bandwidth = skc.estimate_bandwidth(X = X, quantile= 0.01 ,\
-                                       n_samples = 299, n_jobs = -1)
-    t0 = time.time_ns()
-    meanshift = skc.MeanShift(bandwidth=bandwidth, seeds=None,                \
-                              bin_seeding=False, min_bin_freq=1,              \
-                              cluster_all=True, n_jobs=None, max_iter=300)
+    inum_clusters, centroides, etiquetas, total_time = Algoritmos.MeanShift(X)
 
-    meanshift.fit(X)
-
-    etiquetas = meanshift.labels_
-    labels_unique = np.unique(etiquetas)
-    inum_clusters = len(labels_unique)
     num_clusters.append(inum_clusters)
 
-    centroides = meanshift.cluster_centers_
+    inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
+    iclusters_bien, iclusters_mal = Evaluar.evaluacion_total(lista_trazas,    \
+                                    etiquetas, centroides, lista_vertices,    \
+                                    num_trazas_en_v)
 
-    t1 = time.time_ns()
-
-
-
-    ctv = Evaluar.cluster_to_vertex(centroides, lista_vertices)
-
-    idistancia = Evaluar.distancia_media(centroides, lista_vertices, ctv)
-
-    # ipuntos = Evaluar.evaluar(lista_trazas, etiquetas, ctv, num_trazas)
-
-    inotaajustada, inotanorm = Evaluar.evaluacion(lista_trazas, etiquetas)
-
-    itrazas_bien, itrazas_mal, iclusters_bien, iclusters_mal =\
-        Evaluar.tabla_trazas(lista_trazas, etiquetas, num_trazas_en_v, ctv)
-
-    # puntos.append(ipuntos)
     distancia.append(idistancia)
-    tiempo.append((t1-t0)*1e-9)
+    tiempo.append(total_time)
     notaajustada.append(inotaajustada)
     notanorm.append(inotanorm)
 
@@ -111,8 +87,6 @@ tabla = [ [' ', '1', '2', 'media', 'error',],
             np.mean(num_clusters), np.std(num_clusters)] ]
 print(tabulate(tabla, headers =  []))
 print(f'Vertices totales = {num_vertices}')
-
-# print(f'Puntos:{np.mean(puntos)} +- {np.std(puntos)}')
 
 print(f'Nota ajustada:{np.mean(notaajustada)} +- {np.std(notaajustada)}')
 print(f'Nota no ajustada:{np.mean(notanorm)} +- {np.std(notanorm)}')

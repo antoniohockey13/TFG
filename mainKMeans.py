@@ -4,18 +4,16 @@ Created on Mon Feb 13 16:58:16 2023
 
 @author: Antonio
 """
-import time
 from tabulate import tabulate
-import sklearn.cluster as skc
 import numpy as np
 import matplotlib.pyplot as plt
 import GenerarConjuntoVerticesyTrazas as gcvt
 import Evaluar
-import NumeroClusters
+import Algoritmos
 
-tinicial = time.time_ns()
+
 num_vertices = 200
-numcluster_manual = True
+numcluster_manual = 200
 
 
 trazas_totales = []
@@ -32,7 +30,7 @@ clusters_mal = []
 num_clusters = []
 
 
-for i in range(100):
+for i in range(10):
     print(i)
 
     lista_vertices, lista_trazas, pos_trazas, num_trazas_en_v, X, num_trazas  \
@@ -41,45 +39,21 @@ for i in range(100):
                 mediat = 0, sigmat = 200, mediar = 0, sigmar = 0.05,          \
                 error_z = 0.02, error_t = 10)
 
-    t0 = time.time_ns()
 
-    if numcluster_manual:
-        inum_clusters = 200
-    else:
-        inum_clusters = NumeroClusters.kmeans_num_clusters(X, lista_trazas,   \
-                                       num_min = 190, num_max = 210, step = 20)
+    inum_clusters, centroides, etiquetas, total_time = Algoritmos.KMeans(X,   \
+                                            lista_trazas, numcluster_manual)
 
     num_clusters.append(inum_clusters)
+    inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
+    iclusters_bien, iclusters_mal = Evaluar.evaluacion_total(lista_trazas,    \
+                                    etiquetas, centroides, lista_vertices,    \
+                                    num_trazas_en_v)
 
-    kmeans =skc.KMeans(n_clusters = inum_clusters, init = 'k-means++',        \
-                       max_iter = 300, n_init = 10)
-
-    kmeans.fit(X)
-
-    centroides = kmeans.cluster_centers_
-    etiquetas = kmeans.labels_
-
-    t1 = time.time_ns()
-
-
-    ctv = Evaluar.cluster_to_vertex(centroides, lista_vertices)
-
-    idistancia = Evaluar.distancia_media(centroides, lista_vertices, ctv)
-
-    # ipuntos = Evaluar.evaluar(lista_trazas, etiquetas, ctv, num_trazas)
-
-    inotaajustada, inotanorm = Evaluar.evaluacion(lista_trazas, etiquetas)
-
-    itrazas_bien, itrazas_mal, iclusters_bien, iclusters_mal =\
-        Evaluar.tabla_trazas(lista_trazas, etiquetas, num_trazas_en_v, ctv)
-
-    # puntos.append(ipuntos)
     distancia.append(idistancia)
-    tiempo.append((t1-t0)*1e-9)
+    tiempo.append(total_time)
     notaajustada.append(inotaajustada)
     notanorm.append(inotanorm)
 
-    inercia.append(kmeans.inertia_)
     trazas_bien.append(itrazas_bien)
     trazas_mal.append(itrazas_mal)
     clusters_bien.append(iclusters_bien)
@@ -102,7 +76,6 @@ for i in range(100):
 
 print('Ajuste realizado con: KMeans')
 
-
 tabla = [ [' ', '1', '2', 'media', 'error',],
           ['Trazas OK/Tot', trazas_bien[0]/trazas_totales[0],                 \
                 trazas_bien[1]/trazas_totales[1],                             \
@@ -122,8 +95,6 @@ tabla = [ [' ', '1', '2', 'media', 'error',],
             np.mean(num_clusters), np.std(num_clusters)] ]
 print(tabulate(tabla, headers =  []))
 print(f'Vertices totales = {num_vertices}')
-
-# print(f'Puntos:{np.mean(puntos)} +- {np.std(puntos)}')
 
 print(f'Nota ajustada:{np.mean(notaajustada)} +- {np.std(notaajustada)}')
 print(f'Nota no ajustada:{np.mean(notanorm)} +- {np.std(notanorm)}')

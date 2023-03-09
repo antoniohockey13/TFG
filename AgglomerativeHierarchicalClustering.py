@@ -6,20 +6,19 @@ Created on Fri Feb 24 17:01:33 2023
 """
 
 from tabulate import tabulate
-import time
-import sklearn.cluster as skc
 import numpy as np
 import matplotlib.pyplot as plt
 import GenerarConjuntoVerticesyTrazas as gcvt
 import Evaluar
-import FuncionesApoyo as FA
+import Algoritmos
+
 
 
 num_vertices = 200
+numcluster_manual = 200
 
 
 trazas_totales = []
-# puntos = []
 distancia = []
 inercia = []
 tiempo = []
@@ -31,47 +30,24 @@ clusters_bien =  []
 clusters_mal = []
 num_clusters = []
 
-for i in range(100):
+for i in range(2):
     lista_vertices, lista_trazas, pos_trazas, num_trazas_en_v, X, num_trazas  \
         = gcvt.VerticesyTrazasAleatorios( num_vertices = num_vertices,        \
                 mediatrazas = 70, sigmatrazas = 10, mediaz = 0, sigmaz = 5,   \
                 mediat = 0, sigmat = 200, mediar = 0, sigmar = 0.05,          \
                 error_z = 0.02, error_t = 10)
 
-    t0 = time.time_ns()
-    inum_clusters = 200
+    inum_clusters, centroides, etiquetas, total_time = Algoritmos.AHC(X,      \
+                                               lista_trazas, numcluster_manual)
+
+    inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
+    iclusters_bien, iclusters_mal = Evaluar.evaluacion_total(lista_trazas,    \
+                                    etiquetas, centroides, lista_vertices,    \
+                                    num_trazas_en_v)
+
     num_clusters.append(inum_clusters)
-    agglomerative = skc.AgglomerativeClustering(n_clusters = inum_clusters,                 \
-                                                distance_threshold= None,     \
-                                                compute_full_tree = 'auto')
-    # TO DO: Se puede aproximar la distancia media de separación entre clusters
-    # como distance_threshold. Si lo ponemos != None entonces n_clusters = None
-    # y compute_full_tree = True or Auto
-    agglomerative.fit(X)
-
-
-
-    etiquetas = agglomerative.labels_
-    centroides = FA.encontrar_centroides(etiquetas, lista_trazas,             \
-                                         inum_clusters)
-
-    t1 = time.time_ns()
-
-
-    ctv = Evaluar.cluster_to_vertex(centroides, lista_vertices)
-
-    idistancia = Evaluar.distancia_media(centroides, lista_vertices, ctv)
-
-    # ipuntos = Evaluar.evaluar(lista_trazas, etiquetas, ctv, num_trazas)
-
-    inotaajustada, inotanorm = Evaluar.evaluacion(lista_trazas, etiquetas)
-
-    itrazas_bien, itrazas_mal, iclusters_bien, iclusters_mal =\
-        Evaluar.tabla_trazas(lista_trazas, etiquetas, num_trazas_en_v, ctv)
-
-    # puntos.append(ipuntos)
     distancia.append(idistancia)
-    tiempo.append((t1-t0)*1e-9)
+    tiempo.append(total_time)
     notaajustada.append(inotaajustada)
     notanorm.append(inotanorm)
 
@@ -116,7 +92,6 @@ tabla = [ [' ', '1', '2', 'media', 'error',],
 print(tabulate(tabla, headers =  []))
 print(f'Vertices totales = {num_vertices}')
 
-# print(f'Puntos:{np.mean(puntos)} +- {np.std(puntos)}')
 
 print(f'Nota ajustada:{np.mean(notaajustada)} +- {np.std(notaajustada)}')
 print(f'Nota no ajustada:{np.mean(notanorm)} +- {np.std(notanorm)}')
