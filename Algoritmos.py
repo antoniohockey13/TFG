@@ -87,7 +87,8 @@ def MeanShift(X: np.array(2)):
     return num_clusters, centroides, etiquetas, total_time
 
 
-def DBSCAN(X: np.array(2), lista_trazas: np.array(3), epsilon: float = 0.8):
+def DBSCAN(X: np.array(2), lista_trazas: np.array(3), epsilon: float = 0.8,   \
+           min_samples: int = 5, leaf_size: int = 10):
     """
     Realiza el ajuste al algoritmo DBSCAN y devuelve los valores de interes
 
@@ -99,6 +100,13 @@ def DBSCAN(X: np.array(2), lista_trazas: np.array(3), epsilon: float = 0.8):
         Lista con todas las trazas y al vertice perteneciente.
     epsilon : float. OPTIONAL
         Valor de epsilon para el ajuste de DBSCAN. The default is 0.8
+    min_samples : int, OPTIONAL
+        The number of samples in a neighborhood for a point to be considered
+        as a core point. This includes the point itself. Deafault is 5
+    leaf_size : in, OPTIONAL
+        Leaf size passed to BallTree or cKDTree. This can affect the speed of
+        the construction and query, as well as the memory required to store
+        the tree. Default is 10
 
     Returns
     -------
