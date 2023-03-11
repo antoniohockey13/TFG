@@ -2,7 +2,7 @@
 """
 Created on Thu Mar  9 17:50:12 2023
 
-@author: Antonio
+@author: Antonio Gómez
 Generar gráficas
 """
 
