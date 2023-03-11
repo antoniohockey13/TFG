@@ -4,146 +4,100 @@ Created on Mon Feb 13 16:45:28 2023
 
 @author: Antonio
 """
-import sklearn.cluster as skc
-import sklearn.metrics as skm
+from tabulate import tabulate
 import numpy as np
 import matplotlib.pyplot as plt
+import GenerarConjuntoVerticesyTrazas as gcvt
+import Evaluar
+import Algoritmos
 
 
-def num_clusters(X: list[np.array(2)], minclusters: int, maxclusters: int):
-    """
-    Parameters
-    ----------
-    X : list[np.array(2)]
-        Conjunto de trazas.
-    minclusters : int
-        Número mínimo de clusters.
-    maxclusters : int
-        Número máximo de clusters.
 
-    Returns
-    -------
-    None.
-
-    """
-
-    # Elegir número de clusters a partir gráfica ver codo
-    inercia = []
-    for i in range(minclusters, maxclusters):
-        algoritmo = skc.KMeans(n_clusters = i, init = 'k-means++', n_init = 5)
-        algoritmo.fit(X)
-        inercia.append(algoritmo.inertia_)
-
-    plt.plot(list(range(minclusters, maxclusters)), inercia, 'x')
-    plt.xlabel('Nº clusters')
-    plt.ylabel('Inercia')
-    plt.show()
-    # Buscar como elegir codo con regla matemática segunda derivada(?)
+num_vertices = 200
+numcluster_manual = 200
 
 
-def Evaluar(lista_vertices: np.array(np.array(3)),                     \
-                   lista_trazas: np.array(np.array(3)), num_vertices: int,    \
-                   num_trazas: int, etiquetas: np.array(int),                 \
-                   centroides: np.array(float)):
-    """
-    Parameters
-    ----------
-    lista_vertices : np.array(np.array(3))
-        Lista con los vértices de la simulación.
-    lista_trazas : np.array(np.array(3))
-        Lista con las trazas de la simulación.
-    num_vertices : int
-        Número se vértices en la simulacion.
-    num_trazas : int
-        Número de trazas en la simulación.
-    etiquetas : np.array(int)
-        Array que indica a que cluster pertenece cada traza.
-    centroides : np.array(float)
-        Posición de los centroides de cada cluster.
+trazas_totales = []
+distancia = []
+tiempo = []
+notaajustada = []
+notanorm = []
+trazas_bien = []
+trazas_mal = []
+clusters_bien =  []
+clusters_mal = []
+num_clusters = []
+num_noise = []
 
-    Returns
-    -------
-    (float, float)
-        Puntos (sobre 10), distancia vertice-centroide.
+for i in range(2):
 
-    """
+    lista_vertices, lista_trazas, pos_trazas, num_trazas_en_v, X, num_trazas  \
+        = gcvt.VerticesyTrazasAleatorios( num_vertices = num_vertices,        \
+                mediatrazas = 70, sigmatrazas = 10, mediaz = 0, sigmaz = 5,   \
+                mediat = 0, sigmat = 200, mediar = 0, sigmar = 0.05,          \
+                error_z = 0.02, error_t = 10)
 
-    clustertovertex = [] # Posición marca cluster, número vertice [2 , 1...]
-    # Cluster 0--> Vertice 2, cluster 1--> Vertice 1
+    inum_clusters, centroides, etiquetas, total_time = Algoritmos.KMeans(X,   \
+                                               lista_trazas, numcluster_manual)
 
-    distanciatot = 0
-    for icentro in range(len(centroides)):
-        centroi = centroides[icentro]
-        # Distancia se establece como infinito para así escoger la menor y elegir
-        # que vértice esta más cerca de que centroide
-        distancia_minima = np.inf
-        verticeseleccionado = -1
+    inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
+    iclusters_bien, iclusters_mal = Evaluar.evaluacion_total(lista_trazas,    \
+                                    etiquetas, centroides, lista_vertices,    \
+                                    num_trazas_en_v)
 
-        for ivertice in range(len(lista_vertices)):
-            posverticei = [lista_vertices[ivertice,1], lista_vertices[ivertice,2]]
-            verticei = lista_vertices[ivertice,0]
-            distancia = np.sqrt((centroi[0]-posverticei[0])**2+\
-                                (centroi[1]-posverticei[1])**2)
-            if distancia < distancia_minima:
-                distancia_minima = distancia
-                verticeseleccionado = verticei
+    num_clusters.append(inum_clusters)
+    num_noise.append(inum_noise)
 
-        distanciatot += distancia_minima
-        clustertovertex.append(verticeseleccionado)
+    distancia.append(idistancia)
+    tiempo.append(total_time)
+    notaajustada.append(inotaajustada)
+    notanorm.append(inotanorm)
 
-    puntos = 0
-    # Comprobar si trazas bien asignadas
-    for itraza in range(len(lista_trazas)):
-        # A que cluster se corresponde la traza
-        cluster = etiquetas[itraza]
-        # A que vertice se corresponde la traza
-        vertice = lista_trazas[itraza,0]
-        clustersmal = []
-        if vertice == clustertovertex[cluster]:
-            # print('Traza bien asignada')
-            puntos += 1
-        else:
-            # print(f'La traza {itraza} esta mal asignada')
-            puntos -= 1
-            clustersmal.append(cluster)
+    trazas_bien.append(itrazas_bien)
+    trazas_mal.append(itrazas_mal)
+    clusters_bien.append(iclusters_bien)
+    clusters_mal.append(iclusters_mal)
 
-        # Penalizar si falla mucho en el mismo vértice
-        for i in range(len(clustersmal)):
-            clusteri = clustersmal[i]
-            for j in range(len(clustersmal)):
-                clusterj = clustersmal[j]
-
-                if clusteri == clusterj:
-                    puntos -=1/2 # Se divide entre dos por que se encontrara el
-                                 # elemento dos veces
-                    # print(f'1 traza mal en el cluster {clusteri}')
-
-    puntosnorm =puntos/(num_vertices*num_trazas)*10
-    distancianorm = distanciatot/num_vertices
-    return(puntosnorm, distancianorm)
+    trazas_totales.append(num_trazas)
 
 
-def evaluacion(lista_trazas: np.array(np.array(3)), etiquetas:  np.array(int)):
-    """
-    Se basa en:
-    https://scikit-learn.org/stable/modules/clustering.html#clustering-performance-evaluation
+    # plt.plot(lista_vertices[:,1], lista_vertices[:,2], 'x')
+    # # plt.errorbar(lista_trazas[:,1], lista_trazas[:,2], xerr = error_z, \
+    #               # yerr = error_t, fmt= 'or', linestyle="None")
+    # plt.plot(centroides[:,0], centroides[:,1], 'o', c= 'g')
+    # # plt.xlim(-10, 10)
+    # # plt.ylim(-100, 100)
+    # plt.xlabel("$z$/cm")
+    # plt.ylabel("$t$/ps")
+    # plt.show()
 
-    Parameters
-    ----------
-    lista_trazas : np.array(np.array(3))
-        Lista con las trazas de la simulación.
-    etiquetas : np.array(int)
-        Array que indica a que cluster pertenece cada traza.
 
-    Returns
-    -------
-    (float, float)
-        Nota generada con adjusted_rand_score, nota generada con rand_score.
+print('Ajuste realizado con: KMeans')
 
-    """
+tabla = [ [' ', '1', '2', 'media', 'error',],
+          ['Trazas OK/Tot', trazas_bien[0]/trazas_totales[0], \
+               trazas_bien[1]/trazas_totales[1],                  \
+               np.mean(np.array(trazas_bien)/np.array(trazas_totales)),               \
+               np.std(np.array(trazas_bien)/np.array(trazas_totales))],
+          ['Trazas MAL/Tot', trazas_mal[0]/trazas_totales[0], \
+               trazas_mal[1]/trazas_totales[1],                   \
+               np.mean(np.array(trazas_mal)/np.array(trazas_totales)),                \
+               np.std(np.array(trazas_mal)/np.array(trazas_totales))],
+          ['Trazas tot', trazas_totales[0], trazas_totales[1],\
+               np.mean(trazas_totales), np.std(trazas_totales)],
+          ['Vertices OK', clusters_bien[0], clusters_bien[1],     \
+               np.mean(clusters_bien), np.std(clusters_bien)],
+          ['Vertices MAL', clusters_mal[0], clusters_mal[1],      \
+              np.mean(clusters_mal), np.std(clusters_mal)],
+        ['Clusters totales', num_clusters[0], num_clusters[1],\
+            np.mean(num_clusters), np.std(num_clusters)] ]
+print(tabulate(tabla, headers =  []))
+print(f'Vertices totales = {num_vertices}')
 
-    verticepertenecentrazas = lista_trazas[:,0]
+print(f'Nota ajustada:{np.mean(notaajustada)} +- {np.std(notaajustada)}')
+print(f'Nota no ajustada:{np.mean(notanorm)} +- {np.std(notanorm)}')
 
-    notaajustada = skm.adjusted_rand_score(verticepertenecentrazas, etiquetas)
-    notanorm = skm.rand_score(verticepertenecentrazas, etiquetas)
-    return notaajustada, notanorm
+print('Distancia de los centroides a los vértices (normalizada entre número '\
+        f'vértices): {np.mean(distancia)} +- {np.std(distancia)}')
+
+print(f'Tiempo en ejecutar = {np.mean(tiempo)}+-{np.std(tiempo)}s')
