@@ -13,7 +13,8 @@ import FuncionesApoyo as FA
 
 
 def KMeans(X: np.array(2), lista_trazas: np.array(3),                         \
-           numcluster_manual: int or None):
+           numcluster_manual: int or None, n_init: int = 10,                  \
+           tol: float = 1e-4):
     """
     Realiza el ajuste al algoritmo KMeans y devuelve los valores de interes
 
@@ -26,6 +27,11 @@ def KMeans(X: np.array(2), lista_trazas: np.array(3),                         \
     numcluster_manual : int or None
         Numero de cluster total si es un número se toma el número si es
         'None' se calcula el mejor ajuste con la nota ajustada.
+    n_init : int, OPTIONAL
+        Numero de veces que se corre el algoritmo con distintos centroides.
+        Default 10
+    tol : float, OPTIONAL
+        Tolerancia para asegurar convergencia. Default 1e-4
 
     Returns
     -------
@@ -44,7 +50,7 @@ def KMeans(X: np.array(2), lista_trazas: np.array(3),                         \
         num_clusters = numcluster_manual
 
     kmeans =skc.KMeans(n_clusters = num_clusters, init = 'k-means++',         \
-                       max_iter = 300, n_init = 10)
+                       max_iter = 300, n_init = 10, tol = 1e-4)
 
     kmeans.fit(X)
 
@@ -52,11 +58,13 @@ def KMeans(X: np.array(2), lista_trazas: np.array(3),                         \
     etiquetas = kmeans.labels_
 
     total_time = (time.time_ns()-t0)*1e-9
+    # print(kmeans.n_iter_) # Muestra numero iteracciones realizado
 
     return(num_clusters, centroides, etiquetas, total_time)
 
 
-def MeanShift(X: np.array(2)):
+def MeanShift(X: np.array(2), quantile: float = 0.01, n_samples: int = 299,   \
+              min_bin_freq: int = 1):
     """
     Realiza el ajuste al algoritmo MeanShift y devuelve los valores de interes
 
@@ -64,17 +72,27 @@ def MeanShift(X: np.array(2)):
     ----------
     X : np.array(2)
         Lista de las trazas a clusterizar.
+    quantile : float, OPTIONAL
+        Should be between [0, 1] 0.5 means that the median of all pairwise
+        distances is used. For bandwith. Default 0.01
+    n_samples : int, OPTIONAL
+        The number of samples to use. If not given, all samples are used. For
+        bandwith. Default = 299
+    min_bin_freq : int, OPTIONAL
+        To speed up the algorithm, accept only those bins with at
+        least min_bin_freq points as seeds. Default 1
 
     Returns
     -------
     num_clusters, centroides, etiquetas, total_time
     """
-    bandwidth = skc.estimate_bandwidth(X = X, quantile= 0.01 ,\
-                                       n_samples = 299, n_jobs = -1)
     t0 = time.time_ns()
-    meanshift = skc.MeanShift(bandwidth=bandwidth, seeds=None,                \
-                              bin_seeding=False, min_bin_freq=1,              \
-                              cluster_all=True, n_jobs=None, max_iter=300)
+    bandwidth = skc.estimate_bandwidth(X = X, quantile = quantile ,\
+                                       n_samples = n_samples, n_jobs = -1)
+
+    meanshift = skc.MeanShift(bandwidth = bandwidth, seeds = None,                \
+                              bin_seeding = True, min_bin_freq = min_bin_freq,\
+                              cluster_all = True, n_jobs= -1, max_iter=300)
     meanshift.fit(X)
 
     etiquetas = meanshift.labels_
@@ -83,6 +101,7 @@ def MeanShift(X: np.array(2)):
 
     centroides = meanshift.cluster_centers_
     total_time = (time.time_ns()-t0)*1e-9
+    # print(meanshift.n_iter_) # Muestra numero iteracciones realizado
 
     return num_clusters, centroides, etiquetas, total_time
 
@@ -114,9 +133,9 @@ def DBSCAN(X: np.array(2), lista_trazas: np.array(3), epsilon: float = 0.8,   \
 
     """
     t0 = time.time_ns()
-    dbscan = skc.DBSCAN(eps = epsilon, min_samples = 3, metric_params = None, \
-                        algorithm = 'auto', leaf_size = 30, p = None,         \
-                        n_jobs = -1)
+    dbscan = skc.DBSCAN(eps = epsilon, min_samples = min_samples,             \
+                        metric_params = None, algorithm = 'auto',             \
+                        leaf_size = leaf_size, p = None, n_jobs = -1)
 
     dbscan.fit(X)
     etiquetas = dbscan.labels_

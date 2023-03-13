@@ -27,9 +27,8 @@ trazas_mal = []
 clusters_bien =  []
 clusters_mal = []
 num_clusters = []
-num_noise = []
 
-for i in range(2):
+for i in range(20):
 
     lista_vertices, lista_trazas, pos_trazas, num_trazas_en_v, X, num_trazas  \
         = gcvt.VerticesyTrazasAleatorios( num_vertices = num_vertices,        \
@@ -46,7 +45,6 @@ for i in range(2):
                                     num_trazas_en_v)
 
     num_clusters.append(inum_clusters)
-    num_noise.append(inum_noise)
 
     distancia.append(idistancia)
     tiempo.append(total_time)

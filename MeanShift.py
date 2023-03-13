@@ -26,8 +26,7 @@ clusters_bien =  []
 clusters_mal = []
 num_clusters = []
 
-for i in range(2):
-    print(i)
+for i in range(10):
 
     lista_vertices, lista_trazas, pos_trazas, num_trazas_en_v, X, num_trazas  \
         = gcvt.VerticesyTrazasAleatorios( num_vertices = num_vertices,        \
@@ -35,7 +34,9 @@ for i in range(2):
                 mediat = 0, sigmat = 200, mediar = 0, sigmar = 0.05,          \
                 error_z = 0.02, error_t = 10)
 
-    inum_clusters, centroides, etiquetas, total_time = Algoritmos.MeanShift(X)
+    inum_clusters, centroides, etiquetas, total_time = Algoritmos.MeanShift(X,\
+                                            quantile = 1e-2, n_samples = 299, \
+                                            min_bin_freq = 31)
 
     num_clusters.append(inum_clusters)
 
