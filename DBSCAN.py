@@ -28,7 +28,7 @@ clusters_mal = []
 num_clusters = []
 num_noise = []
 
-for i in range(2):
+for i in range(100):
 
     lista_vertices, lista_trazas, pos_trazas, num_trazas_en_v, X, num_trazas  \
         = gcvt.VerticesyTrazasAleatorios( num_vertices = num_vertices,        \
@@ -36,8 +36,9 @@ for i in range(2):
                 mediat = 0, sigmat = 200, mediar = 0, sigmar = 0.05,          \
                 error_z = 0.02, error_t = 10)
 
-    inum_clusters, centroides, etiquetas, total_time, inum_noise =              \
-        Algoritmos.DBSCAN(X, lista_trazas)
+    inum_clusters, centroides, etiquetas, total_time, inum_noise =            \
+        Algoritmos.DBSCAN(X, lista_trazas, epsilon = 1.45, min_samples = 2,   \
+                          leaf_size = 10)
 
     inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
     iclusters_bien, iclusters_mal = Evaluar.evaluacion_total(lista_trazas,    \
