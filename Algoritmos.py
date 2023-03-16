@@ -182,6 +182,7 @@ def EM_GMM(X: np.array(2), lista_trazas, numcluster_manual: int or None):
     em_gmm = skm.GaussianMixture(n_components = num_clusters, n_init = 1,     \
                                  init_params = 'kmeans', warm_start = True)
     em_gmm.fit(X)
+    print(em_gmm.n_iter_)
 
 
     etiquetas = em_gmm.predict(X)
@@ -192,7 +193,7 @@ def EM_GMM(X: np.array(2), lista_trazas, numcluster_manual: int or None):
     return num_clusters, centroides, etiquetas, total_time
 
 def AHC(X: np.array(2), lista_trazas: np.array(3),                            \
-        numcluster_manual: int or None):
+        numcluster_manual: int or None, distance_threshold: float or None):
     """
     Realiza el ajuste al algoritmo Agglomerative Hierarchical Clustering
     y devuelve los valores de interes
@@ -206,28 +207,35 @@ def AHC(X: np.array(2), lista_trazas: np.array(3),                            \
     numcluster_manual : int or None
         Numero de cluster total si es un número se toma el número si es
         'None' se calcula el mejor ajuste con la nota ajustada.
-
+    distance_threshold : float or None
+        The linkage distance threshold at or above which clusters will
+        not be merged
     Returns
     -------
     num_clusters, centroides, etiquetas, total_time
 
+    Si distance_threslhold --> numero
+    --> n_clusters = None y compute_full_tree = True
+
     """
     t0 = time.time_ns()
 
-    if numcluster_manual is None:
-        print('Hay que implementarlo (?)')
-    else:
-        num_clusters = numcluster_manual
+    # if numcluster_manual is None:
+    #     print('Hay que implementarlo (?)')
+    # else:
+    #     num_clusters = numcluster_manual
 
-    agglomerative = skc.AgglomerativeClustering(n_clusters = num_clusters,    \
-                                                distance_threshold= None,     \
-                                                compute_full_tree = 'auto')
+    agglomerative = skc.AgglomerativeClustering(n_clusters = None,    \
+                                      distance_threshold= distance_threshold, \
+                                      compute_full_tree = True)
     # TO DO: Se puede aproximar la distancia media de separación entre clusters
     # como distance_threshold. Si lo ponemos != None entonces n_clusters = None
     # y compute_full_tree = True or Auto
     agglomerative.fit(X)
 
     etiquetas = agglomerative.labels_
+    labels_unique = np.unique(etiquetas)
+    num_clusters = len(labels_unique)
     centroides = FA.encontrar_centroides(etiquetas, lista_trazas, num_clusters)
 
     total_time = (time.time_ns()-t0)*1e-9

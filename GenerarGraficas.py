@@ -55,7 +55,7 @@ plt.xlabel('Num clusters')
 plt.ylabel('Puntos')
 plt.legend(loc='best')
 plt.title('K-Means')
-# plt.savefig('Gráficas/KMeans numclusters_vs_Notas 1')
+plt.savefig('Gráficas/KMeans numclusters_vs_Notas 1')
 plt.show()
 
 #%% n init K-means
@@ -507,8 +507,6 @@ plt.ylabel('Time/s')
 plt.title('DBSCAN')
 plt.savefig('Gráficas/DBSCAN leafsive_vs_tiempo')
 
-#%%
-#%%
 #%% Numero Clusters EM-GMM
 
 clusters1 = np.linspace(170, 194, 9, dtype = int)
@@ -540,3 +538,74 @@ plt.legend(loc='best')
 plt.title('EM-GMM')
 plt.savefig('Gráficas/EM-GMM numclusters_vs_Notas 1')
 plt.show()
+
+#%% AHC distance_threshold
+
+distances = np.linspace(10, 40, 50)
+
+
+notaajustada = []
+notanorm = []
+notamedia = []
+distancia = []
+trazas_bien = []
+clusters_bien = []
+clusters_mal = []
+num_clusters = []
+time = []
+
+for idistance in distances:
+    inum_clusters, centroides, etiquetas, total_time =                         \
+        Algoritmos.AHC(X, lista_trazas, numcluster_manual = None,             \
+                       distance_threshold = idistance)
+
+    inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
+        iclusters_bien, iclusters_mal = Evaluar.evaluacion_total(lista_trazas,\
+                        etiquetas, centroides, lista_vertices, num_trazas_en_v)
+
+
+    notaajustada.append(inotaajustada)
+    notanorm.append(inotanorm)
+    notamedia.append((inotaajustada**2+inotanorm**2)/2)
+    distancia.append(idistancia)
+    trazas_bien.append(itrazas_bien/num_trazas)
+    clusters_bien.append(iclusters_bien/num_vertices)
+    clusters_mal.append(iclusters_mal/num_vertices)
+    num_clusters.append(inum_clusters)
+    time.append(total_time)
+
+
+plt.plot(distances, notaajustada, 'x', c = 'b', label = 'Nota ajustada')
+plt.plot(distances, notanorm, 'x', c = 'r', label = 'Nota normal')
+plt.plot(distances, notamedia, 'o', c = 'g', label = 'Nota media')
+plt.xlabel('distances threshold')
+plt.ylabel('Puntos')
+plt.legend(loc='best')
+plt.title('AHC')
+plt.savefig('Gráficas/AHC distance_threshold_vs_notas')
+plt.show()
+
+plt.plot(distances, trazas_bien, 'x', c = 'b', label = 'Trazas OK')
+plt.plot(distances, clusters_bien, 'x', c = 'r', label = 'Clusters OK')
+plt.plot(distances, clusters_mal, 'o', c = 'g', label = 'Clusters mal')
+plt.xlabel('distances threshold')
+plt.ylabel('Num/Tot')
+plt.legend(loc='best')
+plt.title('AHC')
+plt.savefig('Gráficas/AHC distance_threshold_vs_OK-Mal')
+plt.show()
+
+plt.plot(distances, num_clusters, 'x', c = 'b', label = '')
+plt.xlabel('distances threshold')
+plt.ylabel('Num clusters')
+# plt.legend(loc='best')
+plt.title('AHC')
+plt.savefig('Gráficas/AHC threshold_vs_numclusters')
+plt.show()
+
+plt.plot(distances, time, c = 'b', label = '')
+plt.xlabel('distances threshold')
+plt.ylabel('Time/s')
+# plt.legend(loc='best')
+plt.title('AHC')
+plt.savefig('Gráficas/AHC distance_threshold_vs_tiempo')

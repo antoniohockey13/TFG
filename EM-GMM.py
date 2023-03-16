@@ -37,21 +37,6 @@ for i in range(10):
                 mediat = 0, sigmat = 200, mediar = 0, sigmar = 0.05,          \
                 error_z = 0.02, error_t = 10)
 
-    # t0 = time.time_ns()
-
-    # inum_clusters = 200
-    # num_clusters.append(inum_clusters)
-
-    # em_gmm = skm.GaussianMixture(n_components = inum_clusters, n_init = 1,                  \
-    #                              init_params = 'kmeans', warm_start = True)
-    # em_gmm.fit(X)
-
-
-    # etiquetas = em_gmm.predict(X)
-    # centroides = FA.encontrar_centroides(etiquetas, lista_trazas,             \
-    #                                      inum_clusters)
-    # t1 = time.time_ns()
-
     inum_clusters, centroides, etiquetas, total_time =                        \
                           Algoritmos.EM_GMM(X, lista_trazas, numcluster_manual)
 
