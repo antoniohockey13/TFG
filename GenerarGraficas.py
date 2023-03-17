@@ -541,7 +541,7 @@ plt.show()
 
 #%% AHC distance_threshold
 
-distances = np.linspace(10, 40, 50)
+distances = np.linspace(15, 40, 30)
 
 
 notaajustada = []
@@ -582,7 +582,7 @@ plt.xlabel('distances threshold')
 plt.ylabel('Puntos')
 plt.legend(loc='best')
 plt.title('AHC')
-plt.savefig('Gráficas/AHC distance_threshold_vs_notas')
+plt.savefig('Gráficas/AHC distance_threshold_vs_notas 1')
 plt.show()
 
 plt.plot(distances, trazas_bien, 'x', c = 'b', label = 'Trazas OK')
@@ -592,7 +592,7 @@ plt.xlabel('distances threshold')
 plt.ylabel('Num/Tot')
 plt.legend(loc='best')
 plt.title('AHC')
-plt.savefig('Gráficas/AHC distance_threshold_vs_OK-Mal')
+plt.savefig('Gráficas/AHC distance_threshold_vs_OK-Mal 1')
 plt.show()
 
 plt.plot(distances, num_clusters, 'x', c = 'b', label = '')
@@ -600,7 +600,7 @@ plt.xlabel('distances threshold')
 plt.ylabel('Num clusters')
 # plt.legend(loc='best')
 plt.title('AHC')
-plt.savefig('Gráficas/AHC threshold_vs_numclusters')
+plt.savefig('Gráficas/AHC threshold_vs_numclusters 1')
 plt.show()
 
 plt.plot(distances, time, c = 'b', label = '')
@@ -608,4 +608,4 @@ plt.xlabel('distances threshold')
 plt.ylabel('Time/s')
 # plt.legend(loc='best')
 plt.title('AHC')
-plt.savefig('Gráficas/AHC distance_threshold_vs_tiempo')
+plt.savefig('Gráficas/AHC distance_threshold_vs_tiempo 1')
