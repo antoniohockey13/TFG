@@ -4,14 +4,19 @@ Created on Mon Feb 13 19:22:13 2023
 
 @author: Antonio
 """
-
+import os
 from tabulate import tabulate
 import numpy as np
 import matplotlib.pyplot as plt
-import GenerarConjuntoVerticesyTrazas as gcvt
+
+actual_path = os.getcwd()
+os.chdir('C:\\Users\\Antonio\\OneDrive\\Escritorio1\\Clase\\Universidad\\TFG'\
+         '\\Código')
+from GenerarConjuntoVerticesyTrazas import VerticesyTrazasAleatorios
 import Evaluar
 import Algoritmos
-
+import Grafica_Clusters
+os.chdir(actual_path)
 num_vertices = 200
 
 trazas_totales = []
@@ -26,10 +31,10 @@ clusters_bien =  []
 clusters_mal = []
 num_clusters = []
 
-for i in range(100):
+for i in range(2):
 
     lista_vertices, lista_trazas, pos_trazas, num_trazas_en_v, X, num_trazas  \
-        = gcvt.VerticesyTrazasAleatorios( num_vertices = num_vertices,        \
+        = VerticesyTrazasAleatorios( num_vertices = num_vertices,        \
                 mediatrazas = 70, sigmatrazas = 10, mediaz = 0, sigmaz = 5,   \
                 mediat = 0, sigmat = 200, mediar = 0, sigmar = 0.05,          \
                 error_z = 0.02, error_t = 10)
@@ -44,6 +49,8 @@ for i in range(100):
     iclusters_bien, iclusters_mal = Evaluar.evaluacion_total(lista_trazas,    \
                                     etiquetas, centroides, lista_vertices,    \
                                     num_trazas_en_v)
+    Grafica_Clusters.grafica_colores_cluster(lista_trazas, etiquetas,         \
+                                             'MeanShift')
 
     distancia.append(idistancia)
     tiempo.append(total_time)

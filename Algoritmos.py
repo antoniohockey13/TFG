@@ -90,7 +90,7 @@ def MeanShift(X: np.array(2), quantile: float = 0.01, n_samples: int = 299,   \
     bandwidth = skc.estimate_bandwidth(X = X, quantile = quantile ,\
                                        n_samples = n_samples, n_jobs = -1)
 
-    meanshift = skc.MeanShift(bandwidth = bandwidth, seeds = None,                \
+    meanshift = skc.MeanShift(bandwidth = bandwidth, seeds = None,            \
                               bin_seeding = True, min_bin_freq = min_bin_freq,\
                               cluster_all = True, n_jobs= -1, max_iter=300)
     meanshift.fit(X)
@@ -182,7 +182,7 @@ def EM_GMM(X: np.array(2), lista_trazas, numcluster_manual: int or None):
     em_gmm = skm.GaussianMixture(n_components = num_clusters, n_init = 1,     \
                                  init_params = 'kmeans', warm_start = True)
     em_gmm.fit(X)
-    print(em_gmm.n_iter_)
+    # print(em_gmm.n_iter_)
 
 
     etiquetas = em_gmm.predict(X)
