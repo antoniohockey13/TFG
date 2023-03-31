@@ -8,8 +8,8 @@ import time
 import numpy as np
 import sklearn.cluster as skc
 import sklearn.mixture as skm
-import NumeroClusters
-import FuncionesApoyo as FA
+from . import NumeroClusters
+from . import FuncionesApoyo as FA
 
 
 def KMeans(X: np.array(2), lista_trazas: np.array(3),                         \
@@ -50,7 +50,7 @@ def KMeans(X: np.array(2), lista_trazas: np.array(3),                         \
         num_clusters = numcluster_manual
 
     kmeans =skc.KMeans(n_clusters = num_clusters, init = 'k-means++',         \
-                       max_iter = 300, n_init = 10, tol = 1e-4)
+                       max_iter = 300, n_init = n_init, tol = tol)
 
     kmeans.fit(X)
 
@@ -193,7 +193,47 @@ def EM_GMM(X: np.array(2), lista_trazas, numcluster_manual: int or None):
     return num_clusters, centroides, etiquetas, total_time
 
 def AHC(X: np.array(2), lista_trazas: np.array(3),                            \
-        numcluster_manual: int or None, distance_threshold: float or None):
+       distance_threshold: float or None):
+    """
+    Realiza el ajuste al algoritmo Agglomerative Hierarchical Clustering
+    y devuelve los valores de interes
+
+    Parameters
+    ----------
+    X : np.array(2)
+        Lista de las trazas a clusterizar.
+    lista_trazas : np.array(3)
+        Lista con todas las trazas y al vertice perteneciente.
+    distance_threshold : float or None
+        The linkage distance threshold at or above which clusters will
+        not be merged
+    Returns
+    -------
+    num_clusters, centroides, etiquetas, total_time
+
+    Si distance_threslhold --> numero
+    --> n_clusters = None y compute_full_tree = True
+
+    """
+    t0 = time.time_ns()
+
+
+    agglomerative = skc.AgglomerativeClustering(n_clusters = None,    \
+                                      distance_threshold= distance_threshold, \
+                                      compute_full_tree = True)
+
+    agglomerative.fit(X)
+
+    etiquetas = agglomerative.labels_
+    labels_unique = np.unique(etiquetas)
+    num_clusters = len(labels_unique)
+    centroides = FA.encontrar_centroides(etiquetas, lista_trazas, num_clusters)
+
+    total_time = (time.time_ns()-t0)*1e-9
+
+    return num_clusters, centroides, etiquetas, total_time
+
+def BIRCH(X: np.array(2)):
     """
     Realiza el ajuste al algoritmo Agglomerative Hierarchical Clustering
     y devuelve los valores de interes
@@ -224,19 +264,17 @@ def AHC(X: np.array(2), lista_trazas: np.array(3),                            \
     #     print('Hay que implementarlo (?)')
     # else:
     #     num_clusters = numcluster_manual
+    print('Crear objeto')
+    birch = skc.Birch(threshold = 0.2, branching_factor = 80,              \
+                         n_clusters = None, compute_labels = True, copy = False)
+    # n_cluster: None, int, sklearn.cluster
+    print('Ajuste')
+    birch.fit(X)
 
-    agglomerative = skc.AgglomerativeClustering(n_clusters = None,    \
-                                      distance_threshold= distance_threshold, \
-                                      compute_full_tree = True)
-    # TO DO: Se puede aproximar la distancia media de separación entre clusters
-    # como distance_threshold. Si lo ponemos != None entonces n_clusters = None
-    # y compute_full_tree = True or Auto
-    agglomerative.fit(X)
 
-    etiquetas = agglomerative.labels_
-    labels_unique = np.unique(etiquetas)
-    num_clusters = len(labels_unique)
-    centroides = FA.encontrar_centroides(etiquetas, lista_trazas, num_clusters)
+    etiquetas = birch.labels_
+    centroides = birch.subcluster_centers_
+    num_clusters = len(centroides)
 
     total_time = (time.time_ns()-t0)*1e-9
 

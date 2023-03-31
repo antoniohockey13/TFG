@@ -1,27 +1,23 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Feb 13 19:22:13 2023
+Created on Tue Feb 14 12:37:50 2023
 
 @author: Antonio
 """
-import os
+
 from tabulate import tabulate
 import numpy as np
 import matplotlib.pyplot as plt
+from Utilities_Functions import GenerarConjuntoVerticesyTrazas as gcvt
+from Utilities_Functions import Evaluar
+from Utilities_Functions import Algoritmos
+from Utilities_Functions import Grafica_Clusters
 
-actual_path = os.getcwd()
-os.chdir('C:\\Users\\Antonio\\OneDrive\\Escritorio1\\Clase\\Universidad\\TFG'\
-         '\\Código')
-from GenerarConjuntoVerticesyTrazas import VerticesyTrazasAleatorios
-import Evaluar
-import Algoritmos
-import Grafica_Clusters
-os.chdir(actual_path)
 num_vertices = 200
+
 
 trazas_totales = []
 distancia = []
-inercia = []
 tiempo = []
 notaajustada = []
 notanorm = []
@@ -30,27 +26,29 @@ trazas_mal = []
 clusters_bien =  []
 clusters_mal = []
 num_clusters = []
+num_noise = []
 
 for i in range(2):
 
     lista_vertices, lista_trazas, pos_trazas, num_trazas_en_v, X, num_trazas  \
-        = VerticesyTrazasAleatorios( num_vertices = num_vertices,        \
+        = gcvt.VerticesyTrazasAleatorios( num_vertices = num_vertices,        \
                 mediatrazas = 70, sigmatrazas = 10, mediaz = 0, sigmaz = 5,   \
                 mediat = 0, sigmat = 200, mediar = 0, sigmar = 0.05,          \
                 error_z = 0.02, error_t = 10)
 
-    inum_clusters, centroides, etiquetas, total_time = Algoritmos.MeanShift(X,\
-                                            quantile = 1e-2, n_samples = 299, \
-                                            min_bin_freq = 31)
-
-    num_clusters.append(inum_clusters)
+    inum_clusters, centroides, etiquetas, total_time, inum_noise =            \
+        Algoritmos.DBSCAN(X, lista_trazas, epsilon = 1.45, min_samples = 2,   \
+                          leaf_size = 10)
 
     inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
     iclusters_bien, iclusters_mal = Evaluar.evaluacion_total(lista_trazas,    \
                                     etiquetas, centroides, lista_vertices,    \
                                     num_trazas_en_v)
     Grafica_Clusters.grafica_colores_cluster(lista_trazas, etiquetas,         \
-                                             'MeanShift')
+                                             'DBSCAN')
+
+    num_clusters.append(inum_clusters)
+    num_noise.append(inum_noise)
 
     distancia.append(idistancia)
     tiempo.append(total_time)
@@ -64,17 +62,19 @@ for i in range(2):
 
     trazas_totales.append(num_trazas)
 
+
     # plt.plot(lista_vertices[:,1], lista_vertices[:,2], 'x')
     # # plt.errorbar(lista_trazas[:,1], lista_trazas[:,2], xerr = error_z, \
     #               # yerr = error_t, fmt= 'or', linestyle="None")
     # plt.plot(centroides[:,0], centroides[:,1], 'o', c= 'g')
     # # plt.xlim(-10, 10)
     # # plt.ylim(-100, 100)
-    # plt.xlabel("$z/\sigma_z$")
-    # plt.ylabel("$t/\sigma_t$")
+    # plt.xlabel("$z$/cm")
+    # plt.ylabel("$t$/ps")
     # plt.show()
 
-print('Ajuste realizado con: Mean Shift')
+
+print('Ajuste realizado con: DBSCAN')
 
 tabla = [ [' ', '1', '2', 'media', 'error',],
           ['Trazas OK/Tot', trazas_bien[0]/trazas_totales[0], \

@@ -4,19 +4,14 @@ Created on Fri Feb 24 16:05:15 2023
 
 @author: Antonio
 """
-import os
+
 from tabulate import tabulate
 import numpy as np
 import matplotlib.pyplot as plt
-actual_path = os.getcwd()
-os.chdir('C:\\Users\\Antonio\\OneDrive\\Escritorio1\\Clase\\Universidad\\TFG'\
-         '\\Código')
-from GenerarConjuntoVerticesyTrazas import VerticesyTrazasAleatorios
-import Evaluar
-import Algoritmos
-import Grafica_Clusters
-
-os.chdir(actual_path)
+from Utilities_Functions import GenerarConjuntoVerticesyTrazas as gcvt
+from Utilities_Functions import Evaluar
+from Utilities_Functions import Algoritmos
+from Utilities_Functions import Grafica_Clusters
 
 num_vertices = 200
 numcluster_manual = 200
@@ -37,7 +32,7 @@ num_clusters = []
 for i in range(2):
 
     lista_vertices, lista_trazas, pos_trazas, num_trazas_en_v, X, num_trazas  \
-        = VerticesyTrazasAleatorios( num_vertices = num_vertices,        \
+        = gcvt.VerticesyTrazasAleatorios( num_vertices = num_vertices,        \
                 mediatrazas = 70, sigmatrazas = 10, mediaz = 0, sigmaz = 5,   \
                 mediat = 0, sigmat = 200, mediar = 0, sigmar = 0.05,          \
                 error_z = 0.02, error_t = 10)

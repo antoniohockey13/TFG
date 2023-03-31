@@ -7,9 +7,9 @@ Created on Mon Feb 27 21:18:49 2023
 
 import numpy as np
 import matplotlib.pyplot as plt
-import GenerarConjuntoVerticesyTrazas as gcvt
-import Evaluar
-import Algoritmos
+from . import GenerarConjuntoVerticesyTrazas as gcvt
+from . import Evaluar
+from . import Algoritmos
 
 error_z = 0.02
 error_t = 10

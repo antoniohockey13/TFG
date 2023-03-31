@@ -8,9 +8,9 @@ Generar gráficas
 
 import numpy as np
 import matplotlib.pyplot as plt
-import GenerarConjuntoVerticesyTrazas as gcvt
-import Algoritmos
-import Evaluar
+from . import GenerarConjuntoVerticesyTrazas as gcvt
+from . import Algoritmos
+from . import Evaluar
 
 
 #%% Generar vertices y trazas
