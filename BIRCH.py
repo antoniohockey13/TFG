@@ -34,21 +34,21 @@ num_clusters = []
 
 for i in range(2):
     print(i)
-    lista_vertices, lista_trazas, pos_trazas, num_trazas_en_v, X, num_trazas  \
+    lista_vertices, lista_trazas, num_trazas_en_v, X, num_trazas  \
         = gcvt.VerticesyTrazasAleatorios( num_vertices = num_vertices,             \
                 mediatrazas = 70, sigmatrazas = 10, mediaz = 0, sigmaz = 5,   \
                 mediat = 0, sigmat = 200, mediar = 0, sigmar = 0.05,          \
                 error_z = 0.02, error_t = 10)
 
     inum_clusters, centroides, etiquetas, total_time =                        \
-        Algoritmos.BIRCH(X)
+        Algoritmos.BIRCH(X, threshold = 2.5, branching = 70)
 
     inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
     iclusters_bien, iclusters_mal = Evaluar.evaluacion_total(lista_trazas,    \
                                     etiquetas, centroides, lista_vertices,    \
                                     num_trazas_en_v)
     Grafica_Clusters.grafica_colores_cluster(lista_trazas, etiquetas,         \
-                                              'BIRCH')
+                                               'BIRCH')
 
     num_clusters.append(inum_clusters)
     distancia.append(idistancia)
@@ -62,19 +62,19 @@ for i in range(2):
     clusters_mal.append(iclusters_mal)
 
     trazas_totales.append(num_trazas)
-    plt.plot(lista_vertices[:,1], lista_vertices[:,2], 'x', label = 'Vertices')
-    plt.plot(lista_trazas[:,1], lista_trazas[:,2], 'o',c = 'r', label = 'Trazas')
-    # plt.errorbar(lista_trazas[:,1], lista_trazas[:,2], xerr = error_z, \
-    #                yerr = error_t, fmt= '.r', linestyle="None")
-    plt.plot(centroides[:,0], centroides[:,1], 'o', c= 'g', label = 'Clusters')
-    plt.legend(loc = 'best')
-    # plt.xlim(-10, 10)
+    # plt.plot(lista_vertices[:,1], lista_vertices[:,2], 'x', label = 'Vertices')
+    # plt.plot(lista_trazas[:,1], lista_trazas[:,2], 'o',c = 'r', label = 'Trazas')
+    # # plt.errorbar(lista_trazas[:,1], lista_trazas[:,2], xerr = error_z, \
+    # #                yerr = error_t, fmt= '.r', linestyle="None")
+    # plt.plot(centroides[:,0], centroides[:,1], 'o', c= 'g', label = 'Clusters')
+    # plt.legend(loc = 'best')
+    # # plt.xlim(-10, 10)
     # # plt.ylim(-100, 100)
-    plt.xlabel("$z/\sigma_z$")
-    plt.ylabel("$t/sigma_t$/")
-    plt.show()
+    # plt.xlabel(r"$z/\sigma_z$")
+    # plt.ylabel(r"$t/\sigma_t$/")
+    # plt.show()
 
-print('Ajuste realizado con: Agglomerative Hierarchical Clustering')
+print('Ajuste realizado con: BIRCH')
 
 
 tabla = [ [' ', '1', '2', 'media', 'error',],

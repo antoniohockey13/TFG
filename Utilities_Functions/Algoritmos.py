@@ -218,9 +218,11 @@ def AHC(X: np.array(2), lista_trazas: np.array(3),                            \
     t0 = time.time_ns()
 
 
-    agglomerative = skc.AgglomerativeClustering(n_clusters = None,    \
+    agglomerative = skc.AgglomerativeClustering(n_clusters = None,            \
                                       distance_threshold= distance_threshold, \
-                                      compute_full_tree = True)
+                                      compute_full_tree = True,               \
+                                      linkage = 'ward')
+        #linkge default ward
 
     agglomerative.fit(X)
 
@@ -233,7 +235,7 @@ def AHC(X: np.array(2), lista_trazas: np.array(3),                            \
 
     return num_clusters, centroides, etiquetas, total_time
 
-def BIRCH(X: np.array(2)):
+def BIRCH(X: np.array(2), threshold: float, branching : int):
     """
     Realiza el ajuste al algoritmo Agglomerative Hierarchical Clustering
     y devuelve los valores de interes
@@ -260,15 +262,9 @@ def BIRCH(X: np.array(2)):
     """
     t0 = time.time_ns()
 
-    # if numcluster_manual is None:
-    #     print('Hay que implementarlo (?)')
-    # else:
-    #     num_clusters = numcluster_manual
-    print('Crear objeto')
-    birch = skc.Birch(threshold = 0.2, branching_factor = 80,              \
-                         n_clusters = None, compute_labels = True, copy = False)
+    birch = skc.Birch(threshold = threshold, branching_factor = branching,    \
+                      n_clusters = None, compute_labels = True, copy = False)
     # n_cluster: None, int, sklearn.cluster
-    print('Ajuste')
     birch.fit(X)
 
 

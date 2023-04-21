@@ -32,9 +32,9 @@ clusters_bien =  []
 clusters_mal = []
 num_clusters = []
 
-for i in range(2):
+for i in range(10):
     print(i)
-    lista_vertices, lista_trazas, pos_trazas, num_trazas_en_v, X, num_trazas  \
+    lista_vertices, lista_trazas, num_trazas_en_v, X, num_trazas  \
         = gcvt.VerticesyTrazasAleatorios( num_vertices = num_vertices,        \
                 mediatrazas = 70, sigmatrazas = 10, mediaz = 0, sigmaz = 5,   \
                 mediat = 0, sigmat = 200, mediar = 0, sigmar = 0.05,          \
@@ -48,8 +48,8 @@ for i in range(2):
     iclusters_bien, iclusters_mal = Evaluar.evaluacion_total(lista_trazas,    \
                                     etiquetas, centroides, lista_vertices,    \
                                     num_trazas_en_v)
-    Grafica_Clusters.grafica_colores_cluster(lista_trazas, etiquetas,         \
-                                              'AHC')
+    # Grafica_Clusters.grafica_colores_cluster(lista_trazas, etiquetas,         \
+    #                                           'AHC')
 
     num_clusters.append(inum_clusters)
     distancia.append(idistancia)

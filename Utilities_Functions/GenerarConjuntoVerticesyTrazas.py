@@ -52,8 +52,6 @@ def VerticesyTrazasAleatorios(num_vertices = 200, mediatrazas = 70,           \
         Lista con las posiciones de los vértices
     lista_trazas: np.array([V, z, t])
         Lista con las posiciones de las trazas y el vértice al que pertenecen
-    pos_trazas: np.array([z, t])
-        Lista con las posiciones de las trazas
     num_trazas_en_v: list[int]
         Número de trazas en cada vértice
     Devuelve tres ficheros .dat con estos mismos valores
@@ -94,7 +92,6 @@ def VerticesyTrazasAleatorios(num_vertices = 200, mediatrazas = 70,           \
 
     # Lista vacía para guardar trazas formato [V,z,t]
     lista_trazas = []
-    pos_trazas = []
     for ivert in range(num_vertices):
         zivert = lista_vertices[ivert, 1]
         tivert = lista_vertices[ivert, 2]
@@ -106,20 +103,36 @@ def VerticesyTrazasAleatorios(num_vertices = 200, mediatrazas = 70,           \
             trazai = [ivert, zitraza, titraza]
             postrazai = [zitraza, titraza]
             lista_trazas.append(trazai)
-            pos_trazas.append(postrazai)
-    lista_trazas = np.array(lista_trazas)
-    pos_trazas = np.array(pos_trazas)
 
-    # Gráfica vértices y trazas
-    # plt.plot(lista_vertices[:,1], lista_vertices[:,2], 'x')
-    # plt.errorbar(lista_trazas[:,1], lista_trazas[:,2], xerr = error_z, \
-    #              yerr = error_t, fmt= 'or', linestyle="None")
+    lista_trazas = np.array(lista_trazas)
+
+    # # Gráfica vértices y trazas
+    # plt.plot(lista_vertices[:,1], lista_vertices[:,2], 'o', c = 'b',          \
+    #          label = 'Vértices')
+    # # plt.errorbar(lista_trazas[:,1], lista_trazas[:,2], xerr = error_z, \
+    #               # yerr = error_t, fmt= 'or', linestyle="None")
 
     # plt.xlim(-10, 10)
     # plt.ylim(-100, 100)
     # plt.xlabel("$z$/cm")
     # plt.ylabel("$t$/ps")
+    # plt.title('Posición vértices')
+    # plt.legend(loc='best')
     # plt.show()
+
+    # plt.plot(lista_vertices[:,1], lista_vertices[:,2], 'o', c = 'b',          \
+    #          label = 'Vértices')
+    # plt.plot(lista_trazas[:,1], lista_trazas[:,2], 'x', c = 'r',              \
+    #          label = 'Trazas')
+
+    # plt.xlim(-10, 10)
+    # plt.ylim(-100, 100)
+    # plt.xlabel("$z$/cm")
+    # plt.ylabel("$t$/ps")
+    # plt.title('Posición vértices y trazas')
+    # plt.legend(loc='best')
+    # plt.show()
+
 
     num_trazas = len(lista_trazas)
 
@@ -127,8 +140,6 @@ def VerticesyTrazasAleatorios(num_vertices = 200, mediatrazas = 70,           \
     lista_vertices[:,2] = lista_vertices[:,2]/error_t
     lista_trazas[:,1] = lista_trazas[:,1]/error_z
     lista_trazas[:,2] = lista_trazas[:,2]/error_t
-    pos_trazas[:,0] = pos_trazas[:,0]/error_z
-    pos_trazas[:,1] = pos_trazas[:,1]/error_t
 
     X = []
     for i in range(num_trazas):
@@ -158,5 +169,5 @@ def VerticesyTrazasAleatorios(num_vertices = 200, mediatrazas = 70,           \
             output_file_trazassinvert.write(f"{lista_trazas[i,1]}    "\
                                             f"{lista_trazas[i,2]}\n")
         output_file_trazassinvert.close()
-    return(lista_vertices, lista_trazas, pos_trazas, num_trazas_en_v, X,\
+    return(lista_vertices, lista_trazas, num_trazas_en_v, X,\
            num_trazas)
