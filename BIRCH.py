@@ -32,7 +32,7 @@ clusters_bien =  []
 clusters_mal = []
 num_clusters = []
 
-for i in range(2):
+for i in range(100):
     print(i)
     lista_vertices, lista_trazas, num_trazas_en_v, X, num_trazas  \
         = gcvt.VerticesyTrazasAleatorios( num_vertices = num_vertices,             \
@@ -41,14 +41,14 @@ for i in range(2):
                 error_z = 0.02, error_t = 10)
 
     inum_clusters, centroides, etiquetas, total_time =                        \
-        Algoritmos.BIRCH(X, threshold = 2.5, branching = 70)
+        Algoritmos.BIRCH(X, threshold = 0.2, branching = 70)
 
     inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
     iclusters_bien, iclusters_mal = Evaluar.evaluacion_total(lista_trazas,    \
                                     etiquetas, centroides, lista_vertices,    \
                                     num_trazas_en_v)
-    Grafica_Clusters.grafica_colores_cluster(lista_trazas, etiquetas,         \
-                                               'BIRCH')
+    # Grafica_Clusters.grafica_colores_cluster(lista_trazas, etiquetas,         \
+    #                                            'BIRCH')
 
     num_clusters.append(inum_clusters)
     distancia.append(idistancia)

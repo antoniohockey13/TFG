@@ -32,7 +32,7 @@ clusters_bien =  []
 clusters_mal = []
 num_clusters = []
 
-for i in range(10):
+for i in range(100):
     print(i)
     lista_vertices, lista_trazas, num_trazas_en_v, X, num_trazas  \
         = gcvt.VerticesyTrazasAleatorios( num_vertices = num_vertices,        \
@@ -42,7 +42,7 @@ for i in range(10):
 
     inum_clusters, centroides, etiquetas, total_time = Algoritmos.AHC(X,      \
                                              lista_trazas,                    \
-                                             distance_threshold = 22.5)
+                                             distance_threshold = 1)
 
     inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
     iclusters_bien, iclusters_mal = Evaluar.evaluacion_total(lista_trazas,    \

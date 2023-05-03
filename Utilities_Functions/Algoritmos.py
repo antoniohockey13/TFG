@@ -106,7 +106,7 @@ def MeanShift(X: np.array(2), quantile: float = 0.01, n_samples: int = 299,   \
     return num_clusters, centroides, etiquetas, total_time
 
 
-def DBSCAN(X: np.array(2), lista_trazas: np.array(3), epsilon: float = 0.8,   \
+def DBSCAN(X: np.array(2), lista_trazas: np.array(3), epsilon: float = 0.2,   \
            min_samples: int = 5, leaf_size: int = 10):
     """
     Realiza el ajuste al algoritmo DBSCAN y devuelve los valores de interes

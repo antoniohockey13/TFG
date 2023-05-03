@@ -3,7 +3,7 @@
 Created on Thu Mar  9 17:50:12 2023
 
 @author: Antonio
-Generar gráficas
+Generar Gráficas
 """
 
 import numpy as np
@@ -55,7 +55,7 @@ plt.xlabel('Num clusters')
 plt.ylabel('Puntos')
 plt.legend(loc='best')
 plt.title('K-Means')
-# plt.savefig('KMeans/Gráficas/KMeans numclusters_vs_Notas 1')
+plt.savefig('KMeans/Gráficas reales/KMeans numclusters_vs_Notas 1')
 plt.show()
 
 #%% n init K-means
@@ -88,7 +88,7 @@ plt.xlabel('n_init')
 plt.ylabel('Puntos')
 plt.legend(loc = 'best')
 plt.title('K-Means')
-plt.savefig('Gráficas/KMeans n_init_vs_Notas')
+plt.savefig('KMeans/Gráficas reales/KMeans n_init_vs_Notas 1')
 plt.show()
 
 # plt.plot(ninit, num_clusters, 'x', c = 'b', label = '')
@@ -104,7 +104,7 @@ plt.xlabel('n_init')
 plt.ylabel('Tiempo')
 plt.legend(loc = 'best')
 plt.title('K-Means')
-plt.savefig('Gráficas/KMeans n_init_vs_tiempo')
+plt.savefig('KMeans/Gráficas reales/KMeans n_init_vs_tiempo 1')
 plt.show()
 
 #%% MeanShift Quantile
@@ -146,7 +146,7 @@ plt.xlabel('quantile')
 plt.ylabel('Puntos')
 plt.legend(loc='best')
 plt.title('Mean Shift')
-# plt.savefig('MeanShift/Gráficas/MeanShift Quantile_vs_Puntos 1')
+plt.savefig('MeanShift/Gráficas reales/MeanShift Quantile_vs_Puntos 1')
 plt.show()
 
 plt.plot(quantiles, trazas_bien, 'x', c = 'b', label = 'Trazas OK')
@@ -156,7 +156,7 @@ plt.xlabel('quantile')
 plt.ylabel('Num/Tot')
 plt.legend(loc='best')
 plt.title('Mean Shift')
-# plt.savefig('MeanShift/Gráficas/MeanShift Quantile_vs_OK-Mal 1')
+plt.savefig('MeanShift/Gráficas reales/MeanShift Quantile_vs_OK-Mal 1')
 plt.show()
 
 plt.plot(quantiles, num_clusters, 'x', c = 'b', label = '')
@@ -164,7 +164,7 @@ plt.xlabel('quantiles')
 plt.ylabel('Num clusters')
 # plt.legend(loc='best')
 plt.title('Mean Shift')
-# plt.savefig('MeanShift/Gráficas/MeanShift Quantile_vs_Num_clusters 1')
+plt.savefig('MeanShift/Gráficas reales/MeanShift Quantile_vs_Num_clusters 1')
 plt.show()
 
 #%% n_samples Mean Shift
@@ -208,7 +208,7 @@ plt.xlabel('n_samples')
 plt.ylabel('Puntos')
 plt.legend(loc='best')
 plt.title('Mean Shift')
-plt.savefig('MeanShift/Gráficas/MeanShift nsamples_vs_Notas 1')
+plt.savefig('MeanShift/Gráficas reales/MeanShift nsamples_vs_Notas 1')
 plt.show()
 
 plt.plot(n_samples, trazas_bien, 'x', c = 'b', label = 'Trazas OK')
@@ -219,7 +219,7 @@ plt.xlabel('n_samples')
 plt.ylabel('Num/Tot')
 plt.legend(loc='best')
 plt.title('Mean Shift')
-plt.savefig('MeanShift/Gráficas/MeanShift nsamples_vs_Ok-Mal 1')
+plt.savefig('MeanShift/Gráficas reales/MeanShift nsamples_vs_Ok-Mal 1')
 plt.show()
 
 plt.plot(n_samples, num_clusters, 'x', c = 'b', label = '')
@@ -228,12 +228,12 @@ plt.xlabel('n_samples')
 plt.ylabel('Num clusters')
 # plt.legend(loc='best')
 plt.title('Mean Shift')
-plt.savefig('MeanShift/Gráficas/MeanShift nsamples_vs_Numclusters 1')
+plt.savefig('MeanShift/Gráficas reales/MeanShift nsamples_vs_Numclusters 1')
 plt.show()
 
 #%% min_bin_freq Mean Shift
 
-min_bin_freq = np.linspace(25, 40, 16, dtype= int)
+min_bin_freq = np.linspace(20, 60, 16, dtype= int)
 
 
 notaajustada = []
@@ -275,7 +275,7 @@ plt.xlabel('min_bin_freq')
 plt.ylabel('Puntos')
 plt.legend(loc='best')
 plt.title('Mean Shift')
-plt.savefig('MeanShift/Gráficas/MeanShift min_bin_freq_vs_Puntos')
+plt.savefig('MeanShift/Gráficas reales/MeanShift min_bin_freq_vs_Puntos 1')
 plt.show()
 
 plt.plot(min_bin_freq, trazas_bien, 'x', c = 'b', label = 'Trazas OK')
@@ -286,7 +286,7 @@ plt.xlabel('min_bin_freq')
 plt.ylabel('Num/Tot')
 plt.legend(loc='best')
 plt.title('Mean Shift')
-plt.savefig('MeanShift/Gráficas/MeanShift min_bin_freq_vs_Ok Mal')
+plt.savefig('MeanShift/Gráficas reales/MeanShift min_bin_freq_vs_Ok Mal 1')
 plt.show()
 
 plt.plot(min_bin_freq, num_clusters, 'x', c = 'b', label = '')
@@ -294,7 +294,7 @@ plt.axvline(x = 31, c = 'r')
 plt.xlabel('min_bin_freq')
 plt.ylabel('Num clusters')
 plt.title('Mean Shift')
-plt.savefig('MeanShift/Gráficas/MeanShift min_bin_freq_vs_Numclusters')
+plt.savefig('MeanShift/Gráficas reales/MeanShift min_bin_freq_vs_Numclusters 1')
 plt.show()
 
 plt.plot(min_bin_freq, tiempo)
@@ -302,13 +302,13 @@ plt.axvline(x = 31, c = 'r')
 plt.xlabel('min_bin_freq')
 plt.ylabel('Time')
 plt.title('Mean Shift')
-plt.savefig('MeanShift/Gráficas/MeanShift min_bin_freq_vs_time')
+plt.savefig('MeanShift/Gráficas reales/MeanShift min_bin_freq_vs_time 1')
 plt.show()
 
 
 #%% Barrido de epsilon en DBSCAN
 
-epsilons = np.linspace(1, 2, 50)
+epsilons = np.linspace(0.01, 0.5, 25)
 
 
 notaajustada = []
@@ -342,38 +342,39 @@ for iepsilon in epsilons:
 plt.plot(epsilons, notaajustada, 'x', c = 'b', label = 'Nota ajustada')
 plt.plot(epsilons, notanorm, 'x', c = 'r', label = 'Nota normal')
 plt.plot(epsilons, notamedia, 'o', c = 'g', label = 'Nota media')
-plt.axvline(1.45)
+plt.axvline(0.2)
 plt.xlabel('epsilon')
 plt.ylabel('Puntos')
 plt.legend(loc='best')
 plt.title('DBSCAN')
-plt.savefig('DBSCAN/Gráficas/DBSCAN epsilon_vs_Notas 3')
+plt.savefig('DBSCAN/Gráficas reales/DBSCAN epsilon_vs_Notas 1')
 plt.show()
 
 plt.plot(epsilons, trazas_bien, 'x', c = 'b', label = 'Trazas OK')
 plt.plot(epsilons, clusters_bien, 'x', c = 'r', label = 'Clusters OK')
 plt.plot(epsilons, clusters_mal, 'o', c = 'g', label = 'Clusters mal')
-plt.axvline(1.45)
+plt.axvline(0.2)
 plt.xlabel('epsilon')
 plt.ylabel('Num/Tot')
 plt.legend(loc = 'best')
 plt.title('DBSCAN')
-plt.savefig('DBSCAN/Gráficas/DBSCAN epsilon_vs_OK Mal 3')
+plt.savefig('DBSCAN/Gráficas reales/DBSCAN epsilon_vs_OK Mal 1')
 plt.show()
 
 plt.plot(epsilons, num_clusters, 'x', c = 'b', label = '')
-plt.axvline(1.45)
+plt.axvline(0.2)
+plt.axhline(200)
 plt.xlabel('epsilon')
 plt.ylabel('Num clusters')
 plt.title('DBSCAN')
-plt.savefig('DBSCAN/Gráficas/DBSCAN epsilon_vs_numclusters 3')
+plt.savefig('DBSCAN/Gráficas reales/DBSCAN epsilon_vs_numclusters 1')
 plt.show()
 
 
 #%% Barrido min_samples en DBSCAN
 
 
-min_samples = np.linspace(1, 25, 24, dtype = int)
+min_samples = np.linspace(1, 100, 24, dtype = int)
 
 
 notaajustada = []
@@ -386,8 +387,9 @@ clusters_mal = []
 num_clusters = []
 
 for imin_sample in min_samples:
+
     inum_clusters, centroides, etiquetas, total_time, num_noise =             \
-        Algoritmos.DBSCAN(X, lista_trazas, epsilon = 1.45,                     \
+        Algoritmos.DBSCAN(X, lista_trazas, epsilon = 0.2,                     \
                           min_samples = imin_sample)
 
     inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
@@ -408,32 +410,32 @@ for imin_sample in min_samples:
 plt.plot(min_samples, notaajustada, 'x', c = 'b', label = 'Nota ajustada')
 plt.plot(min_samples, notanorm, 'x', c = 'r', label = 'Nota normal')
 plt.plot(min_samples, notamedia, 'o', c = 'g', label = 'Nota media')
-plt.axvline(2)
+plt.axvline(20)
 plt.xlabel('min samples')
 plt.ylabel('Puntos')
 plt.legend(loc='best')
 plt.title('DBSCAN')
-plt.savefig('DBSCAN/Gráficas/DBSCAN minsamples_vs_Notas 1')
+plt.savefig('DBSCAN/Gráficas reales/DBSCAN minsamples_vs_Notas 1')
 plt.show()
 
 plt.plot(min_samples, trazas_bien, 'x', c = 'b', label = 'Trazas OK')
 plt.plot(min_samples, clusters_bien, 'x', c = 'r', label = 'Clusters OK')
 plt.plot(min_samples, clusters_mal, 'o', c = 'g', label = 'Clusters mal')
-plt.axvline(2)
+plt.axvline(20)
 plt.xlabel('min samples')
 plt.ylabel('Num/Tot')
 plt.legend(loc='best')
 plt.title('DBSCAN')
-plt.savefig('DBSCAN/Gráficas/DBSCAN minsamples_vs_OK-Mal 1')
+plt.savefig('DBSCAN/Gráficas reales/DBSCAN minsamples_vs_OK-Mal 1')
 plt.show()
 
 plt.plot(min_samples, num_clusters, 'x', c = 'b', label = '')
-plt.axvline(2)
+plt.axvline(20)
 plt.xlabel('min samples')
 plt.ylabel('Num clusters')
 # plt.legend(loc='best')
 plt.title('DBSCAN')
-plt.savefig('DBSCAN/Gráficas/DBSCAN minsamples_vs_numclusters 1')
+plt.savefig('DBSCAN/Gráficas reales/DBSCAN minsamples_vs_numclusters 1')
 plt.show()
 
 
@@ -454,7 +456,8 @@ time = []
 
 for ileaf in leaf_size:
     inum_clusters, centroides, etiquetas, total_time, num_noise =             \
-        Algoritmos.DBSCAN(X, lista_trazas, epsilon = 1.45, leaf_size = ileaf)
+        Algoritmos.DBSCAN(X, lista_trazas, epsilon = 0.2, min_samples = 20,   \
+                          leaf_size = ileaf)
 
     inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
         iclusters_bien, iclusters_mal = Evaluar.evaluacion_total(lista_trazas,\
@@ -479,7 +482,7 @@ plt.xlabel('leaf_size')
 plt.ylabel('Puntos')
 plt.legend(loc='best')
 plt.title('DBSCAN')
-plt.savefig('DBSCAN/Gráficas/DBSCAN leafsize_vs_notas 1')
+plt.savefig('DBSCAN/Gráficas reales/DBSCAN leafsize_vs_notas 1')
 plt.show()
 
 plt.plot(leaf_size, trazas_bien, 'x', c = 'b', label = 'Trazas OK')
@@ -489,7 +492,7 @@ plt.xlabel('leaf_size')
 plt.ylabel('Num/Tot')
 plt.legend(loc='best')
 plt.title('DBSCAN')
-plt.savefig('DBSCAN/Gráficas/DBSCAN leafsize_vs_OK-Mal 1')
+plt.savefig('DBSCAN/Gráficas reales/DBSCAN leafsize_vs_OK-Mal 1')
 plt.show()
 
 plt.plot(leaf_size, num_clusters, 'x', c = 'b', label = '')
@@ -497,7 +500,7 @@ plt.xlabel('leaf_size')
 plt.ylabel('Num clusters')
 # plt.legend(loc='best')
 plt.title('DBSCAN')
-plt.savefig('DBSCAN/Gráficas/DBSCAN leafsize_vs_numclusters 1')
+plt.savefig('DBSCAN/Gráficas reales/DBSCAN leafsize_vs_numclusters 1')
 plt.show()
 
 plt.plot(leaf_size, time, c = 'b', label = '')
@@ -505,7 +508,7 @@ plt.xlabel('leaf_size')
 plt.ylabel('Time/s')
 # plt.legend(loc='best')
 plt.title('DBSCAN')
-plt.savefig('DBSCAN/Gráficas/DBSCAN leafsive_vs_tiempo')
+plt.savefig('DBSCAN/Gráficas reales/DBSCAN leafsize_vs_tiempo 1')
 
 #%% Numero Clusters EM-GMM
 
@@ -536,12 +539,12 @@ plt.xlabel('Num clusters')
 plt.ylabel('Puntos')
 plt.legend(loc='best')
 plt.title('EM-GMM')
-plt.savefig('EMGMM/Gráficas/EM-GMM numclusters_vs_Notas 1')
+plt.savefig('EMGMM/Gráficas reales/EM-GMM numclusters_vs_Notas 1')
 plt.show()
 
 #%% AHC distance_threshold
 
-distances = np.linspace(15, 40, 30)
+distances = np.linspace(0.1, 5, 30)
 
 
 notaajustada = []
@@ -556,8 +559,7 @@ time = []
 
 for idistance in distances:
     inum_clusters, centroides, etiquetas, total_time =                         \
-        Algoritmos.AHC(X, lista_trazas, numcluster_manual = None,             \
-                       distance_threshold = idistance)
+        Algoritmos.AHC(X, lista_trazas, distance_threshold = idistance)
 
     inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
         iclusters_bien, iclusters_mal = Evaluar.evaluacion_total(lista_trazas,\
@@ -582,7 +584,7 @@ plt.xlabel('distances threshold')
 plt.ylabel('Puntos')
 plt.legend(loc='best')
 plt.title('AHC')
-plt.savefig('AHC/Gráficas/AHC distance_threshold_vs_notas 1')
+plt.savefig('AHC/Gráficas reales/AHC distance_threshold_vs_notas 1')
 plt.show()
 
 plt.plot(distances, trazas_bien, 'x', c = 'b', label = 'Trazas OK')
@@ -592,7 +594,7 @@ plt.xlabel('distances threshold')
 plt.ylabel('Num/Tot')
 plt.legend(loc='best')
 plt.title('AHC')
-plt.savefig('AHC/Gráficas/AHC distance_threshold_vs_OK-Mal 1')
+plt.savefig('AHC/Gráficas reales/AHC distance_threshold_vs_OK-Mal 1')
 plt.show()
 
 plt.plot(distances, num_clusters, 'x', c = 'b', label = '')
@@ -600,7 +602,7 @@ plt.xlabel('distances threshold')
 plt.ylabel('Num clusters')
 # plt.legend(loc='best')
 plt.title('AHC')
-plt.savefig('AHC/Gráficas/AHC threshold_vs_numclusters 1')
+plt.savefig('AHC/Gráficas reales/AHC threshold_vs_numclusters 1')
 plt.show()
 
 plt.plot(distances, time, c = 'b', label = '')
@@ -608,10 +610,10 @@ plt.xlabel('distances threshold')
 plt.ylabel('Time/s')
 # plt.legend(loc='best')
 plt.title('AHC')
-plt.savefig('AHC/Gráficas/AHC distance_threshold_vs_tiempo 1')
+plt.savefig('AHC/Gráficas reales/AHC distance_threshold_vs_tiempo 1')
 
 #%% threshold BIRCH
-thresholds = np.linspace(1.5, 4, 30)
+thresholds = np.linspace(0.1, 1.5, 30)
 
 
 notaajustada = []
@@ -647,44 +649,45 @@ for ithreshold in thresholds:
 plt.plot(thresholds, notaajustada, 'x', c = 'b', label = 'Nota ajustada')
 plt.plot(thresholds, notanorm, 'x', c = 'r', label = 'Nota normal')
 plt.plot(thresholds, notamedia, 'o', c = 'g', label = 'Nota media')
-plt.axvline(2.5)
+plt.axvline(0.2)
 plt.xlabel('Threshold')
 plt.ylabel('Puntos')
 plt.legend(loc='best')
 plt.title('Birch')
-plt.savefig('BIRCH/Gráficas/Birch distance_threshold_vs_notas 1')
+plt.savefig('BIRCH/Gráficas reales/Birch distance_threshold_vs_notas 1')
 plt.show()
 
 plt.plot(thresholds, trazas_bien, 'x', c = 'b', label = 'Trazas OK')
 plt.plot(thresholds, clusters_bien, 'x', c = 'r', label = 'Clusters OK')
 plt.plot(thresholds, clusters_mal, 'o', c = 'g', label = 'Clusters mal')
-plt.axvline(2.5)
+plt.axvline(0.2)
 plt.xlabel('Threshold')
 plt.ylabel('Num/Tot')
 plt.legend(loc='best')
 plt.title('Birch')
-plt.savefig('BIRCH/Gráficas/Birch distance_threshold_vs_OK-Mal')
+plt.savefig('BIRCH/Gráficas reales/Birch distance_threshold_vs_OK-Mal 1')
 plt.show()
 
 plt.plot(thresholds, num_clusters, 'x', c = 'b', label = '')
-plt.axvline(2.5)
+plt.axvline(0.2)
+plt.axhline(200)
 plt.xlabel('Threshold')
 plt.ylabel('Num clusters')
 # plt.legend(loc='best')
 plt.title('Birch')
-plt.savefig('BIRCH/Gráficas/Birch threshold_vs_numclusters 1')
+plt.savefig('BIRCH/Gráficas reales/Birch threshold_vs_numclusters 1')
 plt.show()
 
 plt.plot(thresholds, time, c = 'b', label = '')
-plt.axvline(2.5)
+plt.axvline(0.2)
 plt.xlabel('Threshold')
 plt.ylabel('Time/s')
 # plt.legend(loc='best')
 plt.title('Birch')
-plt.savefig('BIRCH/Gráficas/Birch distance_threshold_vs_tiempo 1')
+plt.savefig('BIRCH/Gráficas reales/Birch distance_threshold_vs_tiempo 1')
 
 #%% branching ratio BIRCH
-branchings = np.linspace(60, 100, 100, dtype = int)
+branchings = np.linspace(2, 100, 30, dtype = int)
 
 
 notaajustada = []
@@ -699,7 +702,7 @@ time = []
 
 for ibranching in branchings:
     inum_clusters, centroides, etiquetas, total_time =                         \
-        Algoritmos.BIRCH(X, threshold = 2.5, branching = ibranching)
+        Algoritmos.BIRCH(X, threshold = 0.2, branching = ibranching)
 
     inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
         iclusters_bien, iclusters_mal = Evaluar.evaluacion_total(lista_trazas,\
@@ -725,7 +728,7 @@ plt.xlabel('Branching factor')
 plt.ylabel('Puntos')
 plt.legend(loc='best')
 plt.title('Birch')
-plt.savefig('BIRCH/Gráficas/Birch branching_vs_notas 1')
+plt.savefig('BIRCH/Gráficas reales/Birch branching_vs_notas')
 plt.show()
 
 plt.plot(branchings, trazas_bien, 'x', c = 'b', label = 'Trazas OK')
@@ -736,7 +739,7 @@ plt.xlabel('Branching factor')
 plt.ylabel('Num/Tot')
 plt.legend(loc='best')
 plt.title('Birch')
-plt.savefig('BIRCH/Gráficas/Birch branching_vs_OK-Mal 1')
+plt.savefig('BIRCH/Gráficas reales/Birch branching_vs_OK-Mal')
 plt.show()
 
 plt.plot(branchings, num_clusters, 'x', c = 'b', label = '')
@@ -745,7 +748,7 @@ plt.xlabel('Branching factor')
 plt.ylabel('Num clusters')
 # plt.legend(loc='best')
 plt.title('Birch')
-plt.savefig('BIRCH/Gráficas/Birch branching_vs_numclusters 1')
+plt.savefig('BIRCH/Gráficas reales/Birch branching_vs_numclusters')
 plt.show()
 
 plt.plot(branchings, time, c = 'b', label = '')
@@ -754,4 +757,4 @@ plt.xlabel('Branching factor')
 plt.ylabel('Time/s')
 # plt.legend(loc='best')
 plt.title('Birch')
-plt.savefig('BIRCH/Gráficas/Birch branching_vs_tiempo 1')
+plt.savefig('BIRCH/Gráficas reales/Birch branching_vs_tiempo')

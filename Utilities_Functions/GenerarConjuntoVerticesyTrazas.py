@@ -136,10 +136,11 @@ def VerticesyTrazasAleatorios(num_vertices = 200, mediatrazas = 70,           \
 
     num_trazas = len(lista_trazas)
 
-    lista_vertices[:,1] = lista_vertices[:,1]/error_z
-    lista_vertices[:,2] = lista_vertices[:,2]/error_t
-    lista_trazas[:,1] = lista_trazas[:,1]/error_z
-    lista_trazas[:,2] = lista_trazas[:,2]/error_t
+    # # Trabajar con significancia
+    # lista_vertices[:,1] = lista_vertices[:,1]/error_z
+    # lista_vertices[:,2] = lista_vertices[:,2]/error_t
+    # lista_trazas[:,1] = lista_trazas[:,1]/error_z
+    # lista_trazas[:,2] = lista_trazas[:,2]/error_t
 
     X = []
     for i in range(num_trazas):
