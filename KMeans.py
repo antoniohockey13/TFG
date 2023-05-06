@@ -31,13 +31,14 @@ clusters_bien =  []
 clusters_mal = []
 num_clusters = []
 
-for i in range(100):
-
-    lista_vertices, lista_trazas, num_trazas_en_v, X, num_trazas  \
+for i in range(2):
+    print(i)
+    lista_vertices, lista_trazas, num_trazas_en_v, X, num_trazas              \
         = gcvt.VerticesyTrazasAleatorios( num_vertices = num_vertices,        \
                 mediatrazas = 70, sigmatrazas = 10, mediaz = 0, sigmaz = 5,   \
                 mediat = 0, sigmat = 200, mediar = 0, sigmar = 0.05,          \
                 error_z = 0.02, error_t = 10)
+
 
     inum_clusters, centroides, etiquetas, total_time = Algoritmos.KMeans(X,   \
                                                lista_trazas, numcluster_manual)

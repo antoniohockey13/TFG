@@ -13,8 +13,8 @@ from . import FuncionesApoyo as FA
 
 
 def KMeans(X: np.array(2), lista_trazas: np.array(3),                         \
-           numcluster_manual: int or None, n_init: int = 10,                  \
-           tol: float = 1e-4):
+           sample_weight: np.array(1), numcluster_manual: int or None,        \
+           n_init: int = 10, tol: float = 1e-6):
     """
     Realiza el ajuste al algoritmo KMeans y devuelve los valores de interes
 
@@ -24,6 +24,8 @@ def KMeans(X: np.array(2), lista_trazas: np.array(3),                         \
         Lista de las trazas a clusterizar.
     lista_trazas : np.array(3)
         Lista con todas las trazas y al vertice perteneciente.
+    sample_weight : np.array(1)
+        Errores
     numcluster_manual : int or None
         Numero de cluster total si es un número se toma el número si es
         'None' se calcula el mejor ajuste con la nota ajustada.
@@ -52,8 +54,8 @@ def KMeans(X: np.array(2), lista_trazas: np.array(3),                         \
     kmeans =skc.KMeans(n_clusters = num_clusters, init = 'k-means++',         \
                        max_iter = 300, n_init = n_init, tol = tol)
 
-    kmeans.fit(X)
-
+    kmeans.fit(X, sample_weight = sample_weight)
+    print(kmeans.n_iter_)
     centroides = kmeans.cluster_centers_
     etiquetas = kmeans.labels_
 

@@ -145,6 +145,9 @@ def tabla_trazas(lista_trazas: np.array(np.array(3)),                         \
     lista_trazas_mal = []
     trazas_bien = 0
     trazas_mal = 0
+    trazas_en_vertices= {} # Comprobar cuantas trazas en cada vértice
+    for i in range(len(num_trazas_en_v)):
+        trazas_en_vertices[i] = 0
 
     # Comprobar si trazas bien asignadas
     for itraza in range(len(lista_trazas)):
@@ -152,7 +155,7 @@ def tabla_trazas(lista_trazas: np.array(np.array(3)),                         \
         cluster = etiquetas[itraza]
         # A que vertice se corresponde la traza
         vertice = lista_trazas[itraza,0]
-
+        trazas_en_vertices[vertice]+=1
         if vertice == clustertovertex[cluster]:
             # print('Traza bien asignada')
             trazas_bien += 1
@@ -161,22 +164,21 @@ def tabla_trazas(lista_trazas: np.array(np.array(3)),                         \
             # print(f'La traza {itraza} esta mal asignada')
             trazas_mal += 1
             lista_trazas_mal.append(vertice)
+    vertices_faltan = 0
+    for ivertice in range(len(num_trazas_en_v)):
+        if trazas_en_vertices[ivertice] == 0:
+            vertices_faltan += 1
 
     clusters_bien = 0
-    contador_trazas_bien = 1
+    contador_trazas_bien = {}
 
-    itraza = 0
-    while itraza < len(lista_trazas_bien)-1:
-        ivertice = lista_trazas_bien[itraza]
-        if ivertice == lista_trazas_bien[itraza+1]:
-            contador_trazas_bien +=1
-            if contador_trazas_bien == num_trazas_en_v[int(ivertice)]:
-                clusters_bien +=1
-
+    for itraza in lista_trazas_bien:
+        if itraza not in contador_trazas_bien:
+            contador_trazas_bien[itraza] = 1
         else:
-            contador_trazas_bien = 1
-        itraza += 1
-
+            contador_trazas_bien[itraza]+=1
+        if contador_trazas_bien[itraza] == num_trazas_en_v[int(itraza)]:
+            clusters_bien +=1
 
     clusters_mal = 0
     contador_trazas_mal = {}
@@ -187,7 +189,8 @@ def tabla_trazas(lista_trazas: np.array(np.array(3)),                         \
             contador_trazas_mal[itraza] += 1
         if contador_trazas_mal[itraza] == 1:
             clusters_mal += 1
-    return(trazas_bien, trazas_mal, clusters_bien, clusters_mal)
+    return(trazas_bien, trazas_mal, clusters_bien, clusters_mal, vertices_faltan, \
+           contador_trazas_bien, num_trazas_en_v, contador_trazas_mal)
 
 
 def evaluacion_total(lista_trazas: np.array(np.array(3)),                     \
@@ -221,8 +224,11 @@ def evaluacion_total(lista_trazas: np.array(np.array(3)),                     \
     notaajustada, notanorm = evaluacion(lista_trazas, etiquetas)
     ctv = cluster_to_vertex(centroides, lista_vertices)
     distancia = distancia_media(centroides, lista_vertices, ctv)
-    trazas_bien, trazas_mal, clusters_bien, clusters_mal = tabla_trazas(      \
+    trazas_bien, trazas_mal, clusters_bien, clusters_mal, vertices_faltan, \
+           contador_trazas_bien, num_trazas_en_v, contador_trazas_mal\
+            = tabla_trazas(      \
                                  lista_trazas, etiquetas, num_trazas_en_v, ctv)
 
     return(notaajustada, notanorm, distancia, trazas_bien, trazas_mal,         \
-           clusters_bien, clusters_mal)
+           clusters_bien, clusters_mal, vertices_faltan, \
+               contador_trazas_bien, num_trazas_en_v, contador_trazas_mal)

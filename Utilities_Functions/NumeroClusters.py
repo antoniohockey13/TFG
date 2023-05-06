@@ -17,7 +17,7 @@ num_vertices = 200
 
 
 
-lista_vertices, lista_trazas, num_trazas_en_v, X, num_trazas      \
+lista_vertices, lista_trazas, num_trazas_en_v, X, num_trazas                  \
     = gcvt.VerticesyTrazasAleatorios( num_vertices = num_vertices,            \
             mediatrazas = 70, sigmatrazas = 10, mediaz = 0, sigmaz = 5,       \
             mediat = 0, sigmat = 200, mediar = 0, sigmar = 0.05,              \

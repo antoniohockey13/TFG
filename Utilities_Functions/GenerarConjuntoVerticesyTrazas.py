@@ -92,6 +92,7 @@ def VerticesyTrazasAleatorios(num_vertices = 200, mediatrazas = 70,           \
 
     # Lista vacía para guardar trazas formato [V,z,t]
     lista_trazas = []
+    error_trazas = []
     for ivert in range(num_vertices):
         zivert = lista_vertices[ivert, 1]
         tivert = lista_vertices[ivert, 2]
@@ -101,10 +102,14 @@ def VerticesyTrazasAleatorios(num_vertices = 200, mediatrazas = 70,           \
             zitraza = zivert+radio*np.cos(angulo)
             titraza = tivert+radio*np.sin(angulo)
             trazai = [ivert, zitraza, titraza]
-            postrazai = [zitraza, titraza]
             lista_trazas.append(trazai)
+            # errori = [error_z, error_t]
+            # error_trazas.append(errori)
+
+
 
     lista_trazas = np.array(lista_trazas)
+    # error_trazas = np.array(error_trazas)
 
     # # Gráfica vértices y trazas
     # plt.plot(lista_vertices[:,1], lista_vertices[:,2], 'o', c = 'b',          \
@@ -171,4 +176,4 @@ def VerticesyTrazasAleatorios(num_vertices = 200, mediatrazas = 70,           \
                                             f"{lista_trazas[i,2]}\n")
         output_file_trazassinvert.close()
     return(lista_vertices, lista_trazas, num_trazas_en_v, X,\
-           num_trazas)
+           num_trazas) #error_trazas

@@ -4,7 +4,7 @@ Created on Mon Apr 17 19:40:00 2023
 
 @author: Antonio
 """
-import os
+
 import numpy as np
 
 
@@ -28,7 +28,6 @@ def digest_input(file: str):
                         CorrespondingSimVertex, CorrespondingRecoVertex])
         Rough read data from Tracks
     """
-    os.chdir('../Data/')
     data_names = ['SimVertices', 'RecoVertices', 'Tracks']
     seleccion_datos = -1
     #   We open the file from which we are going to read the input
@@ -68,7 +67,6 @@ def digest_input(file: str):
     except IOError:
         print(f"The file {file} does not exist")
 
-    os.chdir('../Utilities_Functions/')
     return num_evento, np.array(simvertices), np.array(recovertices),         \
         np.array(tracks)
 
@@ -77,18 +75,23 @@ def transform_data_into_own_variables(simvertices, recovertices, tracks):
     lista_vertices = simvertices[:, :3]
 
     lista_trazas0 = tracks[:, 5]  # Columna correspondingSimVertex
-    # Se divide z entre error z paratrabajar con significancia
-    lista_trazas1 = np.nan_to_num(tracks[:, 1] / tracks[:, 2])
-    lista_trazas2 = np.nan_to_num(tracks[:, 3] / tracks[:, 4])
+    lista_trazas1 = tracks[:, 1]  # Valor z
+    lista_trazas2 = tracks[:, 3]  # Valor t
     lista_trazas = np.column_stack((lista_trazas0, lista_trazas1,             \
                                     lista_trazas2))
 
     num_trazas_en_v = simvertices[:,3]
-    return lista_vertices, lista_trazas, num_trazas_en_v
+
+    errores_z = tracks[:,2]
+    errores_t = tracks[:,4]
+
+    errores = np.column_stack((errores_z, errores_t))
+
+    return lista_vertices, lista_trazas, num_trazas_en_v, errores
 
 
-num_evento, simvertices, recovertices, tracks =                               \
-    digest_input('SimulationDataCMS_Event0.txt')
+# num_evento, simvertices, recovertices, tracks =                               \
+    # digest_input('SimulationDataCMS_Event0.txt')
 
-lista_vertices, lista_trazas, num_trazas_en_v = transform_data_into_own_variables(
-    simvertices, recovertices, tracks)
+# lista_vertices, lista_trazas, num_trazas_en_v, errores =                      \
+    # transform_data_into_own_variables(simvertices, recovertices, tracks)
