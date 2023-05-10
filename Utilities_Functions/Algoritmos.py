@@ -12,9 +12,10 @@ from . import NumeroClusters
 from . import FuncionesApoyo as FA
 
 
-def KMeans(X: np.array(2), lista_trazas: np.array(3),                         \
-           sample_weight: np.array(1), numcluster_manual: int or None,        \
-           n_init: int = 10, tol: float = 1e-6):
+def KMeans(X: np.array(2), lista_trazas: np.array(3), fit_trazas: np.array(3),\
+           sample_weight: np.array(1), error_predict: np.array(1),            \
+           numcluster_manual: int or None,  n_init: int = 10,                 \
+           tol: float = 1e-6):
     """
     Realiza el ajuste al algoritmo KMeans y devuelve los valores de interes
 
@@ -24,8 +25,12 @@ def KMeans(X: np.array(2), lista_trazas: np.array(3),                         \
         Lista de las trazas a clusterizar.
     lista_trazas : np.array(3)
         Lista con todas las trazas y al vertice perteneciente.
+    fit_trazas : np.array(3)
+        Lista con las trazas y el vértice al que pertenecen que será predichas
     sample_weight : np.array(1)
         Errores
+    error_predict : np.array(1)
+        Errore en trazas ha predecir
     numcluster_manual : int or None
         Numero de cluster total si es un número se toma el número si es
         'None' se calcula el mejor ajuste con la nota ajustada.
@@ -40,7 +45,10 @@ def KMeans(X: np.array(2), lista_trazas: np.array(3),                         \
     num_clusters, centroides, etiquetas, total_time
 
     """
-
+    if type(fit_trazas) != type(None):
+        predict = fit_trazas[:, 1:3]
+    else:
+        predict = None
     t0 = time.time_ns()
 
     if numcluster_manual is None:
@@ -55,14 +63,18 @@ def KMeans(X: np.array(2), lista_trazas: np.array(3),                         \
                        max_iter = 300, n_init = n_init, tol = tol)
 
     kmeans.fit(X, sample_weight = sample_weight)
-    print(kmeans.n_iter_)
+    if type(predict) != type(None):
+        trazas_predict = kmeans.predict(predict, sample_weight = error_predict)
+    else:
+        trazas_predict = None
+    # print(kmeans.n_iter_)
     centroides = kmeans.cluster_centers_
     etiquetas = kmeans.labels_
 
     total_time = (time.time_ns()-t0)*1e-9
     # print(kmeans.n_iter_) # Muestra numero iteracciones realizado
 
-    return(num_clusters, centroides, etiquetas, total_time)
+    return(num_clusters, centroides, etiquetas, trazas_predict, total_time)
 
 
 def MeanShift(X: np.array(2), quantile: float = 0.01, n_samples: int = 299,   \
@@ -77,6 +89,8 @@ def MeanShift(X: np.array(2), quantile: float = 0.01, n_samples: int = 299,   \
     quantile : float, OPTIONAL
         Should be between [0, 1] 0.5 means that the median of all pairwise
         distances is used. For bandwith. Default 0.01
+    sample_weight : np.array(1)
+        Errores
     n_samples : int, OPTIONAL
         The number of samples to use. If not given, all samples are used. For
         bandwith. Default = 299
@@ -108,7 +122,8 @@ def MeanShift(X: np.array(2), quantile: float = 0.01, n_samples: int = 299,   \
     return num_clusters, centroides, etiquetas, total_time
 
 
-def DBSCAN(X: np.array(2), lista_trazas: np.array(3), epsilon: float = 0.2,   \
+def DBSCAN(X: np.array(2), lista_trazas: np.array(3),                         \
+           sample_weight: np.array(1), epsilon: float = 0.2,                  \
            min_samples: int = 5, leaf_size: int = 10):
     """
     Realiza el ajuste al algoritmo DBSCAN y devuelve los valores de interes
@@ -119,6 +134,8 @@ def DBSCAN(X: np.array(2), lista_trazas: np.array(3), epsilon: float = 0.2,   \
         Lista de las trazas a clusterizar.
     lista_trazas : np.array(3)
         Lista con todas las trazas y al vertice perteneciente.
+     sample_weight : np.array(1)
+         Errores
     epsilon : float. OPTIONAL
         Valor de epsilon para el ajuste de DBSCAN. The default is 0.8
     min_samples : int, OPTIONAL
@@ -139,7 +156,7 @@ def DBSCAN(X: np.array(2), lista_trazas: np.array(3), epsilon: float = 0.2,   \
                         metric_params = None, algorithm = 'auto',             \
                         leaf_size = leaf_size, p = None, n_jobs = -1)
 
-    dbscan.fit(X)
+    dbscan.fit(X, sample_weight = sample_weight)
     etiquetas = dbscan.labels_
 
 
@@ -154,7 +171,8 @@ def DBSCAN(X: np.array(2), lista_trazas: np.array(3), epsilon: float = 0.2,   \
 
     return num_clusters, centroides, etiquetas, total_time, num_noise
 
-def EM_GMM(X: np.array(2), lista_trazas, numcluster_manual: int or None):
+def EM_GMM(X: np.array(2), lista_trazas, sample_weight: np.array(1),          \
+           numcluster_manual: int or None):
     """
     Realiza el ajuste al algoritmo EM-GMM y devuelve los valores de interes
 
@@ -164,6 +182,8 @@ def EM_GMM(X: np.array(2), lista_trazas, numcluster_manual: int or None):
         Lista de las trazas a clusterizar.
     lista_trazas : np.array(3)
         Lista con todas las trazas y al vertice perteneciente.
+     sample_weight : np.array(1)
+         Errores
     numcluster_manual : int or None
         Numero de cluster total si es un número se toma el número si es
         'None' se calcula el mejor ajuste con la nota ajustada.
@@ -182,7 +202,8 @@ def EM_GMM(X: np.array(2), lista_trazas, numcluster_manual: int or None):
         num_clusters = numcluster_manual
 
     em_gmm = skm.GaussianMixture(n_components = num_clusters, n_init = 1,     \
-                                 init_params = 'kmeans', warm_start = True)
+                                 init_params = 'kmeans', warm_start = True,   \
+                                 weights_init = sample_weight)
     em_gmm.fit(X)
     # print(em_gmm.n_iter_)
 

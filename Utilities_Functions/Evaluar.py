@@ -10,7 +10,8 @@ import sklearn.metrics as skm
 def evaluacion(lista_trazas: np.array(np.array(3)), etiquetas: np.array(int)):
     """
     Se basa en:
-    https://scikit-learn.org/stable/modules/clustering.html#clustering-performance-evaluation
+    https://scikit-learn.org/stable/modules/clustering.html#clustering-
+    performance-evaluation
 
     Parameters
     ----------
@@ -63,9 +64,9 @@ def cluster_to_vertex(centroides: np.array(float),                            \
         verticeseleccionado = -1
 
         for ivertice in range(len(lista_vertices)):
-            posverticei = [lista_vertices[ivertice,1], lista_vertices[ivertice,2]]
+            posverticei=[lista_vertices[ivertice,1],lista_vertices[ivertice,2]]
             verticei = lista_vertices[ivertice,0]
-            distancia = np.sqrt((centroi[0]-posverticei[0])**2+\
+            distancia = np.sqrt((centroi[0]-posverticei[0])**2+               \
                                 (centroi[1]-posverticei[1])**2)
 
             if distancia < distancia_minima:
@@ -106,7 +107,7 @@ def distancia_media(centroides: np.array(float),                              \
         if centroide[0] == np.inf or centroide[1] == np.inf:
             print('Un cluster esta vacío')
         else:
-            distancia =np.sqrt((centroide[0]-vertice[1])**2+\
+            distancia =np.sqrt((centroide[0]-vertice[1])**2+                  \
                                (centroide[1]-vertice[2])**2)
         distanciatot += distancia
     return distanciatot/len(lista_vertices)
@@ -155,7 +156,10 @@ def tabla_trazas(lista_trazas: np.array(np.array(3)),                         \
         cluster = etiquetas[itraza]
         # A que vertice se corresponde la traza
         vertice = lista_trazas[itraza,0]
-        trazas_en_vertices[vertice]+=1
+        if vertice not in trazas_en_vertices:
+            trazas_en_vertices[vertice] = 1
+        else:
+            trazas_en_vertices[vertice] += 1
         if vertice == clustertovertex[cluster]:
             # print('Traza bien asignada')
             trazas_bien += 1
@@ -164,6 +168,8 @@ def tabla_trazas(lista_trazas: np.array(np.array(3)),                         \
             # print(f'La traza {itraza} esta mal asignada')
             trazas_mal += 1
             lista_trazas_mal.append(vertice)
+
+
     vertices_faltan = 0
     for ivertice in range(len(num_trazas_en_v)):
         if trazas_en_vertices[ivertice] == 0:
@@ -189,9 +195,18 @@ def tabla_trazas(lista_trazas: np.array(np.array(3)),                         \
             contador_trazas_mal[itraza] += 1
         if contador_trazas_mal[itraza] == 1:
             clusters_mal += 1
-    return(trazas_bien, trazas_mal, clusters_bien, clusters_mal, vertices_faltan, \
-           contador_trazas_bien, num_trazas_en_v, contador_trazas_mal)
+    return(trazas_bien, trazas_mal, clusters_bien, clusters_mal,              \
+           vertices_faltan)
 
+
+def num_trazas_en_vertices_con_lista_trazas(lista_trazas: np.array(3)):
+    num_trazas_en_v = {}
+    for itraza in lista_trazas:
+        if itraza[0] not in num_trazas_en_v:
+            num_trazas_en_v[itraza[0]] = 1
+        else:
+            num_trazas_en_v[itraza[0]] += 1
+    return num_trazas_en_v
 
 def evaluacion_total(lista_trazas: np.array(np.array(3)),                     \
                      etiquetas: np.array(int), centroides: np.array(float),   \
@@ -221,14 +236,12 @@ def evaluacion_total(lista_trazas: np.array(np.array(3)),                     \
      clusters_mal)
 
     """
+    num_trazas_en_v = num_trazas_en_vertices_con_lista_trazas(lista_trazas)
     notaajustada, notanorm = evaluacion(lista_trazas, etiquetas)
     ctv = cluster_to_vertex(centroides, lista_vertices)
     distancia = distancia_media(centroides, lista_vertices, ctv)
-    trazas_bien, trazas_mal, clusters_bien, clusters_mal, vertices_faltan, \
-           contador_trazas_bien, num_trazas_en_v, contador_trazas_mal\
-            = tabla_trazas(      \
-                                 lista_trazas, etiquetas, num_trazas_en_v, ctv)
+    trazas_bien, trazas_mal, clusters_bien, clusters_mal, vertices_faltan     \
+        = tabla_trazas(lista_trazas, etiquetas, num_trazas_en_v, ctv)
 
-    return(notaajustada, notanorm, distancia, trazas_bien, trazas_mal,         \
-           clusters_bien, clusters_mal, vertices_faltan, \
-               contador_trazas_bien, num_trazas_en_v, contador_trazas_mal)
+    return(notaajustada, notanorm, distancia, trazas_bien, trazas_mal,        \
+           clusters_bien, clusters_mal, vertices_faltan)

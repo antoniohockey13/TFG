@@ -28,7 +28,7 @@ clusters_mal = []
 num_clusters = []
 num_noise = []
 
-for i in range(100):
+for i in range(10):
     lista_vertices, lista_trazas, num_trazas_en_v, X, num_trazas  \
         = gcvt.VerticesyTrazasAleatorios( num_vertices = num_vertices,        \
                 mediatrazas = 70, sigmatrazas = 10, mediaz = 0, sigmaz = 5,   \
