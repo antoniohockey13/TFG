@@ -30,7 +30,7 @@ def KMeans(X: np.array(2), lista_trazas: np.array(3), fit_trazas: np.array(3),\
     sample_weight : np.array(1)
         Errores
     error_predict : np.array(1)
-        Errore en trazas ha predecir
+        Errores en trazas ha predecir
     numcluster_manual : int or None
         Numero de cluster total si es un número se toma el número si es
         'None' se calcula el mejor ajuste con la nota ajustada.
@@ -45,10 +45,6 @@ def KMeans(X: np.array(2), lista_trazas: np.array(3), fit_trazas: np.array(3),\
     num_clusters, centroides, etiquetas, total_time
 
     """
-    if type(fit_trazas) != type(None):
-        predict = fit_trazas[:, 1:3]
-    else:
-        predict = None
     t0 = time.time_ns()
 
     if numcluster_manual is None:
@@ -63,10 +59,9 @@ def KMeans(X: np.array(2), lista_trazas: np.array(3), fit_trazas: np.array(3),\
                        max_iter = 300, n_init = n_init, tol = tol)
 
     kmeans.fit(X, sample_weight = sample_weight)
-    if type(predict) != type(None):
-        trazas_predict = kmeans.predict(predict, sample_weight = error_predict)
-    else:
-        trazas_predict = None
+
+    if type(fit_trazas) != type(None):
+        kmeans.predict(fit_trazas[:,1:3], sample_weight = error_predict)
     # print(kmeans.n_iter_)
     centroides = kmeans.cluster_centers_
     etiquetas = kmeans.labels_
@@ -74,11 +69,11 @@ def KMeans(X: np.array(2), lista_trazas: np.array(3), fit_trazas: np.array(3),\
     total_time = (time.time_ns()-t0)*1e-9
     # print(kmeans.n_iter_) # Muestra numero iteracciones realizado
 
-    return(num_clusters, centroides, etiquetas, trazas_predict, total_time)
+    return(num_clusters, centroides, etiquetas, total_time)
 
 
-def MeanShift(X: np.array(2), quantile: float = 0.01, n_samples: int = 299,   \
-              min_bin_freq: int = 1):
+def MeanShift(X: np.array(2), fit_trazas: np.array(3), quantile: float = 0.01,\
+              n_samples: int = 299, min_bin_freq: int = 1):
     """
     Realiza el ajuste al algoritmo MeanShift y devuelve los valores de interes
 
@@ -86,11 +81,15 @@ def MeanShift(X: np.array(2), quantile: float = 0.01, n_samples: int = 299,   \
     ----------
     X : np.array(2)
         Lista de las trazas a clusterizar.
+    fit_trazas : np.array(3)
+        Lista con las trazas y el vértice al que pertenecen que será predichas
     quantile : float, OPTIONAL
         Should be between [0, 1] 0.5 means that the median of all pairwise
         distances is used. For bandwith. Default 0.01
     sample_weight : np.array(1)
         Errores
+    error_predict : np.array(1)
+        Errores en trazas ha predecir
     n_samples : int, OPTIONAL
         The number of samples to use. If not given, all samples are used. For
         bandwith. Default = 299
@@ -102,6 +101,7 @@ def MeanShift(X: np.array(2), quantile: float = 0.01, n_samples: int = 299,   \
     -------
     num_clusters, centroides, etiquetas, total_time
     """
+
     t0 = time.time_ns()
     bandwidth = skc.estimate_bandwidth(X = X, quantile = quantile ,\
                                        n_samples = n_samples, n_jobs = -1)
@@ -110,6 +110,8 @@ def MeanShift(X: np.array(2), quantile: float = 0.01, n_samples: int = 299,   \
                               bin_seeding = True, min_bin_freq = min_bin_freq,\
                               cluster_all = True, n_jobs= -1, max_iter=300)
     meanshift.fit(X)
+    if type(fit_trazas) != type(None):
+        meanshift.predict(fit_trazas[:,1:3])
 
     etiquetas = meanshift.labels_
     labels_unique = np.unique(etiquetas)
@@ -122,9 +124,9 @@ def MeanShift(X: np.array(2), quantile: float = 0.01, n_samples: int = 299,   \
     return num_clusters, centroides, etiquetas, total_time
 
 
-def DBSCAN(X: np.array(2), lista_trazas: np.array(3),                         \
-           sample_weight: np.array(1), epsilon: float = 0.2,                  \
-           min_samples: int = 5, leaf_size: int = 10):
+def DBSCAN(X: np.array(2), lista_trazas: np.array(3), fit_trazas: np.array(3),\
+           sample_weight: np.array(1), error_predict: np.array(1),            \
+           epsilon: float = 0.2, min_samples: int = 5, leaf_size: int = 10):
     """
     Realiza el ajuste al algoritmo DBSCAN y devuelve los valores de interes
 
@@ -134,6 +136,8 @@ def DBSCAN(X: np.array(2), lista_trazas: np.array(3),                         \
         Lista de las trazas a clusterizar.
     lista_trazas : np.array(3)
         Lista con todas las trazas y al vertice perteneciente.
+    fit_trazas : np.array(3)
+        Lista con las trazas y el vértice al que pertenecen que será predichas
      sample_weight : np.array(1)
          Errores
     epsilon : float. OPTIONAL
@@ -157,12 +161,14 @@ def DBSCAN(X: np.array(2), lista_trazas: np.array(3),                         \
                         leaf_size = leaf_size, p = None, n_jobs = -1)
 
     dbscan.fit(X, sample_weight = sample_weight)
-    etiquetas = dbscan.labels_
 
+    if type(fit_trazas) != type(None):
+        dbscan.predict(fit_trazas[:,1:3], sample_weight = error_predict)
+
+    etiquetas = dbscan.labels_
 
     num_clusters = len(set(etiquetas)) - (1 if -1 in etiquetas else 0)
     num_noise = list(etiquetas).count(-1)
-
 
     centroides = FA.encontrar_centroides(etiquetas, lista_trazas,             \
                                          num_clusters)
@@ -171,8 +177,8 @@ def DBSCAN(X: np.array(2), lista_trazas: np.array(3),                         \
 
     return num_clusters, centroides, etiquetas, total_time, num_noise
 
-def EM_GMM(X: np.array(2), lista_trazas, sample_weight: np.array(1),          \
-           numcluster_manual: int or None):
+def EM_GMM(X: np.array(2), lista_trazas: np.array(3), fit_trazas: np.array(2),\
+           sample_weight: np.array(1), numcluster_manual: int):
     """
     Realiza el ajuste al algoritmo EM-GMM y devuelve los valores de interes
 
@@ -182,11 +188,12 @@ def EM_GMM(X: np.array(2), lista_trazas, sample_weight: np.array(1),          \
         Lista de las trazas a clusterizar.
     lista_trazas : np.array(3)
         Lista con todas las trazas y al vertice perteneciente.
+    fit_trazas : np.array(3)
+        Lista con las trazas y el vértice al que pertenecen que será predichas
      sample_weight : np.array(1)
          Errores
-    numcluster_manual : int or None
-        Numero de cluster total si es un número se toma el número si es
-        'None' se calcula el mejor ajuste con la nota ajustada.
+    numcluster_manual : int
+        Numero de cluster total
 
     Returns
     -------
@@ -196,27 +203,24 @@ def EM_GMM(X: np.array(2), lista_trazas, sample_weight: np.array(1),          \
 
     t0 = time.time_ns()
 
-    if numcluster_manual is None:
-        print('Hay que implementarlo (?)')
-    else:
-        num_clusters = numcluster_manual
-
-    em_gmm = skm.GaussianMixture(n_components = num_clusters, n_init = 1,     \
+    em_gmm = skm.GaussianMixture(n_components = numcluster_manual, n_init = 1,\
                                  init_params = 'kmeans', warm_start = True,   \
                                  weights_init = sample_weight)
     em_gmm.fit(X)
     # print(em_gmm.n_iter_)
 
-
+    if type(fit_trazas) != type(None):
+        em_gmm.predict(fit_trazas[:,1:3])
     etiquetas = em_gmm.predict(X)
-    centroides = FA.encontrar_centroides(etiquetas, lista_trazas, num_clusters)
+    centroides = FA.encontrar_centroides(etiquetas, lista_trazas,             \
+                                         numcluster_manual)
 
     total_time = (time.time_ns()-t0)*1e-9
 
-    return num_clusters, centroides, etiquetas, total_time
+    return numcluster_manual, centroides, etiquetas, total_time
 
-def AHC(X: np.array(2), lista_trazas: np.array(3),                            \
-       distance_threshold: float or None):
+def AHC(X: np.array(2), lista_trazas: np.array(3), fit_trazas: np.array(3),   \
+       distance_threshold: float or None = 1):
     """
     Realiza el ajuste al algoritmo Agglomerative Hierarchical Clustering
     y devuelve los valores de interes
@@ -227,7 +231,9 @@ def AHC(X: np.array(2), lista_trazas: np.array(3),                            \
         Lista de las trazas a clusterizar.
     lista_trazas : np.array(3)
         Lista con todas las trazas y al vertice perteneciente.
-    distance_threshold : float or None
+    fit_trazas : np.array(3)
+        Lista con las trazas y el vértice al que pertenecen que será predichas
+    distance_threshold : float or None. DEFAULT 1
         The linkage distance threshold at or above which clusters will
         not be merged
     Returns
@@ -245,9 +251,11 @@ def AHC(X: np.array(2), lista_trazas: np.array(3),                            \
                                       distance_threshold= distance_threshold, \
                                       compute_full_tree = True,               \
                                       linkage = 'ward')
-        #linkge default ward
 
     agglomerative.fit(X)
+
+    # if type(fit_trazas) != type(None):
+    #     agglomerative.predict(fit_trazas[:,1:3])
 
     etiquetas = agglomerative.labels_
     labels_unique = np.unique(etiquetas)
@@ -258,7 +266,8 @@ def AHC(X: np.array(2), lista_trazas: np.array(3),                            \
 
     return num_clusters, centroides, etiquetas, total_time
 
-def BIRCH(X: np.array(2), threshold: float, branching : int):
+def BIRCH(X: np.array(2), fit_trazas: np.array(3), threshold: float,          \
+          branching: int):
     """
     Realiza el ajuste al algoritmo Agglomerative Hierarchical Clustering
     y devuelve los valores de interes
@@ -269,6 +278,8 @@ def BIRCH(X: np.array(2), threshold: float, branching : int):
         Lista de las trazas a clusterizar.
     lista_trazas : np.array(3)
         Lista con todas las trazas y al vertice perteneciente.
+    fit_trazas : np.array(3)
+        Lista con las trazas y el vértice al que pertenecen que será predichas
     numcluster_manual : int or None
         Numero de cluster total si es un número se toma el número si es
         'None' se calcula el mejor ajuste con la nota ajustada.
@@ -290,6 +301,8 @@ def BIRCH(X: np.array(2), threshold: float, branching : int):
     # n_cluster: None, int, sklearn.cluster
     birch.fit(X)
 
+    if type(fit_trazas) != type(None):
+        birch.predict(fit_trazas[:,1:3])
 
     etiquetas = birch.labels_
     centroides = birch.subcluster_centers_
