@@ -27,7 +27,7 @@ clusters_bien =  []
 clusters_mal = []
 num_clusters = []
 
-for i in range(100):
+for i in range(3):
 
     lista_vertices, lista_trazas, num_trazas_en_v, X, num_trazas  \
         = gcvt.VerticesyTrazasAleatorios( num_vertices = num_vertices,        \
@@ -35,16 +35,17 @@ for i in range(100):
                 mediat = 0, sigmat = 200, mediar = 0, sigmar = 0.05,          \
                 error_z = 0.02, error_t = 10)
 
-    inum_clusters, centroides, etiquetas, total_time = Algoritmos.MeanShift(X,\
+    inum_clusters, centroides, etiquetas, total_time = Algoritmos.MeanShift(  \
+                                                    X = X, fit_trazas = None, \
                                             quantile = 1e-2, n_samples = 299, \
                                             min_bin_freq = 31)
 
     num_clusters.append(inum_clusters)
 
     inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
-    iclusters_bien, iclusters_mal = Evaluar.evaluacion_total(lista_trazas,    \
-                                    etiquetas, centroides, lista_vertices,    \
-                                    num_trazas_en_v)
+    iclusters_bien, iclusters_mal, ivertices_faltan =                         \
+                                    Evaluar.evaluacion_total(lista_trazas,    \
+                                    etiquetas, centroides, lista_vertices)
     # Grafica_Clusters.grafica_colores_cluster(lista_trazas, etiquetas,         \
                                              # 'MeanShift')
 

@@ -40,14 +40,15 @@ for i in range(100):
                 mediat = 0, sigmat = 200, mediar = 0, sigmar = 0.05,          \
                 error_z = 0.02, error_t = 10)
 
-    inum_clusters, centroides, etiquetas, total_time = Algoritmos.AHC(X,      \
-                                             lista_trazas,                    \
+    inum_clusters, centroides, etiquetas, total_time = Algoritmos.AHC(X = X,  \
+                                             lista_trazas = lista_trazas,     \
+                                             fit_trazas = None,               \
                                              distance_threshold = 1)
 
     inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
-    iclusters_bien, iclusters_mal = Evaluar.evaluacion_total(lista_trazas,    \
-                                    etiquetas, centroides, lista_vertices,    \
-                                    num_trazas_en_v)
+    iclusters_bien, iclusters_mal, vertices_faltan =                          \
+                                    Evaluar.evaluacion_total(lista_trazas,    \
+                                    etiquetas, centroides, lista_vertices)
     # Grafica_Clusters.grafica_colores_cluster(lista_trazas, etiquetas,         \
     #                                           'AHC')
 

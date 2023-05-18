@@ -38,8 +38,32 @@ def grafica_colores_cluster(lista_trazas: np.array(3),                        \
                 z.append(lista_trazas[i_traza, 1])
                 t.append(lista_trazas[i_traza, 2])
         plt.plot(z, t, m, c = c, label = str(i_etiqueta))
-    plt.xlabel(r"$z$")
-    plt.ylabel(r"$t$")
+    plt.xlabel(r"$z/cm$")
+    plt.ylabel(r"$t/ps$")
     # plt.legend(loc = 'best')
     plt.title(algoritmo)
+    plt.show()
+
+def grafica_centroides_vertices(lista_vertices: np.array(3),                  \
+                                centroides: np.array(2), algoritmo: str):
+    """
+    It plots the centroids and the simulated vertex
+    Parameters
+    ----------
+    lista_vertices : np.array(3)
+        Lista con los vértices de la simulación.
+    centroides : np.array(2)
+        Posición de los centroides de cada cluster.
+    algoritmo : str
+        Nombre del algoritmo con el que se obtienen los datos..
+    """
+    plt.figure(figsize=(10,10))
+    plt.plot(centroides[:,0], centroides[:,1], 'x', c = 'b', markersize = 1,  \
+             label = 'Centroides')
+    plt.plot(lista_vertices[:,1], lista_vertices[:,2], 'o', c ='r',           \
+             markersize = 1, label = 'Vertices')
+    plt.xlabel(r"$z/cm$")
+    plt.ylabel(r"$t/ps$")
+    plt.title(algoritmo)
+    plt.legend(loc = 'best')
     plt.show()

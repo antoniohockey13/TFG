@@ -36,13 +36,15 @@ for i in range(10):
                 error_z = 0.02, error_t = 10)
 
     inum_clusters, centroides, etiquetas, total_time, inum_noise =            \
-        Algoritmos.DBSCAN(X, lista_trazas, epsilon = 0.2, min_samples = 20,   \
-                          leaf_size = 12)
+        Algoritmos.DBSCAN(X = X, lista_trazas = lista_trazas,                 \
+                          sample_weight = None, fit_trazas = None,            \
+                          error_predict = None, epsilon = 0.2,                \
+                          min_samples = 20, leaf_size = 12)
 
     inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
-    iclusters_bien, iclusters_mal = Evaluar.evaluacion_total(lista_trazas,    \
-                                    etiquetas, centroides, lista_vertices,    \
-                                    num_trazas_en_v)
+    iclusters_bien, iclusters_mal, ivertices_faltan =                         \
+                                    Evaluar.evaluacion_total(lista_trazas,    \
+                                    etiquetas, centroides, lista_vertices)
     # Grafica_Clusters.grafica_colores_cluster(lista_trazas, etiquetas,         \
     #                                          'DBSCAN')
 

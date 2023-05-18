@@ -92,8 +92,6 @@ def transform_data_into_own_variables(simvertices: np.array(4),               \
         Lista con las posiciones de los vértices.
     lista_trazas : np.array(3)
         Lista con las posiciones de las trazas y el vértice al que pertenecen.
-    num_trazas_en_v : np.array(1)
-        Número de trazas en cada vértice.
     errores : np.array(2)
         Errores en la medida de las trazas.
     """
@@ -105,14 +103,14 @@ def transform_data_into_own_variables(simvertices: np.array(4),               \
     lista_trazas = np.column_stack((lista_trazas0, lista_trazas1,             \
                                     lista_trazas2))
 
-    num_trazas_en_v = simvertices[:,3]
-
     errores_z = tracks[:,2]
     errores_t = tracks[:,4]
-
     errores = np.column_stack((errores_z, errores_t))
 
-    return lista_vertices, lista_trazas, num_trazas_en_v, errores
+    etiquetas_CMS = tracks[:,6]
+    centroide_CMS = np.column_stack((recovertices[:,1], recovertices[:,3]))
+
+    return lista_vertices, lista_trazas, errores, etiquetas_CMS, centroide_CMS
 
 def quit_not_measure_vertex(lista_trazas, errores):
     """
@@ -148,9 +146,3 @@ def quit_not_measure_vertex(lista_trazas, errores):
             errores_medidos.append([errores[i,0], errores[i,1]])
     return np.array(lista_trazas_medidas), np.array(errores_medidos),         \
         np.array(lista_trazas_no_medidas), np.array(errores_no_medidos)
-
-# num_evento, simvertices, recovertices, tracks =                               \
-    # digest_input('SimulationDataCMS_Event0.txt')
-
-# lista_vertices, lista_trazas, num_trazas_en_v, errores =                      \
-    # transform_data_into_own_variables(simvertices, recovertices, tracks)

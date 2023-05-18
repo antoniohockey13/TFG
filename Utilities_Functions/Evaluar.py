@@ -56,8 +56,7 @@ def cluster_to_vertex(centroides: np.array(float),                            \
     clustertovertex = [] # Posición marca cluster, número vertice [2 , 1...]
     # Cluster 0--> Vertice 2, cluster 1--> Vertice 1
 
-    for icentro in range(len(centroides)):
-        centroi = centroides[icentro]
+    for icentro in centroides:
         # Distancia se establece como infinito para así escoger la menor y elegir
         # que vértice esta más cerca de que centroide
         distancia_minima = np.inf
@@ -66,8 +65,8 @@ def cluster_to_vertex(centroides: np.array(float),                            \
         for ivertice in range(len(lista_vertices)):
             posverticei=[lista_vertices[ivertice,1],lista_vertices[ivertice,2]]
             verticei = lista_vertices[ivertice,0]
-            distancia = np.sqrt((centroi[0]-posverticei[0])**2+               \
-                                (centroi[1]-posverticei[1])**2)
+            distancia = np.sqrt((icentro[0]-posverticei[0])**2+               \
+                                (icentro[1]-posverticei[1])**2)
 
             if distancia < distancia_minima:
                 distancia_minima = distancia
@@ -100,15 +99,14 @@ def distancia_media(centroides: np.array(float),                              \
     """
 
     distanciatot = 0
-    for icentroide in range(len(centroides)):
-        centroide = centroides[icentroide]
-        numvertice = clustertovertex[icentroide]
+    for i, icentroide in enumerate(centroides):
+        numvertice = clustertovertex[i]
         vertice = lista_vertices[int(numvertice)]
-        if centroide[0] == np.inf or centroide[1] == np.inf:
+        if np.inf in icentroide:
             print('Un cluster esta vacío')
         else:
-            distancia =np.sqrt((centroide[0]-vertice[1])**2+                  \
-                               (centroide[1]-vertice[2])**2)
+            distancia =np.sqrt((icentroide[0]-vertice[1])**2+                  \
+                               (icentroide[1]-vertice[2])**2)
         distanciatot += distancia
     return distanciatot/len(lista_vertices)
 
@@ -160,7 +158,7 @@ def tabla_trazas(lista_trazas: np.array(np.array(3)),                         \
             trazas_en_vertices[vertice] = 1
         else:
             trazas_en_vertices[vertice] += 1
-        if vertice == clustertovertex[cluster]:
+        if vertice == clustertovertex[int(cluster)]:
             # print('Traza bien asignada')
             trazas_bien += 1
             lista_trazas_bien.append(vertice)
@@ -183,6 +181,7 @@ def tabla_trazas(lista_trazas: np.array(np.array(3)),                         \
             contador_trazas_bien[itraza] = 1
         else:
             contador_trazas_bien[itraza]+=1
+
         if contador_trazas_bien[itraza] == num_trazas_en_v[int(itraza)]:
             clusters_bien +=1
 
@@ -200,6 +199,18 @@ def tabla_trazas(lista_trazas: np.array(np.array(3)),                         \
 
 
 def num_trazas_en_vertices_con_lista_trazas(lista_trazas: np.array(3)):
+    """
+    Parameters
+    ----------
+    lista_trazas : np.array(3)
+        Lista con las trazas de la simulación.
+
+    Returns
+    -------
+    num_trazas_en_v : list
+        Numero de trazas en cada vertice.
+
+    """
     num_trazas_en_v = {}
     for itraza in lista_trazas:
         if itraza[0] not in num_trazas_en_v:
@@ -210,7 +221,7 @@ def num_trazas_en_vertices_con_lista_trazas(lista_trazas: np.array(3)):
 
 def evaluacion_total(lista_trazas: np.array(np.array(3)),                     \
                      etiquetas: np.array(int), centroides: np.array(float),   \
-                     lista_vertices: np.array(3), num_trazas_en_v: list[int]):
+                     lista_vertices: np.array(3)):
     """
     Llama al resto de funciones de evaluación para devolver todos los
     resultados juntos.

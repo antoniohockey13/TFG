@@ -28,9 +28,9 @@ def KMeans(X: np.array(2), lista_trazas: np.array(3), fit_trazas: np.array(3),\
     fit_trazas : np.array(3)
         Lista con las trazas y el vértice al que pertenecen que será predichas
     sample_weight : np.array(1)
-        Errores
+        Errores.
     error_predict : np.array(1)
-        Errores en trazas ha predecir
+        Errores en trazas ha predecir.
     numcluster_manual : int or None
         Numero de cluster total si es un número se toma el número si es
         'None' se calcula el mejor ajuste con la nota ajustada.
@@ -60,20 +60,24 @@ def KMeans(X: np.array(2), lista_trazas: np.array(3), fit_trazas: np.array(3),\
 
     kmeans.fit(X, sample_weight = sample_weight)
 
-    if type(fit_trazas) != type(None):
-        kmeans.predict(fit_trazas[:,1:3], sample_weight = error_predict)
-    # print(kmeans.n_iter_)
-    centroides = kmeans.cluster_centers_
     etiquetas = kmeans.labels_
 
+    if isinstance(fit_trazas, np.ndarray):
+        etiquetas_predict = kmeans.predict(fit_trazas[:,1:3],                 \
+                                           sample_weight = error_predict)
+        etiquetas = np.concatenate((etiquetas, etiquetas_predict))
+
+    # print(kmeans.n_iter_)
+    centroides = kmeans.cluster_centers_
     total_time = (time.time_ns()-t0)*1e-9
+
     # print(kmeans.n_iter_) # Muestra numero iteracciones realizado
 
     return(num_clusters, centroides, etiquetas, total_time)
 
 
 def MeanShift(X: np.array(2), fit_trazas: np.array(3), quantile: float = 0.01,\
-              n_samples: int = 299, min_bin_freq: int = 1):
+              n_samples: int = 299, min_bin_freq: int = 31):
     """
     Realiza el ajuste al algoritmo MeanShift y devuelve los valores de interes
 
@@ -95,7 +99,7 @@ def MeanShift(X: np.array(2), fit_trazas: np.array(3), quantile: float = 0.01,\
         bandwith. Default = 299
     min_bin_freq : int, OPTIONAL
         To speed up the algorithm, accept only those bins with at
-        least min_bin_freq points as seeds. Default 1
+        least min_bin_freq points as seeds. Default 31
 
     Returns
     -------
@@ -110,10 +114,13 @@ def MeanShift(X: np.array(2), fit_trazas: np.array(3), quantile: float = 0.01,\
                               bin_seeding = True, min_bin_freq = min_bin_freq,\
                               cluster_all = True, n_jobs= -1, max_iter=300)
     meanshift.fit(X)
-    if type(fit_trazas) != type(None):
-        meanshift.predict(fit_trazas[:,1:3])
-
     etiquetas = meanshift.labels_
+
+    if isinstance(fit_trazas, np.ndarray):
+        etiquetas_predict = meanshift.predict(fit_trazas[:,1:3])
+        etiquetas = np.concatenate((etiquetas, etiquetas_predict))
+
+
     labels_unique = np.unique(etiquetas)
     num_clusters = len(labels_unique)
 
@@ -162,8 +169,12 @@ def DBSCAN(X: np.array(2), lista_trazas: np.array(3), fit_trazas: np.array(3),\
 
     dbscan.fit(X, sample_weight = sample_weight)
 
-    if type(fit_trazas) != type(None):
-        dbscan.predict(fit_trazas[:,1:3], sample_weight = error_predict)
+    # if type(fit_trazas) != type(None):
+    #     etiquetas_predict = dbscan.predict(fit_trazas[:,1:3],               \
+    #                                             sample_weight = error_predict)
+    #      etiquetas = np.concatenate((etiquetas, etiquetas_predict))
+
+    # No existe función predict
 
     etiquetas = dbscan.labels_
 
@@ -206,12 +217,13 @@ def EM_GMM(X: np.array(2), lista_trazas: np.array(3), fit_trazas: np.array(2),\
     em_gmm = skm.GaussianMixture(n_components = numcluster_manual, n_init = 1,\
                                  init_params = 'kmeans', warm_start = True,   \
                                  weights_init = sample_weight)
-    em_gmm.fit(X)
+    etiquetas = em_gmm.fit_predict(X)
     # print(em_gmm.n_iter_)
 
-    if type(fit_trazas) != type(None):
-        em_gmm.predict(fit_trazas[:,1:3])
-    etiquetas = em_gmm.predict(X)
+    if isinstance(fit_trazas, np.ndarray):
+        etiquetas_predict = em_gmm.predict(fit_trazas[:,1:3])
+        etiquetas = np.concatenate((etiquetas, etiquetas_predict))
+
     centroides = FA.encontrar_centroides(etiquetas, lista_trazas,             \
                                          numcluster_manual)
 
@@ -254,10 +266,13 @@ def AHC(X: np.array(2), lista_trazas: np.array(3), fit_trazas: np.array(3),   \
 
     agglomerative.fit(X)
 
-    # if type(fit_trazas) != type(None):
-    #     agglomerative.predict(fit_trazas[:,1:3])
-
     etiquetas = agglomerative.labels_
+
+
+    # if isinstance(fit_trazas, np.ndarray):
+    #     etiquetas_predict = agglomerative.predict(fit_trazas[:,1:3])
+    #     etiquetas = np.concatenate((etiquetas, etiquetas_predict))
+    #  No existe función predict
     labels_unique = np.unique(etiquetas)
     num_clusters = len(labels_unique)
     centroides = FA.encontrar_centroides(etiquetas, lista_trazas, num_clusters)
@@ -286,6 +301,8 @@ def BIRCH(X: np.array(2), fit_trazas: np.array(3), threshold: float,          \
     distance_threshold : float or None
         The linkage distance threshold at or above which clusters will
         not be merged
+    branching : int
+        Maximum number of CF subclusters in each node.
     Returns
     -------
     num_clusters, centroides, etiquetas, total_time
@@ -301,10 +318,12 @@ def BIRCH(X: np.array(2), fit_trazas: np.array(3), threshold: float,          \
     # n_cluster: None, int, sklearn.cluster
     birch.fit(X)
 
-    if type(fit_trazas) != type(None):
-        birch.predict(fit_trazas[:,1:3])
-
     etiquetas = birch.labels_
+
+    if isinstance(fit_trazas, np.ndarray):
+        etiquetas_predict = birch.predict(fit_trazas[:,1:3])
+        etiquetas = np.concatenate((etiquetas, etiquetas_predict))
+
     centroides = birch.subcluster_centers_
     num_clusters = len(centroides)
 

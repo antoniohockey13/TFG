@@ -40,13 +40,16 @@ for i in range(2):
                 error_z = 0.02, error_t = 10)
 
 
-    inum_clusters, centroides, etiquetas, total_time = Algoritmos.KMeans(X,   \
-                                               lista_trazas, numcluster_manual)
+    inum_clusters, centroides, etiquetas, total_time = Algoritmos.KMeans(     \
+                                    X = X, lista_trazas = lista_trazas,       \
+                                    fit_trazas = None, sample_weight = None,  \
+                                    error_predict = None,                     \
+                                        numcluster_manual = numcluster_manual)
 
     inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
-    iclusters_bien, iclusters_mal = Evaluar.evaluacion_total(lista_trazas,    \
-                                    etiquetas, centroides, lista_vertices,    \
-                                    num_trazas_en_v)
+    iclusters_bien, iclusters_mal, ivertices_faltan =                         \
+                                    Evaluar.evaluacion_total(lista_trazas,    \
+                                    etiquetas, centroides, lista_vertices)
     # Grafica_Clusters.grafica_colores_cluster(lista_trazas, etiquetas, 'KMeans')
 
     num_clusters.append(inum_clusters)
