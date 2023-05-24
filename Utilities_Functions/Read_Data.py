@@ -112,6 +112,32 @@ def transform_data_into_own_variables(simvertices: np.array(4),               \
 
     return lista_vertices, lista_trazas, errores, etiquetas_CMS, centroide_CMS
 
+def read_data(name: str):
+    """
+    Read data from .txt file
+
+    Parameters
+    ----------
+    name : str
+        Name of the file.
+
+    Returns
+    -------
+    lista_vertices : np.array(3)
+        Lista con las posiciones de los vértices.
+    lista_trazas : np.array(3)
+        Lista con las posiciones de las trazas y el vértice al que pertenecen.
+    errores : np.array(2)
+        Errores en la medida de las trazas
+    """
+    num_evento, simvertices, recovertices, tracks = digest_input(name)
+    num_clustersCMS = len(recovertices)
+    lista_vertices, lista_trazas, errores, etiquetas_CMS, centroides_CMS =    \
+        transform_data_into_own_variables(simvertices, recovertices, tracks)
+
+    return lista_vertices, lista_trazas, errores, etiquetas_CMS,              \
+        centroides_CMS, num_clustersCMS
+
 def quit_not_measure_vertex(lista_trazas, errores):
     """
     Se eliminan las trazas que no han sido detectadas temporalmente

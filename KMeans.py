@@ -51,7 +51,8 @@ for i in range(2):
                                     Evaluar.evaluacion_total(lista_trazas,    \
                                     etiquetas, centroides, lista_vertices)
     # Grafica_Clusters.grafica_colores_cluster(lista_trazas, etiquetas, 'KMeans')
-
+    Grafica_Clusters.grafica_centroides_vertices(lista_vertices, centroides,  \
+                                                 'K-Means')
     num_clusters.append(inum_clusters)
 
     distancia.append(idistancia)

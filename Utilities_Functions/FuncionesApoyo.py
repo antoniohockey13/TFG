@@ -81,4 +81,5 @@ def grafica_colores_cluster(lista_trazas: np.array(3),                        \
     plt.ylabel(r"$t/\sigma_t$")
     # plt.legend(loc = 'best')
     plt.title(algoritmo)
+    plt.savefig(f'Centroides vs Vertices-{algoritmo}')
     plt.show()

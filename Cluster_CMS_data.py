@@ -7,41 +7,18 @@ Created on Thu May  4 12:48:15 2023
 from tabulate import tabulate
 import numpy as np
 
-from Utilities_Functions import Algoritmos
 from Utilities_Functions import Evaluar
 from Utilities_Functions import Grafica_Clusters
 from Utilities_Functions import Read_Data
 from Utilities_Functions import Algoritmos_for_CMS_data as Algorithm
 
-def read_data(name: str):
-    """
-    Read data from .txt file
 
-    Parameters
-    ----------
-    name : str
-        Name of the file.
 
-    Returns
-    -------
-    lista_vertices : np.array(3)
-        Lista con las posiciones de los vértices.
-    lista_trazas : np.array(3)
-        Lista con las posiciones de las trazas y el vértice al que pertenecen.
-    errores : np.array(2)
-        Errores en la medida de las trazas
-    """
-    num_evento, simvertices, recovertices, tracks =                           \
-        Read_Data.digest_input(name)
-    num_clustersCMS = len(recovertices)
-    lista_vertices, lista_trazas, errores, etiquetas_CMS, centroides_CMS =    \
-        Read_Data.transform_data_into_own_variables(         \
-                                             simvertices, recovertices, tracks)
-    return lista_vertices, lista_trazas, errores, etiquetas_CMS,              \
-        centroides_CMS, num_clustersCMS
 num_evento = str(0)
+
 lista_vertices, lista_trazas, errores, etiquetas_CMS, centroides_CMS,         \
-    num_clustersCMS = read_data(f'Data/SimulationDataCMS_Event{num_evento}.txt')
+    num_clustersCMS = Read_Data.read_data(                                    \
+                              f'Data/SimulationDataCMS_Event{num_evento}.txt')
 
 lista_trazas_medidas, errores_medidos, lista_trazas_no_medidas,               \
     errores_no_medidos = Read_Data.quit_not_measure_vertex(lista_trazas,      \
@@ -49,11 +26,14 @@ lista_trazas_medidas, errores_medidos, lista_trazas_no_medidas,               \
 
 trazas_totales = len(lista_trazas)
 num_vertices = len(lista_vertices)
-X = np.column_stack((lista_trazas[:,1], lista_trazas[:,2]))
+
 #%% Evaluar resultados CMS
 notaajustada, notanorm, distancia, trazas_bien, trazas_mal, clusters_bien,    \
     clusters_mal, vertices_faltan = Evaluar.evaluacion_total(lista_trazas,    \
                                 etiquetas_CMS, centroides_CMS, lista_vertices)
+
+Grafica_Clusters.grafica_centroides_vertices(lista_vertices, centroides_CMS,  \
+                                             'CMS')
 
 
 print('\n Evaluacion resultados CMS: ')
@@ -75,7 +55,7 @@ print(f'Nota no ajustada:{np.mean(notanorm)} +- {np.std(notanorm)}')
 print('Distancia de los centroides a los vértices (normalizada entre número '\
         f'vértices): {distancia}')
 
-#%% K-Means
+#%% K-Means sin eliminar 0
 num_clusters = 215
 notaajustada, notanorm, distancia, trazas_bien, trazas_mal, clusters_bien,    \
       clusters_mal, vertices_faltan, total_time, num_clusters =               \
@@ -264,7 +244,7 @@ notaajustada, notanorm, distancia, trazas_bien, trazas_mal, clusters_bien,    \
                               sample_weight = None, num_clusters = 215,       \
                               graficas = True)
 
-print('\n Ajuste realizado con: EM_GMM sin eliminar 0')
+print('\n Ajuste realizado con: EM_GMM con eliminar 0')
 
 tabla = [ [' ', 'Valor',],
           ['Trazas OK/Tot', trazas_bien/trazas_totales],

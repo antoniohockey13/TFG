@@ -91,14 +91,6 @@ plt.title('K-Means')
 plt.savefig('KMeans/Gráficas reales/KMeans n_init_vs_Notas 1')
 plt.show()
 
-# plt.plot(ninit, num_clusters, 'x', c = 'b', label = '')
-# plt.xlabel('n_init')
-# plt.ylabel('Num clusters')
-# # plt.legend(loc = 'best')
-# plt.title('Mean Shift')
-# plt.savefig('KMeans/Gráficas/K-Means n_init_vs_Num_clusters')
-# plt.show()
-
 plt.plot(ninit, tiempo,label = 'Tiempo')
 plt.xlabel('n_init')
 plt.ylabel('Tiempo')
@@ -125,8 +117,9 @@ for iquantile in quantiles:
         Algoritmos.MeanShift(X, quantile = iquantile)
 
     inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
-        iclusters_bien, iclusters_mal = Evaluar.evaluacion_total(lista_trazas,\
-                        etiquetas, centroides, lista_vertices, num_trazas_en_v)
+        iclusters_bien, iclusters_mal, clusters_faltan =                      \
+            Evaluar.evaluacion_total(lista_trazas, etiquetas, centroides,     \
+                                     lista_vertices)
 
 
     notaajustada.append(inotaajustada)
@@ -186,8 +179,10 @@ for in_sample in n_samples:
         Algoritmos.MeanShift(X, quantile = 0.01, n_samples = in_sample)
 
     inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
-        iclusters_bien, iclusters_mal = Evaluar.evaluacion_total(lista_trazas,\
-                        etiquetas, centroides, lista_vertices, num_trazas_en_v)
+        iclusters_bien, iclusters_mal, clusters_faltan =                      \
+            Evaluar.evaluacion_total(lista_trazas, etiquetas, centroides,     \
+                                     lista_vertices)
+
 
 
     notaajustada.append(inotaajustada)
@@ -252,8 +247,9 @@ for imin_bin_freq in min_bin_freq:
                              min_bin_freq = imin_bin_freq)
 
     inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
-        iclusters_bien, iclusters_mal = Evaluar.evaluacion_total(lista_trazas,\
-                        etiquetas, centroides, lista_vertices, num_trazas_en_v)
+        iclusters_bien, iclusters_mal, clusters_faltan =                      \
+            Evaluar.evaluacion_total(lista_trazas, etiquetas, centroides,     \
+                                     lista_vertices)
 
 
     notaajustada.append(inotaajustada)
@@ -325,9 +321,9 @@ for iepsilon in epsilons:
         Algoritmos.DBSCAN(X, lista_trazas, epsilon = iepsilon, min_samples = 3)
 
     inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
-        iclusters_bien, iclusters_mal = Evaluar.evaluacion_total(lista_trazas,\
-                        etiquetas, centroides, lista_vertices, num_trazas_en_v)
-
+        iclusters_bien, iclusters_mal, clusters_faltan =                      \
+            Evaluar.evaluacion_total(lista_trazas, etiquetas, centroides,     \
+                                     lista_vertices)
 
     notaajustada.append(inotaajustada)
     notanorm.append(inotanorm)
@@ -393,8 +389,9 @@ for imin_sample in min_samples:
                           min_samples = imin_sample)
 
     inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
-        iclusters_bien, iclusters_mal = Evaluar.evaluacion_total(lista_trazas,\
-                        etiquetas, centroides, lista_vertices, num_trazas_en_v)
+        iclusters_bien, iclusters_mal, clusters_faltan =                      \
+            Evaluar.evaluacion_total(lista_trazas, etiquetas, centroides,     \
+                                     lista_vertices)
 
 
     notaajustada.append(inotaajustada)
@@ -460,9 +457,9 @@ for ileaf in leaf_size:
                           leaf_size = ileaf)
 
     inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
-        iclusters_bien, iclusters_mal = Evaluar.evaluacion_total(lista_trazas,\
-                        etiquetas, centroides, lista_vertices, num_trazas_en_v)
-
+        iclusters_bien, iclusters_mal, clusters_faltan =                      \
+            Evaluar.evaluacion_total(lista_trazas, etiquetas, centroides,     \
+                                     lista_vertices)
 
     notaajustada.append(inotaajustada)
     notanorm.append(inotanorm)
@@ -509,6 +506,7 @@ plt.ylabel('Time/s')
 # plt.legend(loc='best')
 plt.title('DBSCAN')
 plt.savefig('DBSCAN/Gráficas reales/DBSCAN leafsize_vs_tiempo 1')
+plt.show()
 
 #%% Numero Clusters EM-GMM
 
@@ -562,9 +560,9 @@ for idistance in distances:
         Algoritmos.AHC(X, lista_trazas, distance_threshold = idistance)
 
     inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
-        iclusters_bien, iclusters_mal = Evaluar.evaluacion_total(lista_trazas,\
-                        etiquetas, centroides, lista_vertices, num_trazas_en_v)
-
+        iclusters_bien, iclusters_mal, clusters_faltan =                      \
+            Evaluar.evaluacion_total(lista_trazas, etiquetas, centroides,     \
+                                     lista_vertices)
 
     notaajustada.append(inotaajustada)
     notanorm.append(inotanorm)
@@ -631,8 +629,9 @@ for ithreshold in thresholds:
         Algoritmos.BIRCH(X, ithreshold, branching = 80)
 
     inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
-        iclusters_bien, iclusters_mal = Evaluar.evaluacion_total(lista_trazas,\
-                        etiquetas, centroides, lista_vertices, num_trazas_en_v)
+        iclusters_bien, iclusters_mal, clusters_faltan =                      \
+            Evaluar.evaluacion_total(lista_trazas, etiquetas, centroides,     \
+                                     lista_vertices)
 
 
     notaajustada.append(inotaajustada)
@@ -705,8 +704,9 @@ for ibranching in branchings:
         Algoritmos.BIRCH(X, threshold = 0.2, branching = ibranching)
 
     inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
-        iclusters_bien, iclusters_mal = Evaluar.evaluacion_total(lista_trazas,\
-                        etiquetas, centroides, lista_vertices, num_trazas_en_v)
+        iclusters_bien, iclusters_mal, clusters_faltan =                      \
+            Evaluar.evaluacion_total(lista_trazas, etiquetas, centroides,     \
+                                     lista_vertices)
 
 
     notaajustada.append(inotaajustada)

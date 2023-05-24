@@ -58,12 +58,13 @@ def grafica_centroides_vertices(lista_vertices: np.array(3),                  \
         Nombre del algoritmo con el que se obtienen los datos..
     """
     plt.figure(figsize=(10,10))
-    plt.plot(centroides[:,0], centroides[:,1], 'x', c = 'b', markersize = 1,  \
+    plt.plot(centroides[:,0], centroides[:,1], 'o', c = 'b', markersize = 1,  \
              label = 'Centroides')
-    plt.plot(lista_vertices[:,1], lista_vertices[:,2], 'o', c ='r',           \
-             markersize = 1, label = 'Vertices')
+    plt.plot(lista_vertices[:,1], lista_vertices[:,2], 'x', c ='r',           \
+             markersize = 2, label = 'Vertices')
     plt.xlabel(r"$z/cm$")
     plt.ylabel(r"$t/ps$")
     plt.title(algoritmo)
     plt.legend(loc = 'best')
+    # plt.savefig(f"Centroides vs Vertices-{algoritmo}.pdf")
     plt.show()

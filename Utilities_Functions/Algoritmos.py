@@ -12,9 +12,11 @@ from . import NumeroClusters
 from . import FuncionesApoyo as FA
 
 
-def KMeans(X: np.array(2), lista_trazas: np.array(3), fit_trazas: np.array(3),\
-           sample_weight: np.array(1), error_predict: np.array(1),            \
-           numcluster_manual: int or None,  n_init: int = 10,                 \
+def KMeans(X: np.array(2), lista_trazas: np.array(3),                         \
+           numcluster_manual: int or None,                                    \
+           fit_trazas: np.array(3) or None = None,                            \
+           sample_weight: np.array(1) or None = None,                         \
+           error_predict: np.array(1) or None = None, n_init: int = 10,       \
            tol: float = 1e-6):
     """
     Realiza el ajuste al algoritmo KMeans y devuelve los valores de interes
@@ -25,15 +27,16 @@ def KMeans(X: np.array(2), lista_trazas: np.array(3), fit_trazas: np.array(3),\
         Lista de las trazas a clusterizar.
     lista_trazas : np.array(3)
         Lista con todas las trazas y al vertice perteneciente.
-    fit_trazas : np.array(3)
-        Lista con las trazas y el vértice al que pertenecen que será predichas
-    sample_weight : np.array(1)
-        Errores.
-    error_predict : np.array(1)
-        Errores en trazas ha predecir.
     numcluster_manual : int or None
         Numero de cluster total si es un número se toma el número si es
         'None' se calcula el mejor ajuste con la nota ajustada.
+    fit_trazas : np.array(3) or None
+        Lista con las trazas y el vértice al que pertenecen que será predichas.
+        Default None
+    sample_weight : np.array(1) or None
+        Errores. Default None
+    error_predict : np.array(1) or None
+        Errores en trazas ha predecir. Default None
     n_init : int, OPTIONAL
         Numero de veces que se corre el algoritmo con distintos centroides.
         Default 10
@@ -76,8 +79,9 @@ def KMeans(X: np.array(2), lista_trazas: np.array(3), fit_trazas: np.array(3),\
     return(num_clusters, centroides, etiquetas, total_time)
 
 
-def MeanShift(X: np.array(2), fit_trazas: np.array(3), quantile: float = 0.01,\
-              n_samples: int = 299, min_bin_freq: int = 31):
+def MeanShift(X: np.array(2), fit_trazas: np.array(3) or None = None,         \
+              quantile: float = 0.01, n_samples: int = 299,                   \
+              min_bin_freq: int = 31):
     """
     Realiza el ajuste al algoritmo MeanShift y devuelve los valores de interes
 
@@ -85,8 +89,9 @@ def MeanShift(X: np.array(2), fit_trazas: np.array(3), quantile: float = 0.01,\
     ----------
     X : np.array(2)
         Lista de las trazas a clusterizar.
-    fit_trazas : np.array(3)
-        Lista con las trazas y el vértice al que pertenecen que será predichas
+    fit_trazas : np.array(3) or None
+        Lista con las trazas y el vértice al que pertenecen que será predichas.
+        Default None
     quantile : float, OPTIONAL
         Should be between [0, 1] 0.5 means that the median of all pairwise
         distances is used. For bandwith. Default 0.01
@@ -131,9 +136,11 @@ def MeanShift(X: np.array(2), fit_trazas: np.array(3), quantile: float = 0.01,\
     return num_clusters, centroides, etiquetas, total_time
 
 
-def DBSCAN(X: np.array(2), lista_trazas: np.array(3), fit_trazas: np.array(3),\
-           sample_weight: np.array(1), error_predict: np.array(1),            \
-           epsilon: float = 0.2, min_samples: int = 5, leaf_size: int = 10):
+def DBSCAN(X: np.array(2), lista_trazas: np.array(3),                         \
+           fit_trazas: np.array(3) or None = None,                            \
+           sample_weight: np.array(1) or None = None,                         \
+           error_predict: np.array(1) or None = None, epsilon: float = 0.2,   \
+           min_samples: int = 5, leaf_size: int = 10):
     """
     Realiza el ajuste al algoritmo DBSCAN y devuelve los valores de interes
 
@@ -143,10 +150,13 @@ def DBSCAN(X: np.array(2), lista_trazas: np.array(3), fit_trazas: np.array(3),\
         Lista de las trazas a clusterizar.
     lista_trazas : np.array(3)
         Lista con todas las trazas y al vertice perteneciente.
-    fit_trazas : np.array(3)
-        Lista con las trazas y el vértice al que pertenecen que será predichas
-     sample_weight : np.array(1)
-         Errores
+    fit_trazas : np.array(3) or None
+        Lista con las trazas y el vértice al que pertenecen que será predichas.
+        Default None.
+     sample_weight : np.array(1) or None
+         Errores. Default None.
+    error_predict : np.array(1) or None
+        Error en fit_trazas. Default None.
     epsilon : float. OPTIONAL
         Valor de epsilon para el ajuste de DBSCAN. The default is 0.8
     min_samples : int, OPTIONAL
@@ -188,8 +198,9 @@ def DBSCAN(X: np.array(2), lista_trazas: np.array(3), fit_trazas: np.array(3),\
 
     return num_clusters, centroides, etiquetas, total_time, num_noise
 
-def EM_GMM(X: np.array(2), lista_trazas: np.array(3), fit_trazas: np.array(2),\
-           sample_weight: np.array(1), numcluster_manual: int):
+def EM_GMM(X: np.array(2), lista_trazas: np.array(3), numcluster_manual: int, \
+           fit_trazas: np.array(2) or None = None,\
+           sample_weight: np.array(1) or None = None):
     """
     Realiza el ajuste al algoritmo EM-GMM y devuelve los valores de interes
 
@@ -199,12 +210,13 @@ def EM_GMM(X: np.array(2), lista_trazas: np.array(3), fit_trazas: np.array(2),\
         Lista de las trazas a clusterizar.
     lista_trazas : np.array(3)
         Lista con todas las trazas y al vertice perteneciente.
-    fit_trazas : np.array(3)
-        Lista con las trazas y el vértice al que pertenecen que será predichas
-     sample_weight : np.array(1)
-         Errores
     numcluster_manual : int
         Numero de cluster total
+    fit_trazas : np.array(3) or None
+        Lista con las trazas y el vértice al que pertenecen que será predichas.
+        Default None
+     sample_weight : np.array(1) or None
+         Errores. Default None
 
     Returns
     -------
@@ -231,8 +243,9 @@ def EM_GMM(X: np.array(2), lista_trazas: np.array(3), fit_trazas: np.array(2),\
 
     return numcluster_manual, centroides, etiquetas, total_time
 
-def AHC(X: np.array(2), lista_trazas: np.array(3), fit_trazas: np.array(3),   \
-       distance_threshold: float or None = 1):
+def AHC(X: np.array(2), lista_trazas: np.array(3),                            \
+        fit_trazas: np.array(3) or None = None,                               \
+        distance_threshold: float = 1):
     """
     Realiza el ajuste al algoritmo Agglomerative Hierarchical Clustering
     y devuelve los valores de interes
@@ -243,9 +256,10 @@ def AHC(X: np.array(2), lista_trazas: np.array(3), fit_trazas: np.array(3),   \
         Lista de las trazas a clusterizar.
     lista_trazas : np.array(3)
         Lista con todas las trazas y al vertice perteneciente.
-    fit_trazas : np.array(3)
-        Lista con las trazas y el vértice al que pertenecen que será predichas
-    distance_threshold : float or None. DEFAULT 1
+    fit_trazas : np.array(3) or None
+        Lista con las trazas y el vértice al que pertenecen que será predichas.
+        Default None
+    distance_threshold : float. DEFAULT 1
         The linkage distance threshold at or above which clusters will
         not be merged
     Returns
@@ -281,8 +295,8 @@ def AHC(X: np.array(2), lista_trazas: np.array(3), fit_trazas: np.array(3),   \
 
     return num_clusters, centroides, etiquetas, total_time
 
-def BIRCH(X: np.array(2), fit_trazas: np.array(3), threshold: float,          \
-          branching: int):
+def BIRCH(X: np.array(2), threshold: float, branching: int,                   \
+          fit_trazas: np.array(3) or None = None):
     """
     Realiza el ajuste al algoritmo Agglomerative Hierarchical Clustering
     y devuelve los valores de interes
@@ -293,8 +307,7 @@ def BIRCH(X: np.array(2), fit_trazas: np.array(3), threshold: float,          \
         Lista de las trazas a clusterizar.
     lista_trazas : np.array(3)
         Lista con todas las trazas y al vertice perteneciente.
-    fit_trazas : np.array(3)
-        Lista con las trazas y el vértice al que pertenecen que será predichas
+
     numcluster_manual : int or None
         Numero de cluster total si es un número se toma el número si es
         'None' se calcula el mejor ajuste con la nota ajustada.
@@ -303,6 +316,9 @@ def BIRCH(X: np.array(2), fit_trazas: np.array(3), threshold: float,          \
         not be merged
     branching : int
         Maximum number of CF subclusters in each node.
+    fit_trazas : np.array(3) or None
+        Lista con las trazas y el vértice al que pertenecen que será predichas.
+        Default None.
     Returns
     -------
     num_clusters, centroides, etiquetas, total_time

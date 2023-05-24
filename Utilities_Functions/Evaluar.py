@@ -108,7 +108,7 @@ def distancia_media(centroides: np.array(float),                              \
             distancia =np.sqrt((icentroide[0]-vertice[1])**2+                  \
                                (icentroide[1]-vertice[2])**2)
         distanciatot += distancia
-    return distanciatot/len(lista_vertices)
+    return distanciatot/len(centroides)
 
 
 
