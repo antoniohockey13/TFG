@@ -15,10 +15,11 @@ from Utilities_Functions import Algoritmos_for_CMS_data as Algorithm
 
 
 num_evento = str(0)
+name = f"Data/DataCMS_momentum{num_evento}.txt"
+# name = f"Data/SimulationDataCMS_Event{num_evento}.txt"
 
 lista_vertices, lista_trazas, errores, etiquetas_CMS, centroides_CMS,         \
-    num_clustersCMS = Read_Data.read_data(                                    \
-                              f'Data/SimulationDataCMS_Event{num_evento}.txt')
+    num_clustersCMS = Read_Data.read_data(name, pt = 0.2)
 
 lista_trazas_medidas, errores_medidos, lista_trazas_no_medidas,               \
     errores_no_medidos = Read_Data.quit_not_measure_vertex(lista_trazas,      \
@@ -56,7 +57,7 @@ print('Distancia de los centroides a los vértices (normalizada entre número '\
         f'vértices): {distancia}')
 
 #%% K-Means sin eliminar 0
-num_clusters = 215
+num_clusters = len(lista_vertices)
 notaajustada, notanorm, distancia, trazas_bien, trazas_mal, clusters_bien,    \
       clusters_mal, vertices_faltan, total_time, num_clusters =               \
           Algorithm.KMeans(lista_trazas = lista_trazas,                       \

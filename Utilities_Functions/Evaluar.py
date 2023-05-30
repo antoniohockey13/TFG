@@ -114,7 +114,7 @@ def distancia_media(centroides: np.array(float),                              \
 
 def tabla_trazas(lista_trazas: np.array(np.array(3)),                         \
                  etiquetas: np.array(int), num_trazas_en_v: list[int],        \
-                 clustertovertex: np.array(int)):
+                 clustertovertex: np.array(int), lista_vertices):
     """
     Función para obtener número absoluto de trazas y clusters bien/mal
     identificados.
@@ -145,7 +145,7 @@ def tabla_trazas(lista_trazas: np.array(np.array(3)),                         \
     trazas_bien = 0
     trazas_mal = 0
     trazas_en_vertices= {} # Comprobar cuantas trazas en cada vértice
-    for i in range(len(num_trazas_en_v)):
+    for i in range(len(lista_vertices)):
         trazas_en_vertices[i] = 0
 
     # Comprobar si trazas bien asignadas
@@ -159,17 +159,14 @@ def tabla_trazas(lista_trazas: np.array(np.array(3)),                         \
         else:
             trazas_en_vertices[vertice] += 1
         if vertice == clustertovertex[int(cluster)]:
-            # print('Traza bien asignada')
             trazas_bien += 1
             lista_trazas_bien.append(vertice)
         else:
-            # print(f'La traza {itraza} esta mal asignada')
             trazas_mal += 1
             lista_trazas_mal.append(vertice)
 
-
     vertices_faltan = 0
-    for ivertice in range(len(num_trazas_en_v)):
+    for ivertice in range(len(lista_vertices)):
         if trazas_en_vertices[ivertice] == 0:
             vertices_faltan += 1
 
@@ -252,7 +249,8 @@ def evaluacion_total(lista_trazas: np.array(np.array(3)),                     \
     ctv = cluster_to_vertex(centroides, lista_vertices)
     distancia = distancia_media(centroides, lista_vertices, ctv)
     trazas_bien, trazas_mal, clusters_bien, clusters_mal, vertices_faltan     \
-        = tabla_trazas(lista_trazas, etiquetas, num_trazas_en_v, ctv)
+        = tabla_trazas(lista_trazas, etiquetas, num_trazas_en_v, ctv,         \
+                       lista_vertices)
 
     return(notaajustada, notanorm, distancia, trazas_bien, trazas_mal,        \
            clusters_bien, clusters_mal, vertices_faltan)

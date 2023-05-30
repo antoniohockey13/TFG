@@ -26,7 +26,6 @@ def grafica_colores_cluster(lista_trazas: np.array(3),                        \
     markers = ['.', 'o', 'v', 's', 'p', 'P', '*', '+', 'd', 'D']
     colours = ['blue', 'orange', 'green', 'red', 'purple', 'brown', 'pink',   \
                'gray', 'olive', 'cyan']
-
     etiquetas_unique = set(etiquetas)
     for i_etiqueta in etiquetas_unique:
         c = random.choice(colours)
@@ -66,5 +65,5 @@ def grafica_centroides_vertices(lista_vertices: np.array(3),                  \
     plt.ylabel(r"$t/ps$")
     plt.title(algoritmo)
     plt.legend(loc = 'best')
-    # plt.savefig(f"Centroides vs Vertices-{algoritmo}.pdf")
+    plt.savefig(f"Centroides vs Vertices-{algoritmo} con errores.pdf")
     plt.show()

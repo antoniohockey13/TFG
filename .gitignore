@@ -6,3 +6,13 @@ __pycache__
 
 # No subir carpeta con gráficas
 Gráficas
+AHC
+BIRCH
+DBSCAN
+EMGMM
+KMeans
+MeanShift
+
+# No subir imágenes
+*.png
+*.pdf

@@ -102,7 +102,6 @@ plt.show()
 #%% MeanShift Quantile
 
 quantiles = np.linspace(1e-2, 0.1, 10)
-
 notaajustada = []
 notanorm = []
 notamedia = []
@@ -163,8 +162,7 @@ plt.show()
 #%% n_samples Mean Shift
 
 n_samples = np.linspace(280, 320, 50, dtype= int)
-
-
+bandwidth = []
 notaajustada = []
 notanorm = []
 notamedia = []
@@ -175,7 +173,7 @@ clusters_mal = []
 num_clusters = []
 
 for in_sample in n_samples:
-    inum_clusters, centroides, etiquetas, total_time =                        \
+    inum_clusters, centroides, etiquetas, total_time, ibandwidth =                        \
         Algoritmos.MeanShift(X, quantile = 0.01, n_samples = in_sample)
 
     inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
@@ -184,7 +182,7 @@ for in_sample in n_samples:
                                      lista_vertices)
 
 
-
+    bandwidth.append(ibandwidth)
     notaajustada.append(inotaajustada)
     notanorm.append(inotanorm)
     notamedia.append((inotaajustada**2+inotanorm**2)/2)
@@ -304,7 +302,7 @@ plt.show()
 
 #%% Barrido de epsilon en DBSCAN
 
-epsilons = np.linspace(0.01, 0.5, 25)
+epsilons = np.linspace(0.01, 0.5, 50)
 
 
 notaajustada = []
@@ -334,6 +332,17 @@ for iepsilon in epsilons:
     clusters_mal.append(iclusters_mal/num_vertices)
     num_clusters.append(inum_clusters)
 
+# plt.subplot(2, 1, 1)
+
+
+# plt.plot(epsilons, trazas_bien, 'x', c = 'b', label = 'Trazas OK')
+# plt.plot(epsilons, clusters_bien, 'x', c = 'r', label = 'Clusters OK')
+# plt.plot(epsilons, clusters_mal, 'o', c = 'g', label = 'Clusters mal')
+# plt.axvline(x = 0.2, c = 'r')
+# plt.xlabel(r'$\epsilon$')
+# plt.ylabel('Num/Tot')
+# plt.legend(loc = 'best')
+# plt.title('DBSCAN')
 
 plt.plot(epsilons, notaajustada, 'x', c = 'b', label = 'Nota ajustada')
 plt.plot(epsilons, notanorm, 'x', c = 'r', label = 'Nota normal')
@@ -366,11 +375,10 @@ plt.title('DBSCAN')
 plt.savefig('DBSCAN/Gráficas reales/DBSCAN epsilon_vs_numclusters 1')
 plt.show()
 
-
 #%% Barrido min_samples en DBSCAN
 
 
-min_samples = np.linspace(1, 100, 24, dtype = int)
+min_samples = np.linspace(1, 100, 50, dtype = int)
 
 
 notaajustada = []
@@ -403,6 +411,18 @@ for imin_sample in min_samples:
     clusters_mal.append(iclusters_mal/num_vertices)
     num_clusters.append(inum_clusters)
 
+# plt.subplot(2,1,2)
+# plt.plot(min_samples, trazas_bien, 'x', c = 'b', label = 'Trazas OK')
+# plt.plot(min_samples, clusters_bien, 'x', c = 'r', label = 'Clusters OK')
+# plt.plot(min_samples, clusters_mal, 'o', c = 'g', label = 'Clusters mal')
+# plt.axvline(x = 20, c = 'r')
+# plt.xlabel('minPoints')
+# plt.ylabel('Num/Tot')
+# plt.legend(loc='best')
+# plt.title('DBSCAN')
+
+# plt.tight_layout()
+# plt.show()
 
 plt.plot(min_samples, notaajustada, 'x', c = 'b', label = 'Nota ajustada')
 plt.plot(min_samples, notanorm, 'x', c = 'r', label = 'Nota normal')
@@ -542,7 +562,7 @@ plt.show()
 
 #%% AHC distance_threshold
 
-distances = np.linspace(0.1, 5, 30)
+distances = np.linspace(0.1, 2.5, 30)
 
 
 notaajustada = []
@@ -611,7 +631,7 @@ plt.title('AHC')
 plt.savefig('AHC/Gráficas reales/AHC distance_threshold_vs_tiempo 1')
 
 #%% threshold BIRCH
-thresholds = np.linspace(0.1, 1.5, 30)
+thresholds = np.linspace(0.01, 0.6, 50)
 
 
 notaajustada = []
@@ -647,44 +667,44 @@ for ithreshold in thresholds:
 
 plt.plot(thresholds, notaajustada, 'x', c = 'b', label = 'Nota ajustada')
 plt.plot(thresholds, notanorm, 'x', c = 'r', label = 'Nota normal')
-plt.plot(thresholds, notamedia, 'o', c = 'g', label = 'Nota media')
-plt.axvline(0.2)
+# plt.plot(thresholds, notamedia, 'o', c = 'g', label = 'Nota media')
+plt.axvline(x = 0.2, c = 'r')
 plt.xlabel('Threshold')
 plt.ylabel('Puntos')
 plt.legend(loc='best')
 plt.title('Birch')
-plt.savefig('BIRCH/Gráficas reales/Birch distance_threshold_vs_notas 1')
+# plt.savefig('BIRCH/Gráficas reales/Birch distance_threshold_vs_notas 1')
 plt.show()
 
 plt.plot(thresholds, trazas_bien, 'x', c = 'b', label = 'Trazas OK')
 plt.plot(thresholds, clusters_bien, 'x', c = 'r', label = 'Clusters OK')
 plt.plot(thresholds, clusters_mal, 'o', c = 'g', label = 'Clusters mal')
-plt.axvline(0.2)
+plt.axvline(x = 0.2, c = 'r')
 plt.xlabel('Threshold')
 plt.ylabel('Num/Tot')
 plt.legend(loc='best')
 plt.title('Birch')
-plt.savefig('BIRCH/Gráficas reales/Birch distance_threshold_vs_OK-Mal 1')
+# plt.savefig('BIRCH/Gráficas reales/Birch distance_threshold_vs_OK-Mal 1')
 plt.show()
 
 plt.plot(thresholds, num_clusters, 'x', c = 'b', label = '')
-plt.axvline(0.2)
-plt.axhline(200)
+plt.axvline(x = 0.2, c = 'r')
+plt.axhline(y = 200, c = 'r')
 plt.xlabel('Threshold')
 plt.ylabel('Num clusters')
 # plt.legend(loc='best')
 plt.title('Birch')
-plt.savefig('BIRCH/Gráficas reales/Birch threshold_vs_numclusters 1')
+# plt.savefig('BIRCH/Gráficas reales/Birch threshold_vs_numclusters 1')
 plt.show()
 
 plt.plot(thresholds, time, c = 'b', label = '')
-plt.axvline(0.2)
+plt.axvline(x = 0.2, c = 'r')
 plt.xlabel('Threshold')
 plt.ylabel('Time/s')
 # plt.legend(loc='best')
 plt.title('Birch')
-plt.savefig('BIRCH/Gráficas reales/Birch distance_threshold_vs_tiempo 1')
-
+# plt.savefig('BIRCH/Gráficas reales/Birch distance_threshold_vs_tiempo 1')
+plt.show()
 #%% branching ratio BIRCH
 branchings = np.linspace(2, 100, 30, dtype = int)
 

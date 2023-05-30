@@ -83,3 +83,10 @@ def grafica_colores_cluster(lista_trazas: np.array(3),                        \
     plt.title(algoritmo)
     plt.savefig(f'Centroides vs Vertices-{algoritmo}')
     plt.show()
+
+def errores_to_sample_weight(errores):
+    errores = np.sqrt(np.sum(np.square(errores), axis=1))
+
+    error_max = max(errores)
+    errores = 1-(errores/error_max)
+    return errores

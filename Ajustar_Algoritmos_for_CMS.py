@@ -13,7 +13,7 @@ from Utilities_Functions import Algoritmos
 
 
 
-num_evento = str(1)
+num_evento = str(0)
 
 lista_vertices, lista_trazas, errores, etiquetas_CMS, centroides_CMS,         \
     num_clustersCMS = Read_Data.read_data(                                    \
@@ -30,11 +30,17 @@ X = np.column_stack((lista_trazas[:,1], lista_trazas[:,2]))
 #%% n init K-means
 ninit = np.linspace(1, 100, 25, dtype = int)
 n_clusters = len(lista_vertices)
+
 notaajustada = []
 notanorm = []
 notamedia = []
-tiempo =  []
+distancia = []
+trazas_bien = []
+clusters_bien = []
+clusters_mal = []
 num_clusters = []
+tiempo = []
+
 
 for in_init in ninit:
     inum_clusters, centroides, etiquetas, total_time = Algoritmos.KMeans(X,   \
@@ -42,12 +48,19 @@ for in_init in ninit:
                                             numcluster_manual = n_clusters,   \
                                             n_init = in_init, tol = 1e-4)
 
-    inotaajustada, inotanorm = Evaluar.evaluacion(lista_trazas, etiquetas)
+    inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
+        iclusters_bien, iclusters_mal, cluster_faltan =                       \
+            Evaluar.evaluacion_total(lista_trazas, etiquetas, centroides,     \
+                                      lista_vertices)
     notaajustada.append(inotaajustada)
     notanorm.append(inotanorm)
     notamedia.append((inotaajustada**2+inotanorm**2)/2)
-    tiempo.append(total_time)
+    distancia.append(idistancia)
+    trazas_bien.append(itrazas_bien/trazas_totales)
+    clusters_bien.append(iclusters_bien/num_vertices)
+    clusters_mal.append(iclusters_mal/num_vertices)
     num_clusters.append(inum_clusters)
+    tiempo.append(total_time)
 
 
 plt.plot(ninit, notaajustada, 'x', c = 'b', label = 'Nota ajustada')
@@ -61,14 +74,75 @@ plt.savefig(f'KMeans/Gráficas CMS/KMeans n_init_vs_Notas-{num_evento}')
 plt.show()
 
 
-plt.plot(ninit, tiempo,label = 'Tiempo-{num_evento}')
+plt.plot(ninit, trazas_bien, 'x', c = 'b', label = 'Trazas OK')
+plt.plot(ninit, clusters_bien, 'x', c = 'r', label = 'Clusters OK')
+plt.plot(ninit, clusters_mal, 'o', c = 'g', label = 'Clusters mal')
 plt.xlabel('n_init')
-plt.ylabel('Tiempo')
+plt.ylabel('Num/Tot')
+plt.legend(loc='best')
+plt.title('K-Means')
+plt.savefig(f'KMeans/Gráficas CMS/K-Means n_init_vs_Ok Mal'        \
+            f'-{num_evento}')
+plt.show()
+#%% tol K-Means
+tol = np.linspace(1e-12, 1e-3, 2, dtype = int)
+n_clusters = len(lista_vertices)
+
+notaajustada = []
+notanorm = []
+notamedia = []
+distancia = []
+trazas_bien = []
+clusters_bien = []
+clusters_mal = []
+num_clusters = []
+tiempo = []
+
+
+for itol in tol:
+    inum_clusters, centroides, etiquetas, total_time = Algoritmos.KMeans(X,   \
+                                            lista_trazas,                     \
+                                            numcluster_manual = n_clusters,   \
+                                            n_init = 10, tol = itol)
+
+    inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
+        iclusters_bien, iclusters_mal, cluster_faltan =                       \
+            Evaluar.evaluacion_total(lista_trazas, etiquetas, centroides,     \
+                                      lista_vertices)
+    notaajustada.append(inotaajustada)
+    notanorm.append(inotanorm)
+    notamedia.append((inotaajustada**2+inotanorm**2)/2)
+    distancia.append(idistancia)
+    trazas_bien.append(itrazas_bien/trazas_totales)
+    clusters_bien.append(iclusters_bien/num_vertices)
+    clusters_mal.append(iclusters_mal/num_vertices)
+    num_clusters.append(inum_clusters)
+    tiempo.append(total_time)
+
+
+plt.plot(tol, notaajustada, 'x', c = 'b', label = 'Nota ajustada')
+plt.plot(tol, notanorm, 'x', c = 'r', label = 'Nota normal')
+plt.plot(tol, notamedia, 'o', c = 'g', label = 'Nota media')
+plt.xlim(1e-13, 1e-10)
+plt.xlabel('tol')
+plt.ylabel('Puntos')
 plt.legend(loc = 'best')
 plt.title('K-Means')
-plt.savefig(f'KMeans/Gráficas CMS/KMeans n_init_vs_tiempo-{num_evento}')
+plt.savefig(f'KMeans/Gráficas CMS/KMeans tol_vs_Notas-{num_evento}')
 plt.show()
 
+
+plt.plot(tol, trazas_bien, 'x', c = 'b', label = 'Trazas OK')
+plt.plot(tol, clusters_bien, 'x', c = 'r', label = 'Clusters OK')
+plt.plot(tol, clusters_mal, 'o', c = 'g', label = 'Clusters mal')
+plt.xlim(1e-12, 1e-3)
+plt.xlabel('tol')
+plt.ylabel('Num/Tot')
+plt.legend(loc='best')
+plt.title('K-Means')
+plt.savefig(f'KMeans/Gráficas CMS/K-Means tol_vs_Ok Mal'        \
+            f'-{num_evento}')
+plt.show()
 #%% min_bin_freq Mean Shift
 
 min_bin_freq = np.linspace(1, 32, 16, dtype= int)

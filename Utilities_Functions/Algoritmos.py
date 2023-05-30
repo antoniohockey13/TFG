@@ -307,7 +307,6 @@ def BIRCH(X: np.array(2), threshold: float, branching: int,                   \
         Lista de las trazas a clusterizar.
     lista_trazas : np.array(3)
         Lista con todas las trazas y al vertice perteneciente.
-
     numcluster_manual : int or None
         Numero de cluster total si es un número se toma el número si es
         'None' se calcula el mejor ajuste con la nota ajustada.
