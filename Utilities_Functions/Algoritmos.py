@@ -41,7 +41,7 @@ def KMeans(X: np.array(2), lista_trazas: np.array(3),                         \
         Numero de veces que se corre el algoritmo con distintos centroides.
         Default 10
     tol : float, OPTIONAL
-        Tolerancia para asegurar convergencia. Default 1e-4
+        Tolerancia para asegurar convergencia. Default 1e-6
 
     Returns
     -------

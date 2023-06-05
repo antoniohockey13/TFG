@@ -83,9 +83,9 @@ def KMeans(lista_trazas: np.array(3), lista_vertices: np.array(3),            \
 
     if graficas:
         Grafica_Clusters.grafica_colores_cluster(lista_trazas, etiquetas,     \
-                                                 'K-Means-CMS')
+                                                 'K-Means')
         Grafica_Clusters.grafica_centroides_vertices(lista_vertices,          \
-                                                    centroides, 'K-Means-CMS')
+                                                    centroides, 'K-Means')
 
     return  notaajustada, notanorm, distancia, trazas_bien, trazas_mal,       \
             clusters_bien, clusters_mal, vertices_faltan, total_time,         \
@@ -93,7 +93,7 @@ def KMeans(lista_trazas: np.array(3), lista_vertices: np.array(3),            \
 
 def MeanShift(lista_trazas: np.array(3), lista_vertices: np.array(3),         \
               fit_trazas: np.array(3) or None, quantile: float = 1e-2,        \
-              n_samples: int = 299, min_bin_freq: int = 31,                   \
+              n_samples: int = 357, min_bin_freq: int = 1,                   \
               graficas: bool = True):
     """
     Parameters
@@ -157,9 +157,9 @@ def MeanShift(lista_trazas: np.array(3), lista_vertices: np.array(3),         \
                      lista_trazas_tot, etiquetas, centroides, lista_vertices)
     if graficas:
         Grafica_Clusters.grafica_colores_cluster(lista_trazas, etiquetas,     \
-                                                 'MeanShift-CMS')
+                                                 'MeanShift')
         Grafica_Clusters.grafica_centroides_vertices(lista_vertices,          \
-                                                    centroides, 'MeanShift-CMS')
+                                                    centroides, 'MeanShift')
 
     return  notaajustada, notanorm, distancia, trazas_bien, trazas_mal,       \
             clusters_bien, clusters_mal, vertices_faltan, total_time,         \
@@ -240,9 +240,9 @@ def DBSCAN(lista_trazas: np.array(3), lista_vertices: np.array(3),            \
                      lista_trazas_tot, etiquetas, centroides, lista_vertices)
     if graficas:
         Grafica_Clusters.grafica_colores_cluster(lista_trazas, etiquetas,     \
-                                                 'DBSCAN-CMS')
+                                                 'DBSCAN')
         Grafica_Clusters.grafica_centroides_vertices(lista_vertices,          \
-                                                    centroides, 'DBSCAN-CMS')
+                                                    centroides, 'DBSCAN')
     return  notaajustada, notanorm, distancia, trazas_bien, trazas_mal,       \
             clusters_bien, clusters_mal, vertices_faltan, total_time,         \
             num_clusters
@@ -310,9 +310,9 @@ def EM_GMM(lista_trazas: np.array(3), lista_vertices: np.array(3),            \
                      lista_trazas_tot, etiquetas, centroides, lista_vertices)
     if graficas:
         Grafica_Clusters.grafica_colores_cluster(lista_trazas, etiquetas,     \
-                                                 'EM-GMM-CMS')
+                                                 'EM-GMM')
         Grafica_Clusters.grafica_centroides_vertices(lista_vertices,          \
-                                                    centroides, 'EM-GMM-CMS')
+                                                    centroides, 'EM-GMM')
     return  notaajustada, notanorm, distancia, trazas_bien, trazas_mal,       \
             clusters_bien, clusters_mal, vertices_faltan, total_time,         \
             num_clusters
@@ -377,9 +377,9 @@ def AHC(lista_trazas: np.array(3), lista_vertices: np.array(3),               \
                      lista_trazas_tot, etiquetas, centroides, lista_vertices)
     if graficas:
         Grafica_Clusters.grafica_colores_cluster(lista_trazas, etiquetas,     \
-                                                 'AHC-CMS')
+                                                 'AHC')
         Grafica_Clusters.grafica_centroides_vertices(lista_vertices,          \
-                                                    centroides, 'AHC-CMS')
+                                                    centroides, 'AHC')
     return  notaajustada, notanorm, distancia, trazas_bien, trazas_mal,       \
             clusters_bien, clusters_mal, vertices_faltan, total_time,         \
             num_clusters
@@ -444,9 +444,9 @@ def BIRCH(lista_trazas: np.array(3), lista_vertices: np.array(3),             \
                      lista_trazas_tot, etiquetas, centroides, lista_vertices)
     if graficas:
         Grafica_Clusters.grafica_colores_cluster(lista_trazas, etiquetas,     \
-                                                 'BIRCH-CMS')
+                                                 'BIRCH')
         Grafica_Clusters.grafica_centroides_vertices(lista_vertices,          \
-                                                    centroides, 'BIRCH-CMS')
+                                                    centroides, 'BIRCH')
     return  notaajustada, notanorm, distancia, trazas_bien, trazas_mal,       \
             clusters_bien, clusters_mal, vertices_faltan, total_time,         \
             num_clusters

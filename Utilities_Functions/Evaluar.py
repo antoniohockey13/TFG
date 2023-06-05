@@ -105,7 +105,7 @@ def distancia_media(centroides: np.array(float),                              \
         if np.inf in icentroide:
             print('Un cluster esta vacío')
         else:
-            distancia =np.sqrt((icentroide[0]-vertice[1])**2+                  \
+            distancia = np.sqrt((icentroide[0]-vertice[1])**2+                \
                                (icentroide[1]-vertice[2])**2)
         distanciatot += distancia
     return distanciatot/len(centroides)

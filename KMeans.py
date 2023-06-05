@@ -31,7 +31,7 @@ clusters_bien =  []
 clusters_mal = []
 num_clusters = []
 
-for i in range(2):
+for i in range(1000):
     print(i)
     lista_vertices, lista_trazas, num_trazas_en_v, X, num_trazas              \
         = gcvt.VerticesyTrazasAleatorios( num_vertices = num_vertices,        \
@@ -44,15 +44,15 @@ for i in range(2):
                                     X = X, lista_trazas = lista_trazas,       \
                                     fit_trazas = None, sample_weight = None,  \
                                     error_predict = None,                     \
-                                        numcluster_manual = numcluster_manual)
+                                    numcluster_manual = numcluster_manual)
 
     inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
     iclusters_bien, iclusters_mal, ivertices_faltan =                         \
                                     Evaluar.evaluacion_total(lista_trazas,    \
                                     etiquetas, centroides, lista_vertices)
     # Grafica_Clusters.grafica_colores_cluster(lista_trazas, etiquetas, 'KMeans')
-    Grafica_Clusters.grafica_centroides_vertices(lista_vertices, centroides,  \
-                                                 'K-Means')
+    # Grafica_Clusters.grafica_centroides_vertices(lista_vertices, centroides,  \
+                                                 # 'K-Means')
     num_clusters.append(inum_clusters)
 
     distancia.append(idistancia)

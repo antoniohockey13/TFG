@@ -214,7 +214,7 @@ plt.show()
 
 #%% MeanShift Quantile
 
-quantiles = np.linspace(1e-2, 0.1, 50)
+quantiles = np.linspace(0.01, 0.1, 50)
 
 notaajustada = []
 notanorm = []
@@ -259,6 +259,7 @@ plt.show()
 plt.plot(quantiles, trazas_bien, 'x', c = 'b', label = 'Trazas OK')
 plt.plot(quantiles, clusters_bien, 'x', c = 'r', label = 'Clusters OK')
 plt.plot(quantiles, clusters_mal, 'o', c = 'g', label = 'Clusters mal')
+plt.axvline(x = 0.01, c = 'r')
 plt.xlabel('quantile')
 plt.ylabel('Num/Tot')
 plt.legend(loc='best')

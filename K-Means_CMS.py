@@ -25,14 +25,14 @@ num_clusters = []
 num_vertices = []
 vertices_faltan = []
 
-for i in range(2,10):
-
-    # Read data
-    num_evento = str(i)
+for i in range(28):
+    if i < 8:
+        name = f'Data/SimulationDataCMS_Event{i+2}.txt'
+    else:
+        name = f'Data/DataCMS_momentum{i-8}.txt'
 
     lista_vertices, lista_trazas, errores, etiquetas_CMS, centroides_CMS,     \
-        num_clustersCMS = Read_Data.read_data(                                \
-                              f'Data/SimulationDataCMS_Event{num_evento}.txt')
+        num_clustersCMS = Read_Data.read_data(name)
 
     errores = FA.errores_to_sample_weight(errores)
 
@@ -47,7 +47,7 @@ for i in range(2,10):
     num_trazas = len(lista_trazas)
     inum_vertices = len(lista_vertices)
     if i == 2:
-        graficas = True
+        graficas = False
     else:
         graficas = False
 

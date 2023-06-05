@@ -9,8 +9,9 @@ Generar Gráficas
 import numpy as np
 import matplotlib.pyplot as plt
 from Utilities_Functions import GenerarConjuntoVerticesyTrazas as gcvt
-from Utilities_Functions  import Algoritmos
-from Utilities_Functions  import Evaluar
+from Utilities_Functions import Algoritmos
+from Utilities_Functions import Evaluar
+from Utilities_Functions import Grafica_Clusters
 
 
 #%% Generar vertices y trazas
@@ -23,6 +24,7 @@ lista_vertices, lista_trazas, num_trazas_en_v, X, num_trazas      \
 
 num_trazas = len(lista_trazas)
 
+Grafica_Clusters.grafica_colores_cluster(lista_trazas, lista_trazas[:,0],'Aleatorios')
 # %% Num cluster en K-Means
 
 

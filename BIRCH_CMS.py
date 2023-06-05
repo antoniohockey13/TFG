@@ -24,14 +24,14 @@ num_clusters = []
 num_vertices = []
 vertices_faltan = []
 
-for i in range(2,10):
-
-    # Read data
-    num_evento = str(i)
+for i in range(28):
+    if i < 8:
+        name = f'Data/SimulationDataCMS_Event{i+2}.txt'
+    else:
+        name = f'Data/DataCMS_momentum{i-8}.txt'
 
     lista_vertices, lista_trazas, errores, etiquetas_CMS, centroides_CMS,     \
-        num_clustersCMS = Read_Data.read_data(                                \
-                              f'Data/SimulationDataCMS_Event{num_evento}.txt')
+        num_clustersCMS = Read_Data.read_data(name)
 
     lista_trazas_medidas, errores_medidos, lista_trazas_no_medidas,           \
         errores_no_medidos = Read_Data.quit_not_measure_vertex(lista_trazas,  \
