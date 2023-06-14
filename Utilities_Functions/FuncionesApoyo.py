@@ -84,9 +84,39 @@ def grafica_colores_cluster(lista_trazas: np.array(3),                        \
     plt.savefig(f'Centroides vs Vertices-{algoritmo}')
     plt.show()
 
-def errores_to_sample_weight(errores):
+def errores_to_sample_weight(errores: np.array(2)):
+    """
+    Parameters
+    ----------
+    errores : np.array(2)
+        Error in track measurement.
+
+    Returns
+    -------
+    errores : np.array(1)
+        Sample weight.
+
+    """
     errores = np.sqrt(np.sum(np.square(errores), axis=1))
 
     error_max = max(errores)
     errores = 1-(errores/error_max)
+    return errores
+
+def momentum_to_sample_weight(momentum: np.array(1)):
+    """
+    Parameters
+    ----------
+    momentum : np.array(1)
+        pt.
+
+    Returns
+    -------
+    errores : np.array(1)
+        Sample weight.
+
+    """
+    errores = momentum
+    error_max = max(errores)
+    errores = errores/error_max
     return errores

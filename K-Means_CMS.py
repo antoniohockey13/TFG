@@ -30,11 +30,19 @@ for i in range(28):
         name = f'Data/SimulationDataCMS_Event{i+2}.txt'
     else:
         name = f'Data/DataCMS_momentum{i-8}.txt'
+# for i in range(20):
+#     name = f'Data/DataCMS_momentum{i}.txt'
 
     lista_vertices, lista_trazas, errores, etiquetas_CMS, centroides_CMS,     \
-        num_clustersCMS = Read_Data.read_data(name)
+        num_clustersCMS, momentum = Read_Data.read_data(name, pt =0)
 
-    errores = FA.errores_to_sample_weight(errores)
+    # errores = FA.errores_to_sample_weight(errores)
+    # if isinstance(momentum, np.ndarray):
+    #     errores = FA.momentum_to_sample_weight(momentum)
+    #     print(errores)
+    # else:
+    #     errores = 0.5
+    #     print(errores)
 
     # lista_trazas_medidas, errores_medidos, lista_trazas_no_medidas,           \
     #     errores_no_medidos = Read_Data.quit_not_measure_vertex(lista_trazas,  \
@@ -53,14 +61,14 @@ for i in range(28):
 
 
     # Cluster data
-    inum_clusters = len(lista_vertices)
+    inum_clusters = 200
     inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
         iclusters_bien, iclusters_mal, ivertices_faltan, total_time,          \
         inum_clusters = Algorithm.KMeans(lista_trazas = lista_trazas,         \
                                lista_vertices = lista_vertices,               \
                                fit_trazas = None,          \
                                num_clusters = inum_clusters,                  \
-                               sample_weight = errores,               \
+                               sample_weight = None,               \
                                error_predict = None,               \
                                n_init = 10, tol = 1e-6, graficas = graficas)
 
@@ -111,3 +119,10 @@ print(f'Nota no ajustada:{np.mean(notanorm)} +- {np.std(notanorm)}')
 print('Distancia de los centroides a los vértices (normalizada entre número '\
         f'vértices): {np.mean(distancia)} +- {np.std(distancia)}')
 print(f'Tiempo en ejecutar = {np.mean(tiempo)}+-{np.std(tiempo)}s')
+
+verticesOK_tot = np.array(clusters_bien)/np.array(num_vertices)
+print(f'Vértices OK/Vertices Totales =  {np.mean(verticesOK_tot)}+- '\
+      f'{np.std(verticesOK_tot)}')
+numclusters_relativo = np.array(num_clusters)/np.array(num_vertices)
+print(f'Clusters/Vertices Totales =  {np.mean(numclusters_relativo)}+- '\
+      f'{np.std(numclusters_relativo)}')

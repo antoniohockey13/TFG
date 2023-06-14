@@ -28,14 +28,12 @@ for i in range(28):
         name = f'Data/SimulationDataCMS_Event{i+2}.txt'
     else:
         name = f'Data/DataCMS_momentum{i-8}.txt'
+# for i in range(20):
+    # name = f'Data/DataCMS_momentum{i}.txt'
 
-    # Read data
     lista_vertices, lista_trazas, errores, etiquetas_CMS, centroides_CMS,     \
-        num_clustersCMS = Read_Data.read_data(name)
+        num_clustersCMS, momentum = Read_Data.read_data(name, pt = 0)
 
-    lista_trazas_medidas, errores_medidos, lista_trazas_no_medidas,           \
-        errores_no_medidos = Read_Data.quit_not_measure_vertex(lista_trazas,  \
-                                                               errores)
 
     num_trazas = len(lista_trazas)
     inum_vertices = len(lista_vertices)
@@ -91,3 +89,10 @@ print(f'Nota ajustada:{np.mean(notaajustada)} +- {np.std(notaajustada)}')
 print(f'Nota no ajustada:{np.mean(notanorm)} +- {np.std(notanorm)}')
 print('Distancia de los centroides a los vértices (normalizada entre número '\
         f'vértices): {np.mean(distancia)} +- {np.std(distancia)}')
+
+verticesOK_tot = np.array(clusters_bien)/np.array(num_vertices)
+print(f'Vértices OK/Vertices Totales =  {np.mean(verticesOK_tot)}+- '\
+      f'{np.std(verticesOK_tot)}')
+numclusters_relativo = np.array(num_clusters)/np.array(num_vertices)
+print(f'Clusters/Vertices Totales =  {np.mean(numclusters_relativo)}+- '\
+      f'{np.std(numclusters_relativo)}')

@@ -19,7 +19,7 @@ num_evento = str(0)
 name = f"Data/SimulationDataCMS_Event{num_evento}.txt"
 
 lista_vertices, lista_trazas, errores, etiquetas_CMS, centroides_CMS,         \
-    num_clustersCMS = Read_Data.read_data(name, pt = 0)
+    num_clustersCMS, momentum = Read_Data.read_data(name, pt = 0)
 
 lista_trazas_medidas, errores_medidos, lista_trazas_no_medidas,               \
     errores_no_medidos = Read_Data.quit_not_measure_vertex(lista_trazas,      \

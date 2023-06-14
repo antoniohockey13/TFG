@@ -14,6 +14,8 @@ def digest_input(file: str, pt: float = 0):
     ----------
     file : str
         Name of the file wanted to be read.
+    pt : float, OPTIPNAL
+        Minimum momentum of the tracks. Default 0
 
     Returns
     -------
@@ -27,8 +29,6 @@ def digest_input(file: str, pt: float = 0):
     tracks : np.arrray([NºTraza, z, error_z, t, error_t,
                         CorrespondingSimVertex, CorrespondingRecoVertex])
         Rough read data from Tracks
-    pt : float, OPTIPNAL
-        Minimum momentum of the tracks. Default 0
     """
     data_names = ['SimVertices', 'RecoVertices', 'Tracks']
     seleccion_datos = -1
@@ -66,7 +66,7 @@ def digest_input(file: str, pt: float = 0):
                     if len(data) != 0:
                         if data[0] != data_names[2]:
                             data = list(map(float, data))
-                            if len(data)< 6 or data[6]>=pt:
+                            if len(data)<= 7 or data[6]>=pt:
                                 tracks.append(data)
 
     except IOError:
@@ -100,22 +100,29 @@ def transform_data_into_own_variables(simvertices: np.array(4),               \
     errores : np.array(2)
         Errores en la medida de las trazas.
     """
-    lista_vertices = simvertices[:, :3]
+
+    lista_vertices = simvertices[:, :2]
+    vertice_t = simvertices[:,2]*1000
+    lista_vertices = np.column_stack((lista_vertices, vertice_t))
 
     lista_trazas0 = tracks[:, -2]  # Columna correspondingSimVertex
     lista_trazas1 = tracks[:, 1]  # Valor z
-    lista_trazas2 = tracks[:, 3]  # Valor t
+    lista_trazas2 = tracks[:, 3]# Valor t
     lista_trazas = np.column_stack((lista_trazas0, lista_trazas1,             \
-                                    lista_trazas2))
+                                    lista_trazas2*1000))
 
     errores_z = tracks[:,2]
-    errores_t = tracks[:,4]
+    errores_t = tracks[:,4]*1000
     errores = np.column_stack((errores_z, errores_t))
     etiquetas_CMS = tracks[:,-1]
 
-    centroide_CMS = np.column_stack((recovertices[:,1], recovertices[:,3]))
+    centroide_CMS = np.column_stack((recovertices[:,1], recovertices[:,3]*1000))
+    momentum =  None
+    if tracks.shape[1] == 9:
+        momentum = tracks[:,6]
 
-    return lista_vertices, lista_trazas, errores, etiquetas_CMS, centroide_CMS
+    return lista_vertices, lista_trazas, errores, etiquetas_CMS,              \
+            centroide_CMS, momentum
 
 def read_data(name: str, pt: float = 0):
     """
@@ -139,11 +146,12 @@ def read_data(name: str, pt: float = 0):
     """
     num_evento, simvertices, recovertices, tracks = digest_input(name, pt)
     num_clustersCMS = len(recovertices)
-    lista_vertices, lista_trazas, errores, etiquetas_CMS, centroides_CMS =    \
+    lista_vertices, lista_trazas, errores, etiquetas_CMS, centroides_CMS,     \
+        momentum =                                                            \
         transform_data_into_own_variables(simvertices, recovertices, tracks)
 
     return lista_vertices, lista_trazas, errores, etiquetas_CMS,              \
-        centroides_CMS, num_clustersCMS
+        centroides_CMS, num_clustersCMS, momentum
 
 def quit_not_measure_vertex(lista_trazas, errores):
     """

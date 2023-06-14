@@ -103,7 +103,7 @@ plt.show()
 
 #%% MeanShift Quantile
 
-quantiles = np.linspace(1e-2, 0.1, 10)
+quantiles = np.linspace(0.001, 0.1, 10)
 notaajustada = []
 notanorm = []
 notamedia = []

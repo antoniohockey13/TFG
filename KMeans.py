@@ -31,7 +31,7 @@ clusters_bien =  []
 clusters_mal = []
 num_clusters = []
 
-for i in range(1000):
+for i in range(100):
     print(i)
     lista_vertices, lista_trazas, num_trazas_en_v, X, num_trazas              \
         = gcvt.VerticesyTrazasAleatorios( num_vertices = num_vertices,        \

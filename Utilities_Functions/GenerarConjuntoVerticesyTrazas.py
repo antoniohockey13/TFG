@@ -69,10 +69,10 @@ def VerticesyTrazasAleatorios(num_vertices = 200, mediatrazas = 70,           \
 
     lista_vertices = np.array(lista_vertices)
 
-    # Graficar vértices
+    # # Graficar vértices
     # plt.plot(lista_vertices[:,1], lista_vertices[:,2], 'x', c = 'b')
-    # plt.xlim(-10, 10)
-    # plt.ylim(-100, 100)
+    # # plt.xlim(-10, 10)
+    # # plt.ylim(-100, 100)
     # plt.xlabel("$z$/cm")
     # plt.ylabel("$t$/ps")
     # plt.show()
@@ -111,14 +111,17 @@ def VerticesyTrazasAleatorios(num_vertices = 200, mediatrazas = 70,           \
     lista_trazas = np.array(lista_trazas)
     # error_trazas = np.array(error_trazas)
 
-    # # Gráfica vértices y trazas
+    # Gráfica vértices y trazas
     # plt.plot(lista_vertices[:,1], lista_vertices[:,2], 'o', c = 'b',          \
-    #          label = 'Vértices')
-    # # plt.errorbar(lista_trazas[:,1], lista_trazas[:,2], xerr = error_z, \
-    #               # yerr = error_t, fmt= 'or', linestyle="None")
+    #           label = 'Vértices')
 
-    # plt.xlim(-10, 10)
-    # plt.ylim(-100, 100)
+    # plt.plot(lista_trazas[:,1], lista_trazas[:,2], 'x', c = 'r',              \
+    #          label = 'Trazas')
+    # # plt.errorbar(lista_trazas[:,1], lista_trazas[:,2], xerr = error_z, \
+    # #              yerr = error_t, fmt= 'or', linestyle="None")
+
+    # plt.xlim(-0.1, 0.1)
+    # plt.ylim(-0.1, 0.1)
     # plt.xlabel("$z$/cm")
     # plt.ylabel("$t$/ps")
     # plt.title('Posición vértices')
