@@ -33,7 +33,7 @@ def VerticesyTrazasAleatorios(num_vertices = 200, mediatrazas = 70,           \
     mediat : float, optional
         Valor medio del tiempo para los vértices en ps. The default is 0.
     sigmat : float, optional
-        Desviación estándar de t para los vértices. The default is 70.
+        Desviación estándar de t para los vértices. The default is 200.
     mediar : float, optional
         Valor medio de la distancia a la que se encuentra la traza de su
         respectivo vértice. The default is 0.5.

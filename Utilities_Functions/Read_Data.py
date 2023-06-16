@@ -100,29 +100,44 @@ def transform_data_into_own_variables(simvertices: np.array(4),               \
     errores : np.array(2)
         Errores en la medida de las trazas.
     """
+    num_vertice = simvertices[:,0]
+    vertice_z = simvertices[:,1]
+    vertice_t = simvertices[:,2]
 
-    lista_vertices = simvertices[:, :2]
-    vertice_t = simvertices[:,2]*1000
-    lista_vertices = np.column_stack((lista_vertices, vertice_t))
 
     lista_trazas0 = tracks[:, -2]  # Columna correspondingSimVertex
-    lista_trazas1 = tracks[:, 1]  # Valor z
-    lista_trazas2 = tracks[:, 3]# Valor t
-    lista_trazas = np.column_stack((lista_trazas0, lista_trazas1,             \
-                                    lista_trazas2*1000))
+    lista_trazasz = tracks[:, 1]  # Valor z
+    media_z = np.mean(lista_trazasz)
+    desviacion_z = np.std(lista_trazasz)
+    trazas_z = (lista_trazasz-media_z)/desviacion_z
+
+
+    lista_trazast = tracks[:, 3] # Valor t
+    media_t = np.mean(lista_trazast)
+    desviacion_t = np.std(lista_trazast)
+    trazas_t = (lista_trazast-media_t)/desviacion_t
+    lista_trazas = np.column_stack((lista_trazas0, trazas_z ,trazas_t))
+
+    vertice_z = (vertice_z-media_z)/desviacion_z
+    vertice_t = (vertice_t-media_t)/desviacion_t
+    lista_vertices = np.column_stack((num_vertice, vertice_z, vertice_t))
 
     errores_z = tracks[:,2]
-    errores_t = tracks[:,4]*1000
+    errores_t = tracks[:,4]
     errores = np.column_stack((errores_z, errores_t))
     etiquetas_CMS = tracks[:,-1]
 
-    centroide_CMS = np.column_stack((recovertices[:,1], recovertices[:,3]*1000))
+    clustertovertex_CMS = recovertices[:,-1]
+
+    cms_z = (recovertices[:,1]-media_z)/desviacion_z
+    cms_t = (recovertices[:,3]-media_t)/desviacion_t
+    centroide_CMS = np.column_stack((cms_z, cms_t))
     momentum =  None
     if tracks.shape[1] == 9:
         momentum = tracks[:,6]
 
-    return lista_vertices, lista_trazas, errores, etiquetas_CMS,              \
-            centroide_CMS, momentum
+    return lista_vertices, lista_trazas, clustertovertex_CMS, errores,        \
+        etiquetas_CMS, centroide_CMS, momentum
 
 def read_data(name: str, pt: float = 0):
     """
@@ -146,12 +161,12 @@ def read_data(name: str, pt: float = 0):
     """
     num_evento, simvertices, recovertices, tracks = digest_input(name, pt)
     num_clustersCMS = len(recovertices)
-    lista_vertices, lista_trazas, errores, etiquetas_CMS, centroides_CMS,     \
-        momentum =                                                            \
+    lista_vertices, lista_trazas, clustertovertex_CMS, errores, etiquetas_CMS,\
+        centroides_CMS, momentum =                                            \
         transform_data_into_own_variables(simvertices, recovertices, tracks)
 
-    return lista_vertices, lista_trazas, errores, etiquetas_CMS,              \
-        centroides_CMS, num_clustersCMS, momentum
+    return lista_vertices, lista_trazas, clustertovertex_CMS, errores,        \
+        etiquetas_CMS, centroides_CMS, num_clustersCMS, momentum
 
 def quit_not_measure_vertex(lista_trazas, errores):
     """

@@ -254,3 +254,16 @@ def evaluacion_total(lista_trazas: np.array(np.array(3)),                     \
 
     return(notaajustada, notanorm, distancia, trazas_bien, trazas_mal,        \
            clusters_bien, clusters_mal, vertices_faltan)
+
+def evaluar_cms(lista_trazas: np.array(np.array(3)),                          \
+                etiquetas: np.array(int), centroides: np.array(float),        \
+                lista_vertices: np.array(3), ctv: np.array(1)):
+
+    notaajustada, notanorm = evaluacion(lista_trazas, etiquetas)
+    num_trazas_en_v = num_trazas_en_vertices_con_lista_trazas(lista_trazas)
+    distancia = distancia_media(centroides, lista_vertices, ctv)
+    trazas_bien, trazas_mal, clusters_bien, clusters_mal, vertices_faltan     \
+        = tabla_trazas(lista_trazas, etiquetas, num_trazas_en_v, ctv,         \
+                       lista_vertices)
+    return(notaajustada, notanorm, distancia, trazas_bien, trazas_mal,        \
+           clusters_bien, clusters_mal, vertices_faltan)
