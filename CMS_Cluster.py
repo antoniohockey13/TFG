@@ -23,16 +23,17 @@ num_clusters = []
 num_vertices = []
 vertices_faltan = []
 
-for i in range(28):
-    if i < 8:
-        name = f'Data/SimulationDataCMS_Event{i+2}.txt'
-    else:
-        name = f'Data/DataCMS_momentum{i-8}.txt'
-# for i in range(20):
-    # name = f'Data/DataCMS_momentum{i}.txt'
+# for i in range(28):
+#     if i < 8:
+#         name = f'Data/SimulationDataCMS_Event{i+2}.txt'
+#     else:
+#         name = f'Data/DataCMS_momentum{i-8}.txt'
+for i in range(20):
+    name = f'Data/DataCMS_momentum{i}.txt'
 
-    lista_vertices, lista_trazas, errores, etiquetas_CMS, centroides_CMS,     \
-        num_clustersCMS, momentum = Read_Data.read_data(name, pt = 0)
+    lista_vertices, lista_trazas, clustertovertex_CMS, errores,               \
+        etiquetas_CMS, centroides_CMS, num_clustersCMS, momentum =            \
+            Read_Data.read_data(name, pt = 0)
 
 
     num_trazas = len(lista_trazas)
@@ -42,8 +43,8 @@ for i in range(28):
     inum_clusters = len(lista_vertices)
     inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
         iclusters_bien, iclusters_mal, ivertices_faltan =                     \
-            Evaluar.evaluacion_total(lista_trazas, etiquetas_CMS,             \
-                                     centroides_CMS, lista_vertices)
+            Evaluar.evaluar_cms(lista_trazas, etiquetas_CMS, centroides_CMS,  \
+                                lista_vertices, clustertovertex_CMS)
     num_clusters.append(inum_clusters)
     num_vertices.append(inum_vertices)
     vertices_faltan.append(ivertices_faltan)

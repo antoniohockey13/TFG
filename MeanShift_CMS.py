@@ -32,8 +32,9 @@ vertices_faltan = []
 for i in range(20):
     name = f'Data/DataCMS_momentum{i}.txt'
 
-    lista_vertices, lista_trazas, errores, etiquetas_CMS, centroides_CMS,     \
-        num_clustersCMS, momentum = Read_Data.read_data(name, pt = 1.5)
+    lista_vertices, lista_trazas, clustertovertex_CMS, errores, etiquetas_CMS,\
+        centroides_CMS, num_clustersCMS, momentum =                           \
+            Read_Data.read_data(name, pt = 1.5)
 
     # lista_trazas_medidas, errores_medidos, lista_trazas_no_medidas,           \
     #     errores_no_medidos = Read_Data.quit_not_measure_vertex(lista_trazas,  \
@@ -42,15 +43,19 @@ for i in range(20):
     num_trazas = len(lista_trazas)
     inum_vertices = len(lista_vertices)
 
+    if i == 2:
+        graficas = False
+    else:
+        graficas = False
     # Cluster data
     inum_clusters = len(lista_vertices)
     inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
         iclusters_bien, iclusters_mal, ivertices_faltan, total_time,          \
         inum_clusters = Algorithm.MeanShift(lista_trazas = lista_trazas,      \
                                             lista_vertices = lista_vertices,  \
-                                            fit_trazas = None, quantile =1e-2,\
-                                            n_samples = 357, min_bin_freq = 1,\
-                                            graficas = False)
+                                            fit_trazas = None, quantile =0.0118,\
+                                            n_samples = 328, min_bin_freq = 1,\
+                                            graficas = graficas)
 
     num_clusters.append(inum_clusters)
     num_vertices.append(inum_vertices)

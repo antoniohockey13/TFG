@@ -25,21 +25,22 @@ num_clusters = []
 num_vertices = []
 vertices_faltan = []
 
-for i in range(28):
-    if i < 8:
-        name = f'Data/SimulationDataCMS_Event{i+2}.txt'
-    else:
-        name = f'Data/DataCMS_momentum{i-8}.txt'
-# for i in range(20):
-#     name = f'Data/DataCMS_momentum{i}.txt'
+# for i in range(28):
+    # if i < 8:
+        # name = f'Data/SimulationDataCMS_Event{i+2}.txt'
+    # else:
+        # name = f'Data/DataCMS_momentum{i-8}.txt'
+for i in range(20):
+    name = f'Data/DataCMS_momentum{i}.txt'
 
-    lista_vertices, lista_trazas, errores, etiquetas_CMS, centroides_CMS,     \
-        num_clustersCMS, momentum = Read_Data.read_data(name, pt =0)
+    lista_vertices, lista_trazas, clustertovertex_CMS, errores, etiquetas_CMS,\
+        centroides_CMS, num_clustersCMS, momentum =                           \
+            Read_Data.read_data(name, pt = 1.5)
 
     # errores = FA.errores_to_sample_weight(errores)
     # if isinstance(momentum, np.ndarray):
     #     errores = FA.momentum_to_sample_weight(momentum)
-    #     print(errores)
+    #     # print(errores)
     # else:
     #     errores = 0.5
     #     print(errores)

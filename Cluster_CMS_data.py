@@ -18,25 +18,36 @@ num_evento = str(0)
 # name = f"Data/DataCMS_momentum{num_evento}.txt"
 name = f"Data/SimulationDataCMS_Event{num_evento}.txt"
 
-lista_vertices, lista_trazas, errores, etiquetas_CMS, centroides_CMS,         \
-    num_clustersCMS, momentum = Read_Data.read_data(name, pt = 0)
+lista_vertices, lista_trazas, clustertovertex_CMS, errores,               \
+    etiquetas_CMS, centroides_CMS, num_clustersCMS, momentum =            \
+        Read_Data.read_data(name, pt = 0)
 
 lista_trazas_medidas, errores_medidos, lista_trazas_no_medidas,               \
     errores_no_medidos = Read_Data.quit_not_measure_vertex(lista_trazas,      \
-                                                           errores)
+                                                            errores)
+
 
 trazas_totales = len(lista_trazas)
 num_vertices = len(lista_vertices)
 
 Grafica_Clusters.grafica_colores_cluster(lista_trazas, lista_trazas[:,0],'CMS')
+# Grafica_Clusters.grafica_centroides_vertices(lista_vertices, centroides_CMS,  \
+                              # 'CMS')
+#%%Análisis clustertovertex CMS
+print('Asignación CMS')
+print(clustertovertex_CMS)
 
+clustertovertex_yo  = Evaluar.cluster_to_vertex(centroides_CMS, lista_vertices)
+print('Asignación por proximidad')
+print(clustertovertex_yo)
 #%% Evaluar resultados CMS
 notaajustada, notanorm, distancia, trazas_bien, trazas_mal, clusters_bien,    \
-    clusters_mal, vertices_faltan = Evaluar.evaluacion_total(lista_trazas,    \
-                                etiquetas_CMS, centroides_CMS, lista_vertices)
+    clusters_mal, vertices_faltan =                                           \
+        Evaluar.evaluar_cms(lista_trazas, etiquetas_CMS, centroides_CMS,      \
+                            lista_vertices, clustertovertex_CMS)
 
 Grafica_Clusters.grafica_centroides_vertices(lista_vertices, centroides_CMS,  \
-                                             'CMS')
+                                              'CMS')
 
 
 print('\n Evaluacion resultados CMS: ')

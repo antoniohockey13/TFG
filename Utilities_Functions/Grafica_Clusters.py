@@ -25,7 +25,7 @@ def grafica_colores_cluster(lista_trazas: np.array(3),                        \
     """
     markers = ['.', 'o', 'v', 's', 'p', 'P', '*', '+', 'd', 'D']
     colours = ['blue', 'orange', 'green', 'red', 'purple', 'brown', 'pink',   \
-               'gray', 'olive', 'cyan']
+                'gray', 'olive', 'cyan']
     etiquetas_unique = set(etiquetas)
     plt.figure(figsize=(10,10))
     for i_etiqueta in etiquetas_unique:
@@ -38,8 +38,8 @@ def grafica_colores_cluster(lista_trazas: np.array(3),                        \
                 z.append(lista_trazas[i_traza, 1])
                 t.append(lista_trazas[i_traza, 2])
         plt.plot(z, t, m, c = c, label = str(i_etiqueta), markersize = 5)
-    plt.xlabel(r"$z/cm$", fontsize = 20)
-    plt.ylabel(r"$t/ps$", fontsize = 20)
+    plt.xlabel(r"$z'$", fontsize = 20)
+    plt.ylabel(r"$t'$", fontsize = 20)
     # plt.legend(loc = 'best')
     plt.title(algoritmo, fontsize = 25)
     plt.savefig(f"Trazas en colores-{algoritmo}.pdf")
@@ -63,8 +63,8 @@ def grafica_centroides_vertices(lista_vertices: np.array(3),                  \
              label = 'Centroides')
     plt.plot(lista_vertices[:,1], lista_vertices[:,2], 'X', c ='r',           \
              markersize = 2, label = 'Vertices')
-    plt.xlabel(r"$z/cm$", fontsize = 20)
-    plt.ylabel(r"$t/ps$", fontsize = 20)
+    plt.xlabel(r"$z'$", fontsize = 20)
+    plt.ylabel(r"$t'$", fontsize = 20)
     plt.title(algoritmo, fontsize = 25)
     plt.legend(loc = 'best', fontsize = 15)
     plt.savefig(f"Centroides vs Vertices-{algoritmo}.pdf")

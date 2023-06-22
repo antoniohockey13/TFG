@@ -14,10 +14,10 @@ from Utilities_Functions import Algoritmos
 
 
 num_evento = str(0)
-
-lista_vertices, lista_trazas, errores, etiquetas_CMS, centroides_CMS,         \
-    num_clustersCMS = Read_Data.read_data(                                    \
-                              f'Data/SimulationDataCMS_Event{num_evento}.txt')
+name = f'Data/SimulationDataCMS_Event{num_evento}.txt'
+lista_vertices, lista_trazas, clustertovertex_CMS, errores, etiquetas_CMS,    \
+     centroides_CMS, num_clustersCMS, momentum =                              \
+         Read_Data.read_data(name, pt =0)
 
 lista_trazas_medidas, errores_medidos, lista_trazas_no_medidas,               \
     errores_no_medidos = Read_Data.quit_not_measure_vertex(lista_trazas,      \
@@ -70,7 +70,7 @@ plt.xlabel('n_init')
 plt.ylabel('Puntos')
 plt.legend(loc = 'best')
 plt.title('K-Means')
-plt.savefig(f'KMeans/Gráficas CMS/KMeans n_init_vs_Notas-{num_evento}')
+# plt.savefig(f'KMeans/Gráficas CMS/KMeans n_init_vs_Notas-{num_evento}')
 plt.show()
 
 
@@ -145,7 +145,7 @@ plt.savefig(f'KMeans/Gráficas CMS/K-Means tol_vs_Ok Mal'        \
 plt.show()
 #%% min_bin_freq Mean Shift
 
-min_bin_freq = np.linspace(1, 32, 16, dtype= int)
+min_bin_freq = np.linspace(1, 30, 15, dtype= int)
 
 
 notaajustada = []
@@ -248,6 +248,7 @@ for iquantile in quantiles:
 plt.plot(quantiles, notaajustada, 'x', c = 'b', label = 'Nota ajustada')
 plt.plot(quantiles, notanorm, 'x', c = 'r', label = 'Nota normal')
 plt.plot(quantiles, notamedia, 'o', c = 'g', label = 'Nota media')
+plt.axvline(x = 0.0118, c='r')
 plt.xlabel('quantile')
 plt.ylabel('Puntos')
 plt.legend(loc='best')
@@ -259,7 +260,7 @@ plt.show()
 plt.plot(quantiles, trazas_bien, 'x', c = 'b', label = 'Trazas OK')
 plt.plot(quantiles, clusters_bien, 'x', c = 'r', label = 'Clusters OK')
 plt.plot(quantiles, clusters_mal, 'o', c = 'g', label = 'Clusters mal')
-plt.axvline(x = 0.01, c = 'r')
+plt.axvline(x = 0.0118, c='r')
 plt.xlabel('quantile')
 plt.ylabel('Num/Tot')
 plt.legend(loc='best')
@@ -270,6 +271,7 @@ plt.show()
 
 plt.plot(quantiles, num_clusters, 'x', c = 'b', label = '')
 plt.axhline(y = num_vertices, c = 'r')
+plt.axvline(x = 0.0118, c='r')
 plt.xlabel('quantiles')
 plt.ylabel('Num clusters')
 # plt.legend(loc='best')
@@ -280,7 +282,7 @@ plt.show()
 
 #%% n_samples Mean Shift
 
-n_samples = np.linspace(200, 400, 50, dtype= int)
+n_samples = np.linspace(230, 350, 50, dtype= int)
 
 notaajustada = []
 notanorm = []
@@ -293,7 +295,7 @@ num_clusters = []
 
 for in_sample in n_samples:
     inum_clusters, centroides, etiquetas, total_time =                        \
-        Algoritmos.MeanShift(X, quantile = 0.01, min_bin_freq = 1,            \
+        Algoritmos.MeanShift(X, quantile = 0.0118, min_bin_freq = 1,            \
                               n_samples = in_sample)
 
     inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
@@ -315,7 +317,7 @@ for in_sample in n_samples:
 plt.plot(n_samples, notaajustada, 'x', c = 'b', label = 'Nota ajustada')
 plt.plot(n_samples, notanorm, 'x', c = 'r', label = 'Nota normal')
 plt.plot(n_samples, notamedia, 'o', c = 'g', label = 'Nota media')
-plt.axvline(x = 357, c= 'r')
+plt.axvline(x = 328, c= 'r')
 plt.xlabel('n_samples')
 plt.ylabel('Puntos')
 plt.legend(loc='best')
@@ -326,7 +328,7 @@ plt.show()
 plt.plot(n_samples, trazas_bien, 'x', c = 'b', label = 'Trazas OK')
 plt.plot(n_samples, clusters_bien, 'x', c = 'r', label = 'Clusters OK')
 plt.plot(n_samples, clusters_mal, 'o', c = 'g', label = 'Clusters mal')
-plt.axvline(x = 357, c= 'r')
+plt.axvline(x = 328, c= 'r')
 plt.xlabel('n_samples')
 plt.ylabel('Num/Tot')
 plt.legend(loc='best')
@@ -337,7 +339,7 @@ plt.show()
 
 plt.plot(n_samples, num_clusters, 'x', c = 'b', label = '')
 plt.axhline(y = num_vertices, c = 'r')
-plt.axvline(x = 357, c= 'r')
+plt.axvline(x = 328, c= 'r')
 plt.xlabel('n_samples')
 plt.ylabel('Num clusters')
 # plt.legend(loc='best')
@@ -383,7 +385,7 @@ for iepsilon in epsilons:
 plt.plot(epsilons, notaajustada, 'x', c = 'b', label = 'Nota ajustada')
 plt.plot(epsilons, notanorm, 'x', c = 'r', label = 'Nota normal')
 plt.plot(epsilons, notamedia, 'o', c = 'g', label = 'Nota media')
-plt.axvline(0.035, c = 'r')
+plt.axvline(0.04, c = 'r')
 plt.xlabel('epsilon')
 plt.ylabel('Puntos')
 plt.legend(loc='best')
@@ -394,7 +396,7 @@ plt.show()
 plt.plot(epsilons, trazas_bien, 'x', c = 'b', label = 'Trazas OK')
 plt.plot(epsilons, clusters_bien, 'x', c = 'r', label = 'Clusters OK')
 plt.plot(epsilons, clusters_mal, 'o', c = 'g', label = 'Clusters mal')
-plt.axvline(0.035, c = 'r')
+plt.axvline(0.04, c = 'r')
 plt.xlabel('epsilon')
 plt.ylabel('Num/Tot')
 plt.legend(loc = 'best')
@@ -403,7 +405,7 @@ plt.savefig(f'DBSCAN/Gráficas CMS/DBSCAN epsilon_vs_OK Mal-{num_evento}')
 plt.show()
 
 plt.plot(epsilons, num_clusters, 'x', c = 'b', label = '')
-plt.axvline(0.035, c = 'r')
+plt.axvline(0.04, c = 'r')
 plt.axhline(y = num_vertices, c = 'r')
 plt.xlabel('epsilon')
 plt.ylabel('Num clusters')
@@ -430,7 +432,7 @@ num_clusters = []
 for imin_sample in min_samples:
 
     inum_clusters, centroides, etiquetas, total_time, num_noise =             \
-        Algoritmos.DBSCAN(X, lista_trazas, epsilon = 0.035,                   \
+        Algoritmos.DBSCAN(X, lista_trazas, epsilon = 0.04,                   \
                           min_samples = imin_sample)
 
     inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
@@ -483,7 +485,7 @@ plt.show()
 
 #%% AHC distance_threshold
 
-distances = np.linspace(0.2, 1, 30)
+distances = np.linspace(0.3, 2, 30)
 
 
 notaajustada = []
@@ -520,7 +522,7 @@ for idistance in distances:
 plt.plot(distances, notaajustada, 'x', c = 'b', label = 'Nota ajustada')
 plt.plot(distances, notanorm, 'x', c = 'r', label = 'Nota normal')
 plt.plot(distances, notamedia, 'o', c = 'g', label = 'Nota media')
-plt.axvline(x = 0.45, c = 'r')
+plt.axvline(x = 0.5, c = 'r')
 plt.xlabel('distances threshold')
 plt.ylabel('Puntos')
 plt.legend(loc='best')
@@ -531,7 +533,7 @@ plt.show()
 plt.plot(distances, trazas_bien, 'x', c = 'b', label = 'Trazas OK')
 plt.plot(distances, clusters_bien, 'x', c = 'r', label = 'Clusters OK')
 plt.plot(distances, clusters_mal, 'o', c = 'g', label = 'Clusters mal')
-plt.axvline(x = 0.45, c = 'r')
+plt.axvline(x = 0.5, c = 'r')
 plt.xlabel('distances threshold')
 plt.ylabel('Num/Tot')
 plt.legend(loc='best')
@@ -540,7 +542,7 @@ plt.savefig(f'AHC/Gráficas CMS/AHC distance_threshold_vs_OK-Mal-{num_evento}')
 plt.show()
 
 plt.plot(distances, num_clusters, 'x', c = 'b', label = '')
-plt.axvline(x = 0.45, c = 'r')
+plt.axvline(x = 0.5, c = 'r')
 plt.axhline(y = num_vertices, c = 'r')
 plt.xlabel('distances threshold')
 plt.ylabel('Num clusters')
@@ -588,7 +590,7 @@ for ithreshold in thresholds:
 plt.plot(thresholds, notaajustada, 'x', c = 'b', label = 'Nota ajustada')
 plt.plot(thresholds, notanorm, 'x', c = 'r', label = 'Nota normal')
 plt.plot(thresholds, notamedia, 'o', c = 'g', label = 'Nota media')
-plt.axvline(x = 0.11, c = 'r')
+plt.axvline(x = 0.12, c = 'r')
 plt.xlabel('Threshold')
 plt.ylabel('Puntos')
 plt.legend(loc='best')
@@ -600,7 +602,7 @@ plt.show()
 plt.plot(thresholds, trazas_bien, 'x', c = 'b', label = 'Trazas OK')
 plt.plot(thresholds, clusters_bien, 'x', c = 'r', label = 'Clusters OK')
 plt.plot(thresholds, clusters_mal, 'o', c = 'g', label = 'Clusters mal')
-plt.axvline(x = 0.11, c = 'r')
+plt.axvline(x = 0.12, c = 'r')
 plt.xlabel('Threshold')
 plt.ylabel('Num/Tot')
 plt.legend(loc='best')
@@ -610,7 +612,7 @@ plt.savefig('BIRCH/Gráficas CMS/Birch distance_threshold_vs_OK-Mal-'          \
 plt.show()
 
 plt.plot(thresholds, num_clusters, 'x', c = 'b', label = '')
-plt.axvline(x = 0.11, c = 'r')
+plt.axvline(x = 0.12, c = 'r')
 plt.axhline(y = num_vertices, c = 'r')
 plt.xlabel('Threshold')
 plt.ylabel('Num clusters')
@@ -620,7 +622,7 @@ plt.savefig(f'BIRCH/Gráficas CMS/Birch threshold_vs_numclusters-{num_evento}')
 plt.show()
 
 #%% branching ratio BIRCH
-branchings = np.linspace(2, 100, 30, dtype = int)
+branchings = np.linspace(50, 100, 30, dtype = int)
 
 
 notaajustada = []
@@ -635,7 +637,7 @@ time = []
 
 for ibranching in branchings:
     inum_clusters, centroides, etiquetas, total_time =                        \
-        Algoritmos.BIRCH(X, threshold = 0.11, branching = ibranching)
+        Algoritmos.BIRCH(X, threshold = 0.12, branching = ibranching)
 
     inotaajustada, inotanorm, idistancia, itrazas_bien, itrazas_mal,          \
         iclusters_bien, iclusters_mal, clusters_faltan =                      \
@@ -655,7 +657,7 @@ for ibranching in branchings:
 plt.plot(branchings, notaajustada, 'x', c = 'b', label = 'Nota ajustada')
 plt.plot(branchings, notanorm, 'x', c = 'r', label = 'Nota normal')
 plt.plot(branchings, notamedia, 'o', c = 'g', label = 'Nota media')
-plt.axvline(x = 40, c = 'r')
+plt.axvline(x = 95, c = 'r')
 plt.xlabel('Branching factor')
 plt.ylabel('Puntos')
 plt.legend(loc='best')
@@ -666,7 +668,7 @@ plt.show()
 plt.plot(branchings, trazas_bien, 'x', c = 'b', label = 'Trazas OK')
 plt.plot(branchings, clusters_bien, 'x', c = 'r', label = 'Clusters OK')
 plt.plot(branchings, clusters_mal, 'o', c = 'g', label = 'Clusters mal')
-plt.axvline(x = 40, c = 'r')
+plt.axvline(x = 95, c = 'r')
 plt.xlabel('Branching factor')
 plt.ylabel('Num/Tot')
 plt.legend(loc='best')
@@ -675,7 +677,7 @@ plt.savefig(f'BIRCH/Gráficas CMS/Birch branching_vs_OK-Mal-{num_evento}')
 plt.show()
 
 plt.plot(branchings, num_clusters, 'x', c = 'b', label = '')
-plt.axvline(x = 40, c = 'r')
+plt.axvline(x = 95, c = 'r')
 plt.axhline(y = num_vertices, c ='r')
 plt.xlabel('Branching factor')
 plt.ylabel('Num clusters')

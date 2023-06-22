@@ -109,21 +109,27 @@ def transform_data_into_own_variables(simvertices: np.array(4),               \
     lista_trazasz = tracks[:, 1]  # Valor z
     media_z = np.mean(lista_trazasz)
     desviacion_z = np.std(lista_trazasz)
+    # media_z = 0
+    # desviacion_z = 1
     trazas_z = (lista_trazasz-media_z)/desviacion_z
 
 
     lista_trazast = tracks[:, 3] # Valor t
     media_t = np.mean(lista_trazast)
     desviacion_t = np.std(lista_trazast)
+    # media_t = 0
+    # desviacion_t = 1
     trazas_t = (lista_trazast-media_t)/desviacion_t
+
+
     lista_trazas = np.column_stack((lista_trazas0, trazas_z ,trazas_t))
 
     vertice_z = (vertice_z-media_z)/desviacion_z
     vertice_t = (vertice_t-media_t)/desviacion_t
     lista_vertices = np.column_stack((num_vertice, vertice_z, vertice_t))
 
-    errores_z = tracks[:,2]
-    errores_t = tracks[:,4]
+    errores_z = (tracks[:,2]-media_z)/desviacion_z
+    errores_t = (tracks[:,4]-media_t)/desviacion_t
     errores = np.column_stack((errores_z, errores_t))
     etiquetas_CMS = tracks[:,-1]
 
