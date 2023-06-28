@@ -405,9 +405,9 @@ def evaluacion_total(lista_trazas: np.array(np.array(3)),                     \
     """
     num_trazas_en_v = num_trazas_en_vertices_con_lista_trazas(lista_trazas)
     notaajustada, notanorm = evaluacion(lista_trazas, etiquetas)
-    # ctv = cluster_to_vertex(centroides, lista_vertices)
-    ctv = clustertovertex_trazas(centroides, lista_vertices, lista_trazas, \
-                                    etiquetas)
+    ctv = cluster_to_vertex(centroides, lista_vertices)
+    # ctv = clustertovertex_trazas(centroides, lista_vertices, lista_trazas, \
+    #                                 etiquetas)
     distancia = distancia_media(centroides, lista_vertices, ctv)
     trazas_bien, trazas_mal, clusters_bien, clusters_mal, vertices_faltan     \
         = tabla_trazas(lista_trazas, etiquetas, num_trazas_en_v, ctv,         \

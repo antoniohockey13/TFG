@@ -143,7 +143,7 @@ def transform_data_into_own_variables(simvertices: np.array(4),               \
     if tracks.shape[1] == 9:
         momentum = tracks[:,6]
 
-    return lista_vertices, lista_trazas, clustertovertex_CMS, clustertovertex_original, errores,        \
+    return lista_vertices, lista_trazas, clustertovertex_CMS, errores,        \
         etiquetas_CMS, centroide_CMS, momentum
 
 def read_data(name: str, pt: float = 0):
@@ -168,11 +168,11 @@ def read_data(name: str, pt: float = 0):
     """
     num_evento, simvertices, recovertices, tracks = digest_input(name, pt)
     num_clustersCMS = len(recovertices)
-    lista_vertices, lista_trazas, clustertovertex_CMS, clustertovertex_original, errores, etiquetas_CMS,\
+    lista_vertices, lista_trazas, clustertovertex_CMS, errores, etiquetas_CMS,\
         centroides_CMS, momentum =                                            \
         transform_data_into_own_variables(simvertices, recovertices, tracks)
 
-    return lista_vertices, lista_trazas, clustertovertex_CMS, clustertovertex_original, errores,        \
+    return lista_vertices, lista_trazas, clustertovertex_CMS, errores,        \
         etiquetas_CMS, centroides_CMS, num_clustersCMS, momentum
 
 def quit_not_measure_vertex(lista_trazas, errores):
