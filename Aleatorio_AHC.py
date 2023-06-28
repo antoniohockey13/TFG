@@ -8,10 +8,10 @@ Created on Fri Feb 24 17:01:33 2023
 from tabulate import tabulate
 import numpy as np
 import matplotlib.pyplot as plt
-from Utilities_Functions import GenerarConjuntoVerticesyTrazas as gcvt
-from Utilities_Functions import Evaluar
-from Utilities_Functions import Algoritmos
-from Utilities_Functions import Grafica_Clusters
+from .Utilities_Functions import GenerarConjuntoVerticesyTrazas as gcvt
+from .Utilities_Functions import Evaluar
+from .Utilities_Functions import Algoritmos
+from .Utilities_Functions import Grafica_Clusters
 
 
 
@@ -32,7 +32,7 @@ clusters_bien =  []
 clusters_mal = []
 num_clusters = []
 
-for i in range(100):
+for i in range(10):
     print(i)
     lista_vertices, lista_trazas, num_trazas_en_v, X, num_trazas  \
         = gcvt.VerticesyTrazasAleatorios( num_vertices = num_vertices,        \
