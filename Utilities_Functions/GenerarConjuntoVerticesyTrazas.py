@@ -116,12 +116,13 @@ def VerticesyTrazasAleatorios(num_vertices = 200, mediatrazas = 70,           \
     #           label = 'Vértices')
 
     # plt.plot(lista_trazas[:,1], lista_trazas[:,2], 'x', c = 'r',              \
-    #          label = 'Trazas')
-    # # plt.errorbar(lista_trazas[:,1], lista_trazas[:,2], xerr = error_z, \
-    # #              yerr = error_t, fmt= 'or', linestyle="None")
+    #           label = 'Trazas')
+    # # # plt.errorbar(lista_trazas[:,1], lista_trazas[:,2], xerr = error_z, \
+    # # #              yerr = error_t, fmt= 'or', linestyle="None")
 
-    # plt.xlim(-0.1, 0.1)
-    # plt.ylim(-0.1, 0.1)
+    # # plt.xlim(-0.1, 0.1)
+    # # plt.ylim(-0.1, 0.1)
+    # plt.axis('equal')
     # plt.xlabel("$z$/cm")
     # plt.ylabel("$t$/ps")
     # plt.title('Posición vértices')
@@ -180,3 +181,9 @@ def VerticesyTrazasAleatorios(num_vertices = 200, mediatrazas = 70,           \
         output_file_trazassinvert.close()
     return(lista_vertices, lista_trazas, num_trazas_en_v, X,\
            num_trazas) #error_trazas
+
+a = VerticesyTrazasAleatorios(num_vertices = 1, mediatrazas = 70,           \
+                              sigmatrazas = 10, mediaz = 0, sigmaz = 5,       \
+                              mediat = 0, sigmat = 200, mediar = 0,           \
+                              sigmar = 0.05, error_z = 0.02, error_t = 10,    \
+                              guardar_datos = False)

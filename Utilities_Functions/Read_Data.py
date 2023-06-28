@@ -134,6 +134,7 @@ def transform_data_into_own_variables(simvertices: np.array(4),               \
     etiquetas_CMS = tracks[:,-1]
 
     clustertovertex_CMS = recovertices[:,-1]
+    clustertovertex_original = recovertices[:,-2]
 
     cms_z = (recovertices[:,1]-media_z)/desviacion_z
     cms_t = (recovertices[:,3]-media_t)/desviacion_t
@@ -142,7 +143,7 @@ def transform_data_into_own_variables(simvertices: np.array(4),               \
     if tracks.shape[1] == 9:
         momentum = tracks[:,6]
 
-    return lista_vertices, lista_trazas, clustertovertex_CMS, errores,        \
+    return lista_vertices, lista_trazas, clustertovertex_CMS, clustertovertex_original, errores,        \
         etiquetas_CMS, centroide_CMS, momentum
 
 def read_data(name: str, pt: float = 0):
@@ -167,11 +168,11 @@ def read_data(name: str, pt: float = 0):
     """
     num_evento, simvertices, recovertices, tracks = digest_input(name, pt)
     num_clustersCMS = len(recovertices)
-    lista_vertices, lista_trazas, clustertovertex_CMS, errores, etiquetas_CMS,\
+    lista_vertices, lista_trazas, clustertovertex_CMS, clustertovertex_original, errores, etiquetas_CMS,\
         centroides_CMS, momentum =                                            \
         transform_data_into_own_variables(simvertices, recovertices, tracks)
 
-    return lista_vertices, lista_trazas, clustertovertex_CMS, errores,        \
+    return lista_vertices, lista_trazas, clustertovertex_CMS, clustertovertex_original, errores,        \
         etiquetas_CMS, centroides_CMS, num_clustersCMS, momentum
 
 def quit_not_measure_vertex(lista_trazas, errores):
@@ -215,8 +216,8 @@ def separar_eventos(file: str):
         with open(file, 'r') as f:
             lines = f.readlines()
         start = 0
-        for i in range(20):
-            output_file = open(f"DataCMS_momentum{str(i)}.txt", "w")
+        for i in range(1):
+            output_file = open(f"DataCMS_2{str(i)}.txt", "w")
             for iline in range(start, len(lines)):
                 line = lines[iline]
                 evento = f"Event {i+1}\n"

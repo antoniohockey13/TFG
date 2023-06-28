@@ -16,41 +16,110 @@ from Utilities_Functions import Algoritmos_for_CMS_data as Algorithm
 
 num_evento = str(0)
 # name = f"Data/DataCMS_momentum{num_evento}.txt"
-name = f"Data/SimulationDataCMS_Event{num_evento}.txt"
+name = f"Data/DataCMS_2{num_evento}.txt"
 
-lista_vertices, lista_trazas, clustertovertex_CMS, errores,               \
+lista_vertices, lista_trazas, clustertovertex_CMS, clusterotovertex_original, errores,               \
     etiquetas_CMS, centroides_CMS, num_clustersCMS, momentum =            \
         Read_Data.read_data(name, pt = 0)
 
-lista_trazas_medidas, errores_medidos, lista_trazas_no_medidas,               \
-    errores_no_medidos = Read_Data.quit_not_measure_vertex(lista_trazas,      \
-                                                            errores)
-
+# lista_trazas_medidas, errores_medidos, lista_trazas_no_medidas,               \
+#     errores_no_medidos = Read_Data.quit_not_measure_vertex(lista_trazas,      \
+#                                                             errores)
 
 trazas_totales = len(lista_trazas)
 num_vertices = len(lista_vertices)
 
-Grafica_Clusters.grafica_colores_cluster(lista_trazas, lista_trazas[:,0],'CMS')
+# Grafica_Clusters.grafica_colores_cluster(lista_trazas, lista_trazas[:,0],'CMS')
 # Grafica_Clusters.grafica_centroides_vertices(lista_vertices, centroides_CMS,  \
                               # 'CMS')
 #%%Análisis clustertovertex CMS
 print('Asignación CMS')
 print(clustertovertex_CMS)
 
-clustertovertex_yo  = Evaluar.cluster_to_vertex(centroides_CMS, lista_vertices)
-print('Asignación por proximidad')
+print('Asignación CMS anterior')
+print(clusterotovertex_original)
+
+print('Asignación yo original')
+clustertovertex_yo = Evaluar.cluster_to_vertex(centroides_CMS, lista_vertices)
 print(clustertovertex_yo)
+
+# clustertovertex_distancia  = Evaluar.clustertovertex_distancia(centroides_CMS,\
+#                                     lista_vertices,lista_trazas, etiquetas_CMS)
+# print('Asignación por proximidad y al menos una traza coincidente')
+# print(clustertovertex_distancia)
+
+# clustertovertex_trazas = Evaluar.clustertovertex_trazas(centroides_CMS,       \
+#                                    lista_vertices,lista_trazas, etiquetas_CMS)
+
+# print('Asignación trazas')
+# print(clustertovertex_trazas)
+
 #%% Evaluar resultados CMS
 notaajustada, notanorm, distancia, trazas_bien, trazas_mal, clusters_bien,    \
     clusters_mal, vertices_faltan =                                           \
         Evaluar.evaluar_cms(lista_trazas, etiquetas_CMS, centroides_CMS,      \
                             lista_vertices, clustertovertex_CMS)
 
-Grafica_Clusters.grafica_centroides_vertices(lista_vertices, centroides_CMS,  \
-                                              'CMS')
+# Grafica_Clusters.grafica_centroides_vertices(lista_vertices, centroides_CMS,  \
+#                                               'CMS')
 
 
-print('\n Evaluacion resultados CMS: ')
+print('\n Evaluacion resultados CMS clustertovertex CMS: ')
+
+tabla = [ [' ', 'Valor',],
+          ['Trazas OK/Tot', trazas_bien/trazas_totales],
+          ['Trazas MAL/Tot', trazas_mal/trazas_totales],
+          ['Trazas tot', trazas_totales],
+          ['Vertices OK', clusters_bien],
+          ['Vertices MAL', clusters_mal],
+          ['Vertices faltan', vertices_faltan],
+          ['Clusters totales', num_clustersCMS] ]
+print(tabulate(tabla, headers = []))
+print(f'Vertices totales = {num_vertices}')
+
+print(f'Nota ajustada:{np.mean(notaajustada)} +- {np.std(notaajustada)}')
+print(f'Nota no ajustada:{np.mean(notanorm)} +- {np.std(notanorm)}')
+
+print('Distancia de los centroides a los vértices (normalizada entre número '\
+        f'vértices): {distancia}')
+
+
+notaajustada, notanorm, distancia, trazas_bien, trazas_mal, clusters_bien,    \
+    clusters_mal, vertices_faltan =                                           \
+        Evaluar.evaluar_cms(lista_trazas, etiquetas_CMS, centroides_CMS,      \
+                            lista_vertices, clustertovertex_distancia)
+
+# Grafica_Clusters.grafica_centroides_vertices(lista_vertices, centroides_CMS,  \
+#                                               'CMS')
+
+
+print('\n Evaluacion resultados CMS clustertovertex distancia: ')
+
+tabla = [ [' ', 'Valor',],
+          ['Trazas OK/Tot', trazas_bien/trazas_totales],
+          ['Trazas MAL/Tot', trazas_mal/trazas_totales],
+          ['Trazas tot', trazas_totales],
+          ['Vertices OK', clusters_bien],
+          ['Vertices MAL', clusters_mal],
+          ['Vertices faltan', vertices_faltan],
+          ['Clusters totales', num_clustersCMS] ]
+print(tabulate(tabla, headers = []))
+print(f'Vertices totales = {num_vertices}')
+
+print(f'Nota ajustada:{np.mean(notaajustada)} +- {np.std(notaajustada)}')
+print(f'Nota no ajustada:{np.mean(notanorm)} +- {np.std(notanorm)}')
+
+print('Distancia de los centroides a los vértices (normalizada entre número '\
+        f'vértices): {distancia}')
+
+notaajustada, notanorm, distancia, trazas_bien, trazas_mal, clusters_bien,    \
+    clusters_mal, vertices_faltan =                                           \
+        Evaluar.evaluar_cms(lista_trazas, etiquetas_CMS, centroides_CMS,      \
+                            lista_vertices, clustertovertex_2)
+
+
+
+print('\n Evaluacion resultados CMS clustertovertex trazas: ')
 
 tabla = [ [' ', 'Valor',],
           ['Trazas OK/Tot', trazas_bien/trazas_totales],

@@ -332,6 +332,7 @@ def BIRCH(X: np.array(2), threshold: float, branching: int,                   \
                       n_clusters = None, compute_labels = True, copy = False)
     # n_cluster: None, int, sklearn.cluster
     birch.fit(X)
+    print(birch.iter_)
 
     etiquetas = birch.labels_
 
